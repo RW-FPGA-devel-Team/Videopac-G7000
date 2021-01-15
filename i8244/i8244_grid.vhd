@@ -81,7 +81,7 @@ architecture rtl of i8244_grid is
   -- Grid geometry:
   --
   -- number of horizontal grid segments
-  constant grid_hnum_c    : natural := 11;
+  constant grid_hnum_c    : natural := 10;
   -- left horizontal offset (3.54 MHz clocks)
   constant grid_hoffset_c : natural := 16#08#;
   -- horizontal width of vertical segments and dots (3.54 MHz clock)
@@ -120,7 +120,9 @@ begin
              lower_v,
              left_v,
              right_v,
-             dot_v    : natural;
+             dot_v,    
+             left_v10,
+             dot_v10 : natural;
   begin
     if res_i then
       hgrid_q <= '0';
@@ -164,6 +166,14 @@ begin
                 end if;
               end if;
             end loop;
+            
+            -- Show dot column n.10                       --avlixa
+            left_v10  := grid_hoffset_c + 9 * grid_hspace_c;
+            dot_v10   := left_v10 + grid_hwidth_c;
+            if hpos_v >= left_v10 and hpos_v < dot_v10 then
+               dgrid_q <= '1';
+            end if;
+           
           end if;
         end loop;
 
