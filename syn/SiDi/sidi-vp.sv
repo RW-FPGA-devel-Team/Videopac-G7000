@@ -524,7 +524,9 @@ dac #(
    .dac_o        (AUDIO_L)
   );
 
-  wire [15:0] audio_out = ({2'b0, snd, snd, snd, snd[3:2]} + 16'h8000) ;
+wire [15:0] audio_out = ({1'b0, snd, snd, snd, snd[3:1]} + 16'h8000) ;
+//wire [15:0] audio_out = {snd, snd, snd, snd, snd};
+
 assign LED     = char_en;
 assign AUDIO_R = AUDIO_L;
 

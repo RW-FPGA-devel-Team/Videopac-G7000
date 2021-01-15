@@ -107,9 +107,6 @@ begin
       prescaler_q <= pre_3k9_max_c;
       chop_cnt_q  <= (others => '0');
       chop_q      <= '0';
-      -- set LSB of noise LFSR
-      noise_lfsr_q    <= (others => '0');
-      noise_lfsr_q(0) <= '1';
 
     elsif rising_edge(clk_i) then
       if clk_en_i then
@@ -154,12 +151,10 @@ begin
             snd_q(23) <= snd_q(0);
           end if;
 
-          -- and update noise LFSR register by shifting it up
-          noise_lfsr_q(noise_lfsr_q'length-1 downto 1) <=
-            noise_lfsr_q(noise_lfsr_q'length-2 downto 0);
-          -- insert tapped bits at vacant position 0
-          noise_lfsr_q(0) <= noise_lfsr_q(15) xor noise_lfsr_q(13) xor
-                             noise_lfsr_q(0);
+          if cpu2snd_i.noise then			 
+				snd_q(15) <= snd_q(5) xor snd_q(0);
+				snd_q(23) <= snd_q(5) xor snd_q(0);
+          end if;
         end if;
 
         -- chopper
@@ -193,9 +188,7 @@ begin
 
 
   -- overlay noise bit on shift register output
-  snd_s <=   snd_q(0) xor noise_lfsr_q(15)
-           when cpu2snd_i.noise else
-             snd_q(0);
+  snd_s <=   snd_q(0);
 
 
   -----------------------------------------------------------------------------
