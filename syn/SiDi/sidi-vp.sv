@@ -67,7 +67,8 @@ parameter CONF_STR = {
 	"F,BIN,Load catridge;",
 	"F,CHR,Change VDC font;",
 	"OE,System,Odyssey2,Videopac;",
-	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%,CRT 75%;",
+	"O5,Palette,NTSC,PAL;",
+	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%;",
 	"O7,Swap Joysticks,No,Yes;",
 	"T0,Reset;",
 	"V,v",`BUILD_DATE
@@ -89,7 +90,9 @@ wire [24:0] ps2_mouse;
 wire ypbpr;
 
 
-wire        PAL = status[14];
+wire        PAL  = status[14];
+wire        MODE = status[5];
+
 wire        joy_swap = status[7];
 
 wire [15:0] joya = joy_swap ? joystick_1 : joystick_0;
@@ -273,8 +276,8 @@ wire HBlank;
 
 wire ce_pix = clk_vdc_en;
 
-wire [23:0] colors = color_lut[{R, G, B, luma}];
 
+wire [23:0] colors = MODE ? color_lut_pal[{R, G, B, luma}] : color_lut_ntsc[{R, G, B, luma}];
 
 
 wire [2:0] scale = status[11:9];
@@ -296,39 +299,22 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
 	.clk_sys(clk_sys),
 	.ce_pix_actual(ce_pix),
 	.scandoubler_disable(scandoubler_disable),
-	.scanlines(0),
+	.scanlines(scandoubler_disable ? 2'b00 : {scale==3, scale==2}),
+	//.scanlines(0),
 	.hq2x(scale==1),
 	.mono(0),
 	
 	.line_start(0),
 	.ypbpr_full(1),
 
+	.R({colors[23:16]  >>2}),
+	.G({colors[15:8]   >>2}),
+	.B({colors[7:0]    >>2})
 
-   .R({R,R,luma,R,luma,luma}),
-	.G({G,G,luma,G,luma,luma}),
-	.B({B,B,luma,B,luma,luma})
 );
 
 
-//video_mixer mixer
-//(
-//        .*,
-//
-//        .ce_pix(vclk),
-//        .ce_pix_out(CE_PIXEL),
-//
-//        
-//        .hq2x(0),
-//        .scanlines(0),
-////      .scandoubler(scale || scandoubler_disable),
-//        .scandoubler(0),
-//        .R(r_o),
-//        .G(g_o),
-//        .B(b_o),
-//
-//        .mono(0)
-//
-//);
+
 
 ////////////////////////////  INPUT  ////////////////////////////////////
 
@@ -523,17 +509,7 @@ wire [12:0] rom_addr =
 	cart_bank_0 : 1'b0, cart_addr[11], cart_addr[9:0]};
 
 
-// LUT using calibrated palette
-wire [23:0] color_lut[16] = '{
-	24'h000000, 24'h676767,
-	24'h1a37be, 24'h5c80f6,
-	24'h006d07, 24'h56c469,
-	24'h2aaabe, 24'h77e6eb,
-	24'h790000, 24'hc75151,
-	24'h94309f, 24'hdc84e8,
-	24'h77670b, 24'hc6b86a,
-	24'hcecece, 24'hffffff
-};
+
 wire snd_o;
 wire [3:0] snd;
 wire cart_wr_n;
@@ -551,4 +527,45 @@ dac #(
   wire [15:0] audio_out = ({2'b0, snd, snd, snd, snd[3:2]} + 16'h8000) ;
 assign LED     = char_en;
 assign AUDIO_R = AUDIO_L;
+
+// LUT using calibrated palette
+wire [23:0] color_lut_ntsc[16] = '{
+	24'h000000,    //BLACK
+	24'h676767,    //BLACK LUMA
+	24'h1a37be,
+	24'h5c80f6,
+	24'h006d07,
+	24'h56c469,
+	24'h2aaabe,
+	24'h77e6eb,
+	24'h790000,    //RED
+	24'hc75151,    //RED LUMA
+	24'h94309f,
+	24'hdc84e8,
+	24'h77670b,
+	24'hc6b86a,
+	24'hcecece,     //WHITE 
+	24'hffffff      //WHITE LUMA
+};
+
+wire [23:0] color_lut_pal[16] = '{
+	24'h000000,    //BLACK
+	24'h494949,    //BLACK LUMA
+	24'h0000B6,    //Blue
+	24'h4949ff,
+	24'h00B601,    //Green
+	24'h49ff49,
+	24'h00b6c9,    //Cyan
+	24'h49ffff,
+	24'hB60000,    //RED
+	24'hff4949,    //RED LUMA
+	24'hb600b6,    //magenta     
+	24'hff49ff,
+	24'hb6b600,    //Yellow    
+	24'hffff49,
+	24'hb6b6b6,     //WHITE 
+	24'hffffff      //WHITE LUMA
+};
+
+
 endmodule
