@@ -73,15 +73,14 @@ architecture rtl of i8244_sound is
   signal snd_q : std_logic_vector(23 downto 0);
   signal snd_s : std_logic;
   signal hbl_q : std_logic;
-
+  signal hbl_cnt_q : integer := 0;
+  
   constant pre_3k9_max_c : unsigned(3 downto 0) := to_unsigned( 3, 4);
   constant pre_0k9_max_c : unsigned(3 downto 0) := to_unsigned(15, 4);
   signal   prescaler_q   : unsigned(3 downto 0);
 
   constant shift_cnt_max_c : unsigned(4 downto 0) := to_unsigned(23, 5);
   signal   shift_cnt_q     : unsigned(4 downto 0);
-
-  signal noise_lfsr_q : std_logic_vector(15 downto 0);
 
   signal int_q : boolean;
 
@@ -114,8 +113,16 @@ begin
         int_q <= false;
 
         -- flag for edge detection
-        hbl_q <= hbl_i;
-
+        if clk_en_i and hbl_i = '1' then
+		     hbl_cnt_q <= hbl_cnt_q + 1 ;
+		  end if;
+		  
+		  if hbl_cnt_q = 47 then 
+		      hbl_q <= '0' ;
+				hbl_cnt_q <= 0;
+			else hbl_q <= '1';
+        end if;
+		  
         shift_en_v := false;
         -- prescaler
         if hbl_i = '1' and hbl_q = '0' then  -- detect rising edge on hbl
@@ -128,9 +135,7 @@ begin
             end case;
 
             -- and shift one bit
-            if cpu2snd_i.enable then
               shift_en_v := true;
-            end if;
           else
             prescaler_q <= prescaler_q - 1;
           end if;
@@ -144,7 +149,7 @@ begin
             shift_cnt_q <= shift_cnt_max_c;
 
             -- generate interrupt
-            int_q <= true;
+            int_q <= true; 
           else
             shift_cnt_q <= shift_cnt_q - 1;
             snd_q(22 downto 0) <= snd_q(23 downto 1);
@@ -155,6 +160,7 @@ begin
 				snd_q(15) <= snd_q(5) xor snd_q(0);
 				snd_q(23) <= snd_q(5) xor snd_q(0);
           end if;
+			 
         end if;
 
         -- chopper
@@ -187,7 +193,7 @@ begin
   -----------------------------------------------------------------------------
 
 
-  -- overlay noise bit on shift register output
+  
   snd_s <=   snd_q(0);
 
 
@@ -195,9 +201,9 @@ begin
   -- Output mapping
   -----------------------------------------------------------------------------
   snd_int_o <= int_q;
-  snd_o     <= snd_s and chop_q;
-  snd_vec_o <=   cpu2snd_i.volume
-               when snd_s = '1' and cpu2snd_i.enable else
-                 (others => '0');
+  snd_o     <= snd_s and chop_q; 
+  snd_vec_o <=   cpu2snd_i.volume when  snd_s = '1' and cpu2snd_i.enable 
+                 else
+                  (others => '0');
 
 end rtl;
