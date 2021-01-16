@@ -69,6 +69,7 @@ parameter CONF_STR = {
 	"OE,System,Odyssey2,Videopac;",
 	"O5,Palette,NTSC,PAL;",
 	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%;",
+	"O1,The Voice,Off,on;",
 	"O7,Swap Joysticks,No,Yes;",
 	"T0,Reset;",
 	"V,v",`BUILD_DATE
@@ -135,6 +136,7 @@ mist_io #(.STRLEN($size(CONF_STR)>>3)) mist_io
 wire clock_locked;
 wire clk_sys_o2;
 wire clk_sys_vp;
+wire clk_voice;
 
 wire clk_sys = PAL ? clk_sys_vp : clk_sys_o2;
 
@@ -144,6 +146,7 @@ pll pll
 	.areset(0),
 	.c0(clk_sys_o2),
 	.c1(clk_sys_vp),
+	.c2(clk_voice),
 	.locked(clock_locked)
 );
 
@@ -214,7 +217,7 @@ vp_console vp
 	.res_n_i        (~reset & joy_reset), // low to reset
 
 	// Cart Data
-	.cart_cs_o      (),
+	.cart_cs_o      (cart_cs_o),
 	.cart_cs_n_o    (),
 	.cart_wr_n_o    (cart_wr_n),   // Cart write
 	.cart_a_o       (cart_addr),   // Cart Address
@@ -223,7 +226,7 @@ vp_console vp
 	.cart_bs0_o     (cart_bank_0), // Bank switch 0
 	.cart_bs1_o     (cart_bank_1), // Bank Switch 1
 	.cart_psen_n_o  (cart_rd_n),   // Program Store Enable (read)
-	.cart_t0_i      (kb_read_ack), // KB/Voice ack
+	.cart_t0_i      (kb_read_ack || !ldq), // KB/Voice ack
 	.cart_t0_o      (),
 	.cart_t0_dir_o  (),
 	
@@ -511,10 +514,11 @@ wire [12:0] rom_addr =
 
 
 wire snd_o;
+wire the_voice;
 wire [3:0] snd;
 wire cart_wr_n;
 wire [7:0] cart_di;
-
+wire VOICE = status[1];
 dac #(
    .c_bits         (16))
   audiodac_l(
@@ -524,11 +528,51 @@ dac #(
    .dac_o        (AUDIO_L)
   );
 
-wire [15:0] audio_out = ({1'b0, snd, snd, snd, snd[3:1]} + 16'h8000) ;
-//wire [15:0] audio_out = {snd, snd, snd, snd, snd};
+wire [15:0] audio_out = ({1'b0,VOICE?{the_voice,the_voice,the_voice,}:3'b0, snd, snd,snd} + 16'h8000);
+//wire [15:0] audio_out = ({2'b0, snd,VOICE ? sample_out:snd, snd, snd, snd[3:2]} + 16'h8000);
 
 assign LED     = char_en;
 assign AUDIO_R = AUDIO_L;
+
+
+////////////The Voice /////////////////////////////////////////////////
+
+reg [9:0] v_rom_addr;
+
+// debug signals for 16-bit DAC
+wire sample_stb;
+wire signed [15:0] sample_out;
+    
+wire ldq;
+	 
+
+SPEECH256_TOP speech256 (
+        .clk        (clk_voice),
+        .rst_an     (!reset),
+        .ldq        (ldq),
+        .data_in    (v_rom_addr),
+        .data_stb   (ald_n),
+        .pwm_out    (the_voice),
+        .sample_out (sample_out),
+        .sample_stb (sample_stb)
+);
+
+
+
+wire ald_n   = !(!rom_addr[7] || cart_wr_n || cart_cs_o);
+wire rst_a_n ;
+
+always @(posedge ald_n) 
+begin
+ rst_a_n <= cart_di[5]; 
+end 
+
+assign v_rom_addr= {rom_addr[6],rom_addr[5],rom_addr[4],rom_addr[3],rom_addr[2],rom_addr[1],rom_addr[0],1'b0};
+
+
+
+///////////////////////////////////////////////////////////////////////
+
 
 // LUT using calibrated palette
 wire [23:0] color_lut_ntsc[16] = '{
