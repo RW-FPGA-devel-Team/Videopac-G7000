@@ -84,9 +84,6 @@ architecture rtl of i8244_sound is
 
   signal int_q : boolean;
 
-  signal chop_cnt_q : unsigned(3 downto 0);
-  signal chop_q     : std_logic;
-
 begin
 
   -----------------------------------------------------------------------------
@@ -104,8 +101,7 @@ begin
       shift_cnt_q <= shift_cnt_max_c;
       int_q       <= false;
       prescaler_q <= pre_3k9_max_c;
-      chop_cnt_q  <= (others => '0');
-      chop_q      <= '0';
+
       -- set LSB of noise LFSR
       noise_lfsr_q    <= (others => '0');
       noise_lfsr_q(0) <= '1';
@@ -159,18 +155,7 @@ begin
           noise_lfsr_q(0) <= noise_lfsr_q(15) xor noise_lfsr_q(13) xor
                              noise_lfsr_q(0);
         end if;
-
-        -- chopper
-        if chop_cnt_q = unsigned(cpu2snd_i.volume) then
-          chop_q <= '1';
-        end if;
-        if chop_cnt_q = 0 then
-          chop_cnt_q <= (others => '1');
-          chop_q     <= '0';
-        else
-          chop_cnt_q <= chop_cnt_q - 1;
-        end if;
-
+        
       end if;
 
       -- parallel load from CPU interface
