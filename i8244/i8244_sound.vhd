@@ -86,6 +86,7 @@ architecture rtl of i8244_sound is
 
   signal chop_cnt_q : unsigned(3 downto 0);
   signal chop_q     : std_logic;
+  signal rotate_bit : std_logic;
 
 begin
 
@@ -111,21 +112,26 @@ begin
       if clk_en_i then
         -- default: interrupt off
         int_q <= false;
-
+		  
         -- flag for edge detection
         if clk_en_i and hbl_i = '1' then
 		     hbl_cnt_q <= hbl_cnt_q + 1 ;
+			  
 		  end if;
 		  
-		  if hbl_cnt_q = 47 then 
+		  if hbl_cnt_q = 242 then 
 		      hbl_q <= '0' ;
 				hbl_cnt_q <= 0;
-			else hbl_q <= '1';
+				snd_q(23 downto 0) <= snd_q(0) & snd_q(23 downto 1);
+ 
+  		  else hbl_q <= '1';
+		  
+		  
         end if;
 		  
         shift_en_v := false;
         -- prescaler
-        if hbl_i = '1' and hbl_q = '0' then  -- detect rising edge on hbl
+        if hbl_i = '1' then  -- detect rising edge on hbl
           if prescaler_q = 0 then
             case cpu2snd_i.freq is
               when SND_FREQ_HIGH =>
@@ -136,6 +142,7 @@ begin
 
             -- and shift one bit
               shift_en_v := true;
+				  
           else
             prescaler_q <= prescaler_q - 1;
           end if;
@@ -152,28 +159,17 @@ begin
             int_q <= true; 
           else
             shift_cnt_q <= shift_cnt_q - 1;
-            snd_q(22 downto 0) <= snd_q(23 downto 1);
-            snd_q(23) <= snd_q(0);
-          end if;
-
-          if cpu2snd_i.noise then			 
-				snd_q(15) <= snd_q(5) xor snd_q(0);
-				snd_q(23) <= snd_q(5) xor snd_q(0);
-          end if;
-			 
+          --  snd_q(23 downto 0) <= snd_q(0) & snd_q(23 downto 1);
+			     
+           end if;	     
+			  
         end if;
-
-        -- chopper
-        if chop_cnt_q = unsigned(cpu2snd_i.volume) then
-          chop_q <= '1';
+		  
+        if cpu2snd_i.noise then			 
+		    snd_q(15) <= snd_q(5) xor snd_q(0);
+		    snd_q(23) <= snd_q(5) xor snd_q(0);
         end if;
-        if chop_cnt_q = 0 then
-          chop_cnt_q <= (others => '1');
-          chop_q     <= '0';
-        else
-          chop_cnt_q <= chop_cnt_q - 1;
-        end if;
-
+     
       end if;
 
       -- parallel load from CPU interface
@@ -193,15 +189,18 @@ begin
   -----------------------------------------------------------------------------
 
 
+  snd_s <=   snd_q(0) ;
   
-  snd_s <=   snd_q(0);
-
 
   -----------------------------------------------------------------------------
   -- Output mapping
   -----------------------------------------------------------------------------
   snd_int_o <= int_q;
-  snd_o     <= snd_s and chop_q; 
+  --snd_o     <= snd_s and chop_q; 
+
+  snd_o <=   snd_s when cpu2snd_i.enable 
+                 else '0';
+                  
   snd_vec_o <=   cpu2snd_i.volume when  snd_s = '1' and cpu2snd_i.enable 
                  else
                   (others => '0');

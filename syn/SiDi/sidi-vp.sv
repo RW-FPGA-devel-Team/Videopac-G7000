@@ -519,19 +519,21 @@ wire [3:0] snd;
 wire cart_wr_n;
 wire [7:0] cart_di;
 wire VOICE = status[1];
-dac #(
-   .c_bits         (16))
-  audiodac_l(
-   .clk_i        (clk_sys),
-   .res_n_i      (1      ),
-   .dac_i        (audio_out),
-   .dac_o        (AUDIO_L)
-  );
+//dac #(
+//   .c_bits         (4))
+//  audiodac_l(
+//   .clk_i        (clk_sys),
+//   .res_n_i      (1      ),
+//   .dac_i        (snd),
+//   .dac_o        (AUDIO_L)
+//  );
 
-wire [15:0] audio_out = ({1'b0,VOICE?{the_voice,the_voice,the_voice,}:3'b0, snd, snd,snd} + 16'h8000);
-//wire [15:0] audio_out = ({2'b0, snd,VOICE ? sample_out:snd, snd, snd, snd[3:2]} + 16'h8000);
+//wire [15:0] audio_out = ({1'b0,VOICE?{the_voice,the_voice,the_voice,}:3'b0, snd, snd,snd} + 16'h8000);
 
+wire [15:0] audio_out = {2'b00, snd,snd, 5'd0} ;//+ {3'b000, snd,snd, 4'd0}; // + sample_out;
 assign LED     = char_en;
+
+assign AUDIO_L = VOICE ? (the_voice |  snd_o) : snd_o;
 assign AUDIO_R = AUDIO_L;
 
 

@@ -181,7 +181,7 @@ architecture struct of vp_console is
          p2_from_cpu_s  : std_logic_vector(7 downto 0);
   signal p1_to_cpu_s,
          p1_from_cpu_s  : std_logic_vector(7 downto 0);
-
+			
   -- glue signals
   signal a_low_s     : std_logic_vector( 7 downto 0);
   signal a_s         : std_logic_vector(11 downto 0);
@@ -220,6 +220,7 @@ begin
   gnd_s <= '0';
 
 
+  -- XROM not (p1_from_cpu_s(1) and p1_from_cpu_s(6)) and psen_n_o
   -----------------------------------------------------------------------------
   -- I8048 uController
   -----------------------------------------------------------------------------
@@ -237,7 +238,7 @@ begin
       int_n_i       => int_n_s,
       ea_i          => gnd_s,
       rd_n_o        => rd_n_s,
-      psen_n_o      => cart_psen_n_o,
+      psen_n_o      => cart_psen_n_o ,
       wr_n_o        => wr_n_s,
       ale_o         => ale_s,
       db_i          => db_to_cpu_s,
