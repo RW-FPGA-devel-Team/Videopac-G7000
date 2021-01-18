@@ -369,6 +369,15 @@ set_global_assignment -name ENABLE_SIGNALTAP OFF
 set_global_assignment -name USE_SIGNALTAP_FILE output_files/stp1.stp
 set_global_assignment -name ROUTER_TIMING_OPTIMIZATION_LEVEL MAXIMUM
 set_global_assignment -name ROUTER_CLOCKING_TOPOLOGY_ANALYSIS ON
+set_global_assignment -name VERILOG_FILE ../../Speech256/spmul/spmul.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/source/source.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/sd2dac/sd2dac.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/pwmdac/pwmdac.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/filter/filter.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/controller/xlat.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/controller/ctrlrom.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/controller/controller.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/speech256_top/speech256_top.v
 set_global_assignment -name SYSTEMVERILOG_FILE "mister-vp.sv"
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/rom_t48.vhd
 set_global_assignment -name VHDL_FILE "../../vp_keymap-c.vhd"

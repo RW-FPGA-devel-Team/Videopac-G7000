@@ -43,7 +43,6 @@
 -- you have the latest version of this file.
 --
 -------------------------------------------------------------------------------
-
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -73,20 +72,20 @@ architecture rtl of i8244_sound is
   signal snd_q : std_logic_vector(23 downto 0);
   signal snd_s : std_logic;
   signal hbl_q : std_logic;
-  signal hbl_cnt_q : integer := 0;
-  
+
   constant pre_3k9_max_c : unsigned(3 downto 0) := to_unsigned( 3, 4);
   constant pre_0k9_max_c : unsigned(3 downto 0) := to_unsigned(15, 4);
   signal   prescaler_q   : unsigned(3 downto 0);
 
-  constant shift_cnt_max_c : unsigned(4 downto 0) := to_unsigned(23, 5);
-  signal   shift_cnt_q     : unsigned(4 downto 0);
+  constant shift_cnt_max_c : unsigned(7 downto 0) := to_unsigned(127, 8);
+  signal   shift_cnt_q     : unsigned(7 downto 0);
+
+  signal noise_lfsr_q : std_logic_vector(15 downto 0);
 
   signal int_q : boolean;
 
   signal chop_cnt_q : unsigned(3 downto 0);
   signal chop_q     : std_logic;
-  signal rotate_bit : std_logic;
 
 begin
 
@@ -107,31 +106,21 @@ begin
       prescaler_q <= pre_3k9_max_c;
       chop_cnt_q  <= (others => '0');
       chop_q      <= '0';
+      -- set LSB of noise LFSR
+      noise_lfsr_q    <= (others => '0');
+      noise_lfsr_q(0) <= '1';
 
     elsif rising_edge(clk_i) then
       if clk_en_i then
         -- default: interrupt off
         int_q <= false;
-		  
+
         -- flag for edge detection
-        if clk_en_i and hbl_i = '1' then
-		     hbl_cnt_q <= hbl_cnt_q + 1 ;
-			  
-		  end if;
-		  
-		  if hbl_cnt_q = 242 then 
-		      hbl_q <= '0' ;
-				hbl_cnt_q <= 0;
-				snd_q(23 downto 0) <= snd_q(0) & snd_q(23 downto 1);
- 
-  		  else hbl_q <= '1';
-		  
-		  
-        end if;
-		  
+        hbl_q <= hbl_i;
+
         shift_en_v := false;
         -- prescaler
-        if hbl_i = '1' then  -- detect rising edge on hbl
+        if hbl_i = '1' and hbl_q = '0' then  -- detect rising edge on hbl
           if prescaler_q = 0 then
             case cpu2snd_i.freq is
               when SND_FREQ_HIGH =>
@@ -141,8 +130,9 @@ begin
             end case;
 
             -- and shift one bit
+            if cpu2snd_i.enable then
               shift_en_v := true;
-				  
+            end if;
           else
             prescaler_q <= prescaler_q - 1;
           end if;
@@ -156,20 +146,31 @@ begin
             shift_cnt_q <= shift_cnt_max_c;
 
             -- generate interrupt
-            int_q <= true; 
+            int_q <= true;
           else
             shift_cnt_q <= shift_cnt_q - 1;
-          --  snd_q(23 downto 0) <= snd_q(0) & snd_q(23 downto 1);
-			     
-           end if;	     
-			  
+            snd_q(23 downto 0) <= snd_q(0) & snd_q(23 downto 1);
+          end if;
+
+          -- and update noise LFSR register by shifting it up
+          noise_lfsr_q(noise_lfsr_q'length-1 downto 1) <=
+            noise_lfsr_q(noise_lfsr_q'length-2 downto 0);
+          -- insert tapped bits at vacant position 0
+          noise_lfsr_q(0) <= noise_lfsr_q(15) xor noise_lfsr_q(13) xor
+                             noise_lfsr_q(0);
         end if;
-		  
-        if cpu2snd_i.noise then			 
-		    snd_q(15) <= snd_q(5) xor snd_q(0);
-		    snd_q(23) <= snd_q(5) xor snd_q(0);
+
+        -- chopper
+        if chop_cnt_q = unsigned(cpu2snd_i.volume) then
+          chop_q <= '1';
         end if;
-     
+        if chop_cnt_q = 0 then
+          chop_cnt_q <= (others => '1');
+          chop_q     <= '0';
+        else
+          chop_cnt_q <= chop_cnt_q - 1;
+        end if;
+
       end if;
 
       -- parallel load from CPU interface
@@ -187,18 +188,17 @@ begin
   end process seq;
   --
   -----------------------------------------------------------------------------
-
-
-  snd_s <=   snd_q(0) ;
   
-
+  -- overlay noise bit on shift register output
+  snd_s <=   snd_q(0) xor noise_lfsr_q(15)
+           when cpu2snd_i.noise else snd_q(0);
+  			  
   -----------------------------------------------------------------------------
   -- Output mapping
   -----------------------------------------------------------------------------
   snd_int_o <= int_q;
-  --snd_o     <= snd_s and chop_q; 
-
-  snd_o <=   snd_s when cpu2snd_i.enable 
+  
+  snd_o <=   snd_s when cpu2snd_i.enable
                  else '0';
                   
   snd_vec_o <=   cpu2snd_i.volume when  snd_s = '1' and cpu2snd_i.enable 

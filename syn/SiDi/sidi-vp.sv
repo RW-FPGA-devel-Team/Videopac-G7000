@@ -92,6 +92,7 @@ wire ypbpr;
 
 
 wire        PAL  = status[14];
+wire        VOICE = status[1];
 wire        MODE = status[5];
 
 wire        joy_swap = status[7];
@@ -518,7 +519,7 @@ wire the_voice;
 wire [3:0] snd;
 wire cart_wr_n;
 wire [7:0] cart_di;
-wire VOICE = status[1];
+
 //dac #(
 //   .c_bits         (4))
 //  audiodac_l(
