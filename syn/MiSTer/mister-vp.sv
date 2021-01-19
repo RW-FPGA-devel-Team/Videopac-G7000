@@ -387,7 +387,7 @@ wire [7:0] cart_di;
 
 												
 //wire [15:0] audio_out = {2'b0, snd,snd,snd, 2'd0};
-wire [15:0] audio_out = (VOICE?{2'b0, snd, snd,snd,2'b0} +voice_out:{2'b0,snd,snd,snd,2'b0}) ;
+wire [15:0] audio_out = (VOICE?{snd, snd, snd,snd,snd} | voice_out[14:0]:{snd,snd,snd,snd,snd}) ;
 wire snd_o;
 //wire [15:0] audio_out = {16{snd_o}};
 

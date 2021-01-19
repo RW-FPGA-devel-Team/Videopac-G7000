@@ -84,7 +84,7 @@ architecture rtl of i8244_sync_gen is
 
   -- last horizontal blank defines horizontal interval:
   --   (228 * 2) - 1 = 455
-  constant last_hpos_c       : pos_t := to_pos_f(454);
+  constant last_hpos_c       : pos_t := to_pos_f(455);
   constant last_hblank_c     : pos_t := last_hpos_c - to_pos_f(0);
   constant first_hblank_c    : pos_t := last_hblank_c - to_pos_f(87);
   constant first_hsync_c     : pos_t := first_hblank_c + to_pos_f(10);
@@ -96,10 +96,10 @@ architecture rtl of i8244_sync_gen is
   -- and ends 5 us before end of hblank
   constant last_hor_int_c    : pos_t := last_hblank_c - to_pos_f(37);
 
-  constant last_vis_line_c   : pos_t := to_pos_f(240);
+  constant last_vis_line_c   : pos_t := to_pos_f(242);
   constant last_frame_line_c : limits_t := (
-    is_ntsc_c => to_pos_f(261),
-    is_pal_c  => to_pos_f(311));
+    is_ntsc_c => to_pos_f(263),
+    is_pal_c  => to_pos_f(313));
   constant first_vblank_c    : pos_t := last_vis_line_c + to_pos_f(0);
   constant last_vblank_c     : limits_t := (
     is_ntsc_c => to_pos_f(0),
