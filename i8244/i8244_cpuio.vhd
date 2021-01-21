@@ -527,7 +527,7 @@ begin
       if clk_rise_en_i or clk_fall_en_i then
         for idx in byte_t'range loop
           if tag_overlap_f(pix  => pix_vec_v,
-                           mask => reg_enoverlap_q,
+                           mask => (reg_enoverlap_q),
                            idx  => idx) then
             reg_overlap_q(idx) <= '1';
 				
@@ -536,8 +536,12 @@ begin
 			 ---------------------------------------------------------------
 			 -- RAMPA trying to get the same values as in the real hardware
 			 ---------------------------------------------------------------
-			 if (reg_overlap_q(5) = '1' or reg_overlap_q(4) = '1') and reg_overlap_q(7) = '0'  then 
-			    reg_overlap_q(3 downto 0) <= "0000";
+			 if ((reg_overlap_q(5) = '1' and reg_enoverlap_q(5)='0') 
+			  or (reg_overlap_q(4) = '1' and reg_enoverlap_q(4)='0'))  
+			  and (reg_overlap_q(7) = '0' and reg_overlap_q(3 downto 0)="0001") then 
+			  
+ 			     reg_overlap_q(3 downto 0) <= "0000";
+					
 			 end if;
 
 
