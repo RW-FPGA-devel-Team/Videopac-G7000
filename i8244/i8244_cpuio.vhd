@@ -228,6 +228,13 @@ architecture rtl of i8244_cpuio is
   signal ale_pulse_s,
          rd_pulse_s,
          wr_pulse_s   : boolean;
+			
+  signal spr0_col_s,
+         spr1_col_s,
+			spr2_col_s,
+			spr3_col_s   : std_logic;
+  signal hgrid_s,
+         vgrid_s      : std_logic;
 
 begin
 
@@ -490,23 +497,52 @@ begin
           reg_x_q <= std_logic_vector(hpos_i(pos_t'high downto 1));
         end if;
       end if;
-
+      
+		spr0_col_s <= minor_pix_i(0);
+		spr1_col_s <= minor_pix_i(1);
+		spr2_col_s <= minor_pix_i(2);
+		spr3_col_s <= minor_pix_i(3);
+		hgrid_s <= grid_hpix_i or grid_dpix_i;
+		vgrid_s <=  grid_vpix_i and not major_pix_i;
+		
+		pix_vec_v := major_pix_i 
+						 & cx_i 
+						 & hgrid_s 
+						 & vgrid_s 
+						 & spr3_col_s 
+						 & spr2_col_s
+						 & spr1_col_s
+						 & spr0_col_s;
+						 
       -- detect overlap -------------------------------------------------------
-      pix_vec_v := (bit_over_major_c  => major_pix_i,
-                    bit_over_ext_c    => cx_i,
-                    bit_over_hdgrid_c => grid_hpix_i or grid_dpix_i,
-                    bit_over_vgrid_c  => grid_vpix_i,
-                    bit_over_minor3_c => minor_pix_i(3),
-                    bit_over_minor2_c => minor_pix_i(2),
-                    bit_over_minor1_c => minor_pix_i(1),
-                    bit_over_minor0_c => minor_pix_i(0));
+--      pix_vec_v := (bit_over_major_c  => major_pix_i,
+--													  
+--                    bit_over_ext_c    => cx_i,
+--                    bit_over_hdgrid_c => hgrid_s,
+--                    bit_over_vgrid_c  => vgrid_s,
+--                    bit_over_minor3_c => spr3_col_s,
+--                    bit_over_minor2_c => spr2_col_s,
+--                    bit_over_minor1_c => spr1_col_s,
+--                    bit_over_minor0_c => spr0_col_s);
       if clk_rise_en_i or clk_fall_en_i then
         for idx in byte_t'range loop
           if tag_overlap_f(pix  => pix_vec_v,
                            mask => reg_enoverlap_q,
                            idx  => idx) then
             reg_overlap_q(idx) <= '1';
+				
           end if;
+			 
+			 ---------------------------------------------------------------
+			 -- RAMPA trying to get the same values as in the real hardware
+			 ---------------------------------------------------------------
+			 if (reg_overlap_q(5) = '1' or reg_overlap_q(4) = '1') and reg_overlap_q(7) = '0'  then 
+			    reg_overlap_q(3 downto 0) <= "0000";
+			 end if;
+
+
+--			
+			 
         end loop;
       end if;
       -- clear OVERLAP register upon read

@@ -102,6 +102,15 @@ module CONTROLLER (
         .en         (rom_en)
     );
 
+    // control program ROM
+//    voice_rom voice_rom
+//	 (
+//        .clock        (clk),
+//        .q            (rom_data),
+//        .address      (rom_addr),
+//        .rden         (rom_en)
+//    );
+
     localparam ROM_ADDR_ZERO = 3'b000,    // zero the ROM address 
               ROM_ADDR_INC  = 3'b001,    // increment the ROM address
               ROM_ADDR_JMP  = 3'b010,    // jump to code

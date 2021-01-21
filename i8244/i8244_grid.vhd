@@ -195,7 +195,7 @@ begin
               lower_v := upper_v + grid_vspace_c;
 
               -- check upper and lower bar limits
-              if vpos_v >= upper_v and vpos_v < lower_v then
+              if vpos_v >=upper_v and vpos_v < lower_v then 
                 if grid_cfg_i.bars.vbars(vbar)(idx) = '1' then
                   vgrid_q <= '1';
                 end if;
