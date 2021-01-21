@@ -155,7 +155,7 @@ parameter CONF_STR = {
 	"F2,CHR,Change VDC font;",
 	"-;",
 	"OE,System,Odyssey2,Videopac;",
-	"O5,Palette,NTSC,PAL;",
+	"O6,Palette,NTSC,PAL;",
 	"O8,Aspect ratio,4:3,16:9;",
 	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%,CRT 75%;",
 	"O1,The Voice,Off,on;",
@@ -215,7 +215,7 @@ wire       PAL = status[14];
 wire       joy_swap = status[7];
 
 wire       VOICE = status[1];
-wire       MODE = status[5];
+wire       MODE = status[6];
 
 wire [15:0] joya = joy_swap ? joystick_1 : joystick_0;
 wire [15:0] joyb = joy_swap ? joystick_0 : joystick_1;
