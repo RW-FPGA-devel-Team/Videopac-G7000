@@ -1,6 +1,6 @@
 # Odyssey2/Videopac for FPGA.
 
-### This is an FPGA implementation of the Magnavox Oddysey2/Videopac G700 based on FPGA videopac by Arnim Laeuger and ported to MiSTer (With additional work from wsoltys) by [Jamie Dickson] (https://github.com/Kitrinx).
+### This is an FPGA implementation of the Magnavox Oddysey2/Videopac G700 based on FPGA videopac by Arnim Laeuger and ported to MiSTer (With additional work from wsoltys) by [Jamie Dickson](https://github.com/Kitrinx).
 
 ## Features
  * Switch between Odyssey2 and Videopac mode.
