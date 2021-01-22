@@ -643,17 +643,23 @@ SPEECH256_TOP speech256 (
         .sample_stb (sample_stb)
 );
 
-
-
 wire ald_n   = !(!rom_addr[7] || cart_wr_n || cart_cs_o);
 wire rst_a_n ;
 
-always @(posedge ald_n) 
-begin
- rst_a_n <= cart_di[5]; 
-end 
+ls74 ls74
+(
+  .d     (cart_di[5]),
+  .clr   (VOICE? 1'b1: 1'b0),
+  .q     (rst_a_n),
+  .pre   (1'b1),
+  .clk   (!ald_n)
+);
+
+
 
 assign v_rom_addr= {rom_addr[6],rom_addr[5],rom_addr[4],rom_addr[3],rom_addr[2],rom_addr[1],rom_addr[0],1'b0};
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 // LUT using calibrated palette
