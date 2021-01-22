@@ -315,7 +315,8 @@ begin
       mask_res_v := (pix(idx) and mask(idx)) = '1' and
                     pix_or_v = '1';
 
-      return pix_res_v or mask_res_v;
+      
+		return  mask_res_v or pix_res_v;
     end;
 
   begin
@@ -529,16 +530,18 @@ begin
           if tag_overlap_f(pix  => pix_vec_v,
                            mask => (reg_enoverlap_q),
                            idx  => idx) then
-            reg_overlap_q(idx) <= '1';
+            reg_overlap_q(idx) <= '1' ;
 				
           end if;
+			 
+	
 			 
 			 ---------------------------------------------------------------
 			 -- RAMPA trying to get the same values as in the real hardware
 			 ---------------------------------------------------------------
 			 if ((reg_overlap_q(5) = '1' and reg_enoverlap_q(5)='0') 
 			  or (reg_overlap_q(4) = '1' and reg_enoverlap_q(4)='0'))  
-			  and (reg_overlap_q(7) = '0' and reg_overlap_q(3 downto 0)="0001") then 
+			  and (reg_overlap_q(7) = '0' and reg_overlap_q(3 downto 0) /="0000") then 
 			  
  			     reg_overlap_q(3 downto 0) <= "0000";
 					
