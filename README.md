@@ -20,7 +20,6 @@ Copy the *.rbf file to your SD card. Create an **Videopac** folder on the card, 
 
 * **The voice** is not detected in any games.
 * The roms of "**the voice**" need to be replaced by the origial ones.
-* Lot of noise if the voice is not initialized.
 * Extended rom cartridges, still not supported.
 * Still a few glitches.
 
