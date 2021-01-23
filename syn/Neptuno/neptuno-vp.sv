@@ -167,15 +167,15 @@ data_io data_io
 	.vga_hsync(HSync),
 	.vga_vsync(VSync),
 	
-	.red_i({colors[23:16]  >>2}),
-	.green_i({colors[15:8]   >>2}),
-	.blue_i({colors[7:0]    >>2}),
+	.red_i({colors[23:16]}),  //  >>2}),
+	.green_i({colors[15:8]}), //  >>2}),
+	.blue_i({colors[7:0]}),   //  >>2}),
 	.red_o(R_OSD),
 	.green_o(G_OSD),
 	.blue_o(B_OSD),
 	
-	.ps2k_clk_in(ps2_clk),
-	.ps2k_dat_in(ps2_data),
+	.ps2k_clk_in(PS2_CLK),
+	.ps2k_dat_in(PS2_DAT),
 	.ps2_key(ps2_key),
 
 	.host_scandoubler_disable(host_scandoubler_disable),
@@ -400,13 +400,13 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
 	.ypbpr_full(1),
 
 `ifndef CYCLONE
-	.R({colors[23:16]  >>2}),
-	.G({colors[15:8]   >>2}),
-	.B({colors[7:0]    >>2})
+	.R({colors[23:16] >>2}),
+	.G({colors[15:8]  >>2}),
+	.B({colors[7:0]   >>2})
 `else	
-	.R(R_OSD),
-	.G(G_OSD),
-	.B(B_OSD),
+	.R(R_OSD[7:2]),
+	.G(G_OSD[7:2]),
+	.B(B_OSD[7:2]),
 	.SPI_SCK(),
 	.SPI_SS3(),
 	.SPI_DI()
