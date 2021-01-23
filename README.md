@@ -25,7 +25,7 @@ Copy the *.rbf file to your SD card. Create an **Videopac** folder on the card, 
 
 ## Thanks to:
 
-* **René van den Enden** Videopac guru. helped us via email and posted lots of information on [videopac.nl] (http://www.videopac.nl)
+* **René van den Enden** Videopac guru. helped us via email and posted lots of information on [videopac.nl](http://www.videopac.nl)
 * **Mejias3D** Support on videopac internals and 8048 assembler programming.
 * **avlixa** For the **ZXDOS** port.
 * **Antonio Sanchez** For the LX16 port.
