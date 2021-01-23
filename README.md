@@ -20,16 +20,17 @@ Copy the *.rbf file to your SD card. Create an **Videopac** folder on the card, 
 
 * **The voice** is not detected in any games.
 * The roms of "**the voice**" need to be replaced by the origial ones.
-* Lot of noise if the voice is not initialized.
 * Extended rom cartridges, still not supported.
 * Still a few glitches.
 
 ## Thanks to:
 
-* **René van den Enden** Videopac guru. helped us via email and posted lots of information on [videopac.nl] (http://www.videopac.nl)
+* **René van den Enden** Videopac guru. helped us via email and posted lots of information on [videopac.nl](http://www.videopac.nl)
 * **Mejias3D** Support on videopac internals and 8048 assembler programming.
 * **avlixa** For the **ZXDOS** port.
-* **Wilco2009** For the SD-cart for the real console and for helping with hardware internals and tricks.
+* **Antonio Sanchez** For the LX16 port.
+* **Wilco2009** For the SD-cart for the real console and for helping with hardware internals and tricks his [sd cartridge](https://wilco2009.blogspot.com/2020/) for the real console is a must!.
 
 ## Some ROMS.
- You can download almost all the console roms from the [René van dem Enden](http://www.ozyr.com/rene/VP_O2-roms777.zip) site. This .zip file contains 220 games and is 765 kB. 
+*  You can download almost all the console roms from the [René van dem Enden](http://www.ozyr.com/rene/VP_O2-roms777.zip) site. This .zip file contains 220 games and is 765 kB. 
+* Also the **wilco2009** SD collection [here](https://1drv.ms/u/s!Avo9sa7McTNBjbJPgZ2FjR_3bj3Pig). 
