@@ -628,7 +628,7 @@ wire [7:0] cart_di;
 //wire [15:0] audio_out = ({1'b0,VOICE?{the_voice,the_voice,the_voice,}:3'b0, snd, snd,snd} + 16'h8000);
 
 wire [15:0] audio_out = VOICE ? {3'b000, snd,snd, 5'd0} + sample_out : {3'b000, snd,snd, 5'd0} ; //+ {3'b000, snd,snd, 4'd0}; // + sample_out;
-assign LED     = char_en;
+assign LED     = ~(VOICE | PAL | MODE); //char_en;
 
 assign AUDIO_L = VOICE ? (the_voice |  snd_o) : snd_o;
 assign AUDIO_R = AUDIO_L;
