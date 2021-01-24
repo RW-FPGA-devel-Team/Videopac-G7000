@@ -27,8 +27,8 @@ module neptuno_vp
         output  [5:0] VGA_B,
         output        VGA_HS,
         output        VGA_VS,
-        output        AUDSG_L,
-        output        AUDSG_R,  
+        output        AUDIO_L,
+        output        AUDIO_R,  
 
 		  input         UART_RX,
 		  output        UART_TX,
@@ -193,10 +193,10 @@ data_io data_io
 	.dac_LRCK(LRCLK),
 	.dac_SCLK(SCLK),
 	.dac_SDIN(SDIN),
-	.sigma_L(AUDSG_L),
-	.sigma_R(AUDSG_R),
-	.L_data(AUDIO_L),
-	.R_data(AUDIO_R),
+	.sigma_L(),
+	.sigma_R(),
+	.L_data(audio_out),
+	.R_data(audio_out),
 
 	.spi_miso(SD_MISO),
 	.spi_mosi(SD_MOSI),
@@ -627,7 +627,7 @@ wire [7:0] cart_di;
 
 //wire [15:0] audio_out = ({1'b0,VOICE?{the_voice,the_voice,the_voice,}:3'b0, snd, snd,snd} + 16'h8000);
 
-wire [15:0] audio_out = {2'b00, snd,snd, 5'd0} ;//+ {3'b000, snd,snd, 4'd0}; // + sample_out;
+wire [15:0] audio_out = VOICE ? {3'b000, snd,snd, 5'd0} + sample_out : {3'b000, snd,snd, 5'd0} ; //+ {3'b000, snd,snd, 4'd0}; // + sample_out;
 assign LED     = char_en;
 
 assign AUDIO_L = VOICE ? (the_voice |  snd_o) : snd_o;
