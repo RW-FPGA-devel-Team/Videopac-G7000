@@ -262,6 +262,8 @@ set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 
 # end ENTITY(sidi_vp)
 # -------------------
+#set_global_assignment -name VERILOG_FILE ../SiDi/sys/data_io.v
+set_global_assignment -name VHDL_FILE ../SiDi/dac.vhd
 set_global_assignment -name VHDL_FILE ../../74ls74.vhd
 set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/video_space.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/video_mixer.sv
@@ -272,7 +274,6 @@ set_global_assignment -name VERILOG_FILE ../SiDi/sys/osd.v
 set_global_assignment -name VERILOG_FILE ../SiDi/sys/mist_video.v
 set_global_assignment -name VERILOG_FILE ../SiDi/sys/mist_io.v
 set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/hq2x.sv
-#set_global_assignment -name VERILOG_FILE ../SiDi/sys/data_io.v
 set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/cofi.sv
 set_global_assignment -name VERILOG_FILE ../../Speech256/speech256_top/speech256_top.v
 set_global_assignment -name VERILOG_FILE ../../Speech256/sd2dac/sd2dac.v

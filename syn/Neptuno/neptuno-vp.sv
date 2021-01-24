@@ -75,6 +75,8 @@ assign   SDRAM_nCS = 1'b1;
 
 assign UART_TX = 'Z;
 
+assign LED = ~VOICE;
+
 //////////////////////////////////////////////////////////////////
 
 `include "build_id.v"
@@ -616,59 +618,65 @@ wire [3:0] snd;
 wire cart_wr_n;
 wire [7:0] cart_di;
 
-//dac #(
-//   .c_bits         (4))
-//  audiodac_l(
-//   .clk_i        (clk_sys),
-//   .res_n_i      (1      ),
-//   .dac_i        (snd),
-//   .dac_o        (AUDIO_L)
-//  );
+dac #(
+   .c_bits         (16))
+  audiodac_l(
+   .clk_i        (clk_sys),
+   .res_n_i      (1      ),
+   .dac_i        (audio_out),
+   .dac_o        (AUDIO_L)
+  );
 
-//wire [15:0] audio_out = ({1'b0,VOICE?{the_voice,the_voice,the_voice,}:3'b0, snd, snd,snd} + 16'h8000);
+//wire [15:0] audio_out = (VOICE?{snd, snd, snd,snd} | voice_out[15:0]:{snd,snd,snd,snd}) ;
 
-wire [15:0] audio_out = VOICE ? {3'b000, snd,snd, 5'd0} + sample_out : {3'b000, snd,snd, 5'd0} ; //+ {3'b000, snd,snd, 4'd0}; // + sample_out;
-assign LED     = ~(VOICE | PAL | MODE); //char_en;
-
-assign AUDIO_L = VOICE ? (the_voice |  snd_o) : snd_o;
+wire [15:0] audio_out = VOICE ? {3'b000, snd,snd, 5'd0} + voice_out : {3'b000, snd,snd, 5'd0};
 assign AUDIO_R = AUDIO_L;
 
 
 ////////////The Voice /////////////////////////////////////////////////
 
-reg [9:0] v_rom_addr;
-
-// debug signals for 16-bit DAC
 wire sample_stb;
-wire signed [15:0] sample_out;
+reg signed [15:0] signed_voice_out;
+reg        [15:0] voice_out;
     
 wire ldq;
-	 
+         
 
 SPEECH256_TOP speech256 (
         .clk        (clk_voice),
-        .rst_an     (!reset),
+        .rst_an     (rst_a_n),
         .ldq        (ldq),
-        .data_in    (v_rom_addr),
+        .data_in    (rom_addr[6:0]),
         .data_stb   (ald_n),
         .pwm_out    (the_voice),
-        .sample_out (sample_out),
-        .sample_stb (sample_stb)
+        .sample_out (signed_voice_out),
+        .sample_stb ()
 );
+
 
 
 
 wire ald_n   = !(!rom_addr[7] || cart_wr_n || cart_cs_o);
 wire rst_a_n ;
 
-always @(posedge ald_n) 
-begin
- rst_a_n <= cart_di[5]; 
-end 
+ls74 ls74
+(
+  .d     (cart_di[5]),
+  .clr   (VOICE? 1'b1: 1'b0),
+  .q     (rst_a_n),
+  .pre   (1'b1),
+  .clk   (!ald_n)
+);
 
-assign v_rom_addr= {rom_addr[6],rom_addr[5],rom_addr[4],rom_addr[3],rom_addr[2],rom_addr[1],rom_addr[0],1'b0};
 
-
+always @* begin
+  if (signed_voice_out < 16'd0) begin
+    voice_out = ~signed_voice_out;
+  end
+  else begin
+    voice_out = signed_voice_out ;
+  end
+end
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -711,6 +719,5 @@ wire [23:0] color_lut_pal[16] = '{
 	24'hb6b6b6,     //WHITE 
 	24'hffffff      //WHITE LUMA
 };
-
 
 endmodule
