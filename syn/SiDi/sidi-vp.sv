@@ -529,31 +529,29 @@ dac #(
    .dac_o        (AUDIO_L)
   );
 
-wire [15:0] audio_out = (VOICE?{snd, snd, snd,snd,snd} | voice_out[14:0]:{snd,snd,snd,snd,snd}) ;
+wire [15:0] audio_out = (VOICE?{snd, snd, snd,snd} | voice_out[14:0]:{snd,snd,snd,snd,snd}) ;
 
 assign AUDIO_R = AUDIO_L;
 
 
 ////////////The Voice /////////////////////////////////////////////////
 
-reg [9:0] v_rom_addr;
-
-// debug signals for 16-bit DAC
 wire sample_stb;
-wire signed [15:0] voice_out;
+reg signed [15:0] signed_voice_out;
+reg        [15:0] voice_out;
     
 wire ldq;
-	 
+         
 
 SPEECH256_TOP speech256 (
         .clk        (clk_voice),
         .rst_an     (rst_a_n),
         .ldq        (ldq),
-        .data_in    (v_rom_addr),
+        .data_in    (rom_addr[6:0]),
         .data_stb   (ald_n),
         .pwm_out    (the_voice),
-        .sample_out (voice_out),
-        .sample_stb (sample_stb)
+        .sample_out (signed_voice_out),
+        .sample_stb ()
 );
 
 
@@ -572,10 +570,14 @@ ls74 ls74
 );
 
 
-
-assign v_rom_addr= {rom_addr[6],rom_addr[5],rom_addr[4],rom_addr[3],rom_addr[2],rom_addr[1],rom_addr[0],1'b0};
-
-
+always @* begin
+  if (signed_voice_out < 16'd0) begin
+    voice_out = ~signed_voice_out;
+  end
+  else begin
+    voice_out = signed_voice_out ;
+  end
+end
 
 ///////////////////////////////////////////////////////////////////////
 
