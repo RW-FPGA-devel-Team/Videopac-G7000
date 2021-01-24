@@ -296,33 +296,56 @@ begin
                            idx  : in natural) return boolean is
       variable pix_or_v, mask_or_v   : std_logic;
       variable pix_res_v, mask_res_v : boolean;
-      variable mask_check_v : boolean;
-      variable pix_check, pix_mask: std_logic_vector(7 downto 0);
+      variable pix_check, pix_check1, pix_check2, pix_mask: std_logic_vector(7 downto 0);
       variable idx_mask, idx_mask_n: std_logic_vector(7 downto 0);
       variable init_mask: std_logic_vector(7 downto 0);
     begin
-      pix_res_v := false;
+      --pix_res_v := false;
       init_mask := X"01";
       -- mascaras para eliminar el propio pixel probado
       idx_mask := std_logic_vector(shift_left(unsigned(init_mask), idx));
       idx_mask_n := not idx_mask;
       -- identificar si el pixel testeado está activo
       pix_mask := pix and idx_mask; --( pix or "00110000") and idx_mask;
-      mask_check_v := (pix_mask(0) = '1' or pix_mask(1) = '1' or pix_mask(2) = '1' or pix_mask(3) = '1' or 
+      pix_res_v := (pix_mask(0) = '1' or pix_mask(1) = '1' or pix_mask(2) = '1' or pix_mask(3) = '1' or 
                       pix_mask(4) = '1' or pix_mask(5) = '1' or pix_mask(6) = '1' or pix_mask(7) = '1');
+                      -- añado chequeo del
+                      
                       -- esto me da la colisión con los grid como '01'
                       --(mask(4) = '1' and pix_check(4) = '1' )  or (mask(5)  = '1' and pix_check(5) = '1' ) or pix_mask(6) = '1' or pix_mask(7) = '1');
 
-      -- eliminar el propio pixel probado
+      --A eliminar el propio pixel probado
       --pix_check := pix and idx_mask_n; --esto genera 21 en gh y 11 en gv
-      --chequeando con la máscara en gh y vh evita el 21 y 11, pero siguen errores al cruzar meta en coches
-      --pix_check := (pix(7 downto 6) & mask(5 downto 4) & pix(3 downto 0)) and idx_mask_n; 
+      --B chequeando con la máscara en gh y vh evita el 21 y 11, pero siguen errores al cruzar meta en coches
+      -- pix_check := (pix(7 downto 6) & mask(5 downto 4) & pix(3 downto 0)) and idx_mask_n; 
       --chequeando con la máscara en gh y vh evita el 21 y 11, y no chequeo minor si no tienen mascara, 
       --así no dan error los coches al cruzar meta y los pistoleros no se mueven cuando choca el otro
-      pix_check := (pix(7 downto 6) & mask(5 downto 4) & (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
-      
+      --C quedan algunos fallos: el baloncesto la bola no choca con la pared vertical
+      --pix_check := (pix(7 downto 6) & mask(5 downto 4) & (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
+--      --D separo la comprobación de grid y de minor y no sirve, sigue igual y los coches colisionan cuando lo hace el otro
+--      pix_check1 := (pix(7 downto 6) & mask(5 downto 4) & (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
+--      pix_check2 := (pix(7 downto 6) & mask(5 downto 4) & pix(3 downto 0)) and idx_mask_n; 
+--      pix_check  :=  pix_check2 when (idx_mask(5) = '1' or idx_mask(4) = '1') else pix_check1;
+--      --E probando para evitar el baloncesto la bola no choca con la pared vertical --va peor 
+--      pix_check := (pix(7 downto 6) & (mask(5 downto 4) or pix(5 downto 4))
+--                   & (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
+--      --F nuevo intento: igual que C y soluciona errores de mascara 01
+--      pix_check := ((pix(7 downto 6) and mask(7 downto 6)) & 
+--                    mask(5 downto 4) & 
+--                    (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
+--      --G nuevo intento: igual que F incluyo chequeo de pixel de grid hor por mascara - ok marcianitos - ko globo
+--      pix_check := ((pix(7 downto 6) and mask(7 downto 6)) & 
+--                    mask(5) & 
+--                    ( pix(4) and mask(4)) &
+--                    (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
+      --H nuevo intento: igual que F añadiendo chequeo de pixel de grid ver por mascara 
+      pix_check := ((pix(7 downto 6) and mask(7 downto 6)) & 
+                    ( pix(5) and mask(5)) &
+                    ( pix(4) and mask(4)) &
+                    (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
+
       -- colisión si el propio pixel está activo y hay otros
-      mask_res_v := mask_check_v and ( pix_check(0) = '1' or pix_check(1) = '1' or pix_check(2) = '1' 
+      mask_res_v := ( pix_check(0) = '1' or pix_check(1) = '1' or pix_check(2) = '1' 
                       or pix_check(3) = '1' or pix_check(4) = '1' or pix_check(5) = '1' 
                       or pix_check(6) = '1' or pix_check(7) = '1');
       
@@ -366,8 +389,8 @@ begin
 --                    pix_or_v = '1';
 
       
-		return  mask_res_v or pix_res_v;  --avlixa
-      --return  mask_res_v and pix_res_v;  --avlixa no sirve
+		--return  mask_res_v or pix_res_v;  --avlixa - original
+      return  mask_res_v and pix_res_v;  --avlixa 
     end;
 
   begin
@@ -555,8 +578,10 @@ begin
 		spr2_col_s <= minor_pix_i(2);
 		spr3_col_s <= minor_pix_i(3);
 		hgrid_s <= grid_hpix_i or grid_dpix_i;
-		vgrid_s <=  grid_vpix_i and not major_pix_i;
-		
+		--vgrid_s <=  grid_vpix_i and not major_pix_i; --avlixa original
+		vgrid_s <=  grid_vpix_i; --solucionar problema con canasta
+                               -- genera otros errores en: frogger, globos..
+      
 		pix_vec_v := major_pix_i 
 						 & cx_i 
 						 & hgrid_s 

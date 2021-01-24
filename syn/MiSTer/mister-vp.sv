@@ -612,9 +612,17 @@ always @(posedge clk_sys) begin
 		cart_size <= cart_size + 16'd1;
 end
 
-wire [12:0] rom_addr = 
-	{(cart_size >= 16'h2000) ? cart_bank_1 : 1'b0, (cart_size >= 16'h1000) ? 
-	cart_bank_0 : 1'b0, cart_addr[11], cart_addr[9:0]};
+	
+wire [13:0] rom_addr;
+always @(*)
+  begin
+    case (cart_size)
+      16'h1000 : rom_addr <= {1'b0,cart_bank_0, cart_addr[11], cart_addr[9:0]};  //4k
+      16'h2000 : rom_addr <= {cart_bank_1,cart_bank_0, cart_addr[11], cart_addr[9:0]};   //8K
+      16'h4000 : rom_addr <= {cart_bank_1,cart_bank_0, cart_addr[11:0]}; //12K (16k banked)
+      default  : rom_addr <= {1'b0, cart_addr[11], cart_addr[9:0]};
+    endcase
+  end
 
 ////////////The Voice /////////////////////////////////////////////////
 

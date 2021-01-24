@@ -99,7 +99,7 @@ architecture rtl of i8244_sync_gen is
   constant last_vis_line_c   : pos_t := to_pos_f(242);
   constant last_frame_line_c : limits_t := (
     is_ntsc_c => to_pos_f(263),
-    is_pal_c  => to_pos_f(313));
+    is_pal_c  => to_pos_f(312));
   constant first_vblank_c    : pos_t := last_vis_line_c + to_pos_f(0);
   constant last_vblank_c     : limits_t := (
     is_ntsc_c => to_pos_f(0),
