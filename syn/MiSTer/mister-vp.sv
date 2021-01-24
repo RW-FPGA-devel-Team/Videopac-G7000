@@ -227,7 +227,6 @@ wire [15:0] joyb = joy_swap ? joystick_0 : joystick_1;
 wire clock_locked;
 wire clk_sys_o2;
 wire clk_sys_vp;
-wire clk_voice;
 
 wire clk_sys = PAL ? clk_sys_vp : clk_sys_o2;
 
@@ -237,7 +236,6 @@ pll pll
 	.rst(0),
 	.outclk_0(clk_sys_o2),
 	.outclk_1(clk_sys_vp),
-	.outclk_2(clk_voice),
 	.locked(clock_locked)
 );
 
@@ -386,13 +384,10 @@ wire [7:0] cart_di;
 
 
 												
-//wire [15:0] audio_out = {2'b0, snd,snd,snd, 2'd0};
-wire [15:0] audio_out = (VOICE?{snd, snd, snd,snd,snd} | voice_out[14:0]:{snd,snd,snd,snd,snd}) ;
-wire snd_o;
-//wire [15:0] audio_out = {16{snd_o}};
+wire [15:0] audio_out = (VOICE?{snd, snd, snd,snd,snd} | voice_out[15:0]:{snd,snd,snd,snd,snd}) ;
 
 assign AUDIO_L = audio_out;
-assign AUDIO_R = audio_out;
+assign AUDIO_R = AUDIO_L;
 
 
 ////////////////////////////  VIDEO  ////////////////////////////////////
@@ -623,25 +618,27 @@ wire [12:0] rom_addr =
 
 ////////////The Voice /////////////////////////////////////////////////
 
-reg [9:0] v_rom_addr;
 
-// debug signals for 16-bit DAC
 wire sample_stb;
-wire signed [15:0] voice_out;
+reg signed [15:0] signed_voice_out;
+reg        [15:0] voice_out;
     
 wire ldq;
 	 
 
 SPEECH256_TOP speech256 (
         .clk        (clk_voice),
-        .rst_an     (!reset),
+        .rst_an     (rst_a_n),
         .ldq        (ldq),
-        .data_in    (v_rom_addr),
+        .data_in    (rom_addr[6:0]),
         .data_stb   (ald_n),
         .pwm_out    (the_voice),
-        .sample_out (voice_out),
-        .sample_stb (sample_stb)
+        .sample_out (signed_voice_out),
+        .sample_stb ()
 );
+
+
+
 
 wire ald_n   = !(!rom_addr[7] || cart_wr_n || cart_cs_o);
 wire rst_a_n ;
@@ -657,8 +654,31 @@ ls74 ls74
 
 
 
-assign v_rom_addr= {rom_addr[6],rom_addr[5],rom_addr[4],rom_addr[3],rom_addr[2],rom_addr[1],rom_addr[0],1'b0};
+always @* begin
+  if (signed_voice_out < 16'd0) begin
+    voice_out = ~signed_voice_out;
+  end
+  else begin
+    voice_out = signed_voice_out ;
+  end
+end
 
+reg  clk_voice;
+reg  [3:0] divcnt; // clock divider counter
+always @(posedge CLK_50M)
+    begin
+
+        // clock divider to generate 2.5 MHz for Speech256
+        if (divcnt > 9)
+        begin
+            clk_voice <= !clk_voice;
+            divcnt <= 0;            
+        end
+        else
+        begin
+            divcnt <= divcnt + 1;
+        end        
+    end
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 

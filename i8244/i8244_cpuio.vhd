@@ -46,6 +46,7 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all; --avlixa
 
 use work.i8244_pack.pos_t;
 use work.i8244_pack.byte_t;
@@ -290,33 +291,83 @@ begin
   seq: process (clk_i, res_i)
     variable pix_vec_v     : byte_t;
 
-    function tag_overlap_f(pix  : in std_logic_vector;
-                           mask : in std_logic_vector;
+    function tag_overlap_f(pix  : in std_logic_vector(7 downto 0);
+                           mask : in std_logic_vector(7 downto 0);
                            idx  : in natural) return boolean is
       variable pix_or_v, mask_or_v   : std_logic;
       variable pix_res_v, mask_res_v : boolean;
+      variable mask_check_v : boolean;
+      variable pix_check, pix_mask: std_logic_vector(7 downto 0);
+      variable idx_mask, idx_mask_n: std_logic_vector(7 downto 0);
+      variable init_mask: std_logic_vector(7 downto 0);
     begin
-      pix_or_v  := '0';
-      mask_or_v := '0';
+      pix_res_v := false;
+      init_mask := X"01";
+      -- mascaras para eliminar el propio pixel probado
+      idx_mask := std_logic_vector(shift_left(unsigned(init_mask), idx));
+      idx_mask_n := not idx_mask;
+      -- identificar si el pixel testeado está activo
+      pix_mask := pix and idx_mask; --( pix or "00110000") and idx_mask;
+      mask_check_v := (pix_mask(0) = '1' or pix_mask(1) = '1' or pix_mask(2) = '1' or pix_mask(3) = '1' or 
+                      pix_mask(4) = '1' or pix_mask(5) = '1' or pix_mask(6) = '1' or pix_mask(7) = '1');
+                      -- esto me da la colisión con los grid como '01'
+                      --(mask(4) = '1' and pix_check(4) = '1' )  or (mask(5)  = '1' and pix_check(5) = '1' ) or pix_mask(6) = '1' or pix_mask(7) = '1');
 
-      for pos in pix'range loop
-        -- OR all pix / masked pix except for the given index
-        if pos /= idx then
-          pix_or_v  := pix_or_v or pix(pos);
-          mask_or_v := mask_or_v or (pix(pos) and mask(pos));
-        end if;
-      end loop;
-
-      -- 1) overlap bit for idx has to be set when
-      --    this channel overlaps with other enabled pix channels
-      pix_res_v  := pix(idx) = '1' and mask_or_v = '1';
-      -- 2) overlap bit for idx has to be set when
-      --    mask enables this bit and other pix channels collide
-      mask_res_v := (pix(idx) and mask(idx)) = '1' and
-                    pix_or_v = '1';
+      -- eliminar el propio pixel probado
+      --pix_check := pix and idx_mask_n; --esto genera 21 en gh y 11 en gv
+      --chequeando con la máscara en gh y vh evita el 21 y 11, pero siguen errores al cruzar meta en coches
+      --pix_check := (pix(7 downto 6) & mask(5 downto 4) & pix(3 downto 0)) and idx_mask_n; 
+      --chequeando con la máscara en gh y vh evita el 21 y 11, y no chequeo minor si no tienen mascara, 
+      --así no dan error los coches al cruzar meta y los pistoleros no se mueven cuando choca el otro
+      pix_check := (pix(7 downto 6) & mask(5 downto 4) & (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
+      
+      -- colisión si el propio pixel está activo y hay otros
+      mask_res_v := mask_check_v and ( pix_check(0) = '1' or pix_check(1) = '1' or pix_check(2) = '1' 
+                      or pix_check(3) = '1' or pix_check(4) = '1' or pix_check(5) = '1' 
+                      or pix_check(6) = '1' or pix_check(7) = '1');
+      
+      
+--      pix_or_v  := '0';
+--      mask_or_v := '0';
+--
+--      for pos in pix'range loop
+--        -- OR all pix / masked pix except for the given index
+--        if pos /= idx then
+--          --pix_or_v  := pix_or_v or pix(pos);   --avlixa original
+--          --pix_or_v  := pix_or_v or (pix(pos) and mask(pos));   --avlixa no sirve evita algo pero no todo
+--          --avlixa
+--            if ((pos<4) or (pos>6)) then --minor and major objects
+--            --if (pos>6) then --major objects --así siguen chocando los coches con meta
+--               pix_or_v  := pix_or_v or (pix(pos) and mask(pos));
+--            else --vertical/horizontal grid & minor
+--               pix_or_v  := pix_or_v or pix(pos);
+--            end if;
+--          --fin avlixa
+--          mask_or_v := mask_or_v or (pix(pos) and mask(pos)); 
+--        end if;
+--      end loop;
+--
+--      -- 1) overlap bit for idx has to be set when
+--      --    this channel overlaps with other enabled pix channels
+--      pix_res_v  := pix(idx) = '1' and mask_or_v = '1' ;   --avlixa original
+--      -- pix_res_v  := pix(idx) = '1' and mask_or_v = '1' and mask(idx) = '1' ;   --avlixa funciona, pero voy a probar solo con minor
+----      -- avlixa ini
+----      if ((idx<4) or (idx>6)) then --minor and major objects  --avlixa casí, pero no chocan los menores entre sí
+----      --if (idx>6) then --major objects --así siguen chocando los coches con meta
+----         pix_res_v  := pix(idx) = '1' and mask_or_v = '1' and mask(idx) = '1' ; 
+----      else --vertical/horizontal grid & minor
+----         pix_res_v  := pix(idx) = '1' and mask_or_v = '1' ;
+----      end if;
+----      -- fin avlixa
+--      
+--      -- 2) overlap bit for idx has to be set when
+--      --    mask enables this bit and other pix channels collide
+--      mask_res_v := (pix(idx) and mask(idx)) = '1' and
+--                    pix_or_v = '1';
 
       
-		return  mask_res_v or pix_res_v;
+		return  mask_res_v or pix_res_v;  --avlixa
+      --return  mask_res_v and pix_res_v;  --avlixa no sirve
     end;
 
   begin
@@ -536,16 +587,16 @@ begin
 			 
 	
 			 
-			 ---------------------------------------------------------------
-			 -- RAMPA trying to get the same values as in the real hardware
-			 ---------------------------------------------------------------
-			 if ((reg_overlap_q(5) = '1' and reg_enoverlap_q(5)='0') 
-			  or (reg_overlap_q(4) = '1' and reg_enoverlap_q(4)='0'))  
-			  and (reg_overlap_q(7) = '0' and reg_overlap_q(3 downto 0) /="0000") then 
-			  
- 			     reg_overlap_q(3 downto 0) <= "0000";
-					
-			 end if;
+--			 ---------------------------------------------------------------
+--			 -- RAMPA trying to get the same values as in the real hardware
+--			 ---------------------------------------------------------------
+--			 if ((reg_overlap_q(5) = '1' and reg_enoverlap_q(5)='0') 
+--			  or (reg_overlap_q(4) = '1' and reg_enoverlap_q(4)='0'))  
+--			  and (reg_overlap_q(7) = '0' and reg_overlap_q(3 downto 0) /="0000") then 
+--			  
+-- 			     reg_overlap_q(3 downto 0) <= "0000";
+--					
+--			 end if;
 
 
 --			
