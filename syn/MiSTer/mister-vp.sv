@@ -152,7 +152,9 @@ parameter CONF_STR = {
 	"VIDEOPAC;;",
 	"-;",
 	"F1,BIN,Load catridge;",
-	"F2,CHR,Change VDC font;",
+	"F2,ROM,Load XROM;",
+   "-;",
+	"F3,CHR,Change VDC font;",
 	"-;",
 	"OE,System,Odyssey2,Videopac;",
 	"O6,Palette,NTSC,PAL;",
@@ -306,11 +308,11 @@ vp_console vp
 	.res_n_i        (~reset & joy_reset), // low to reset
 
 	// Cart Data
-	.cart_cs_o      (cart_cs_o),
-	.cart_cs_n_o    (),
+	.cart_cs_o      (cart_cs),
+	.cart_cs_n_o    (cart_cs_n),
 	.cart_wr_n_o    (cart_wr_n),   // Cart write
 	.cart_a_o       (cart_addr),   // Cart Address
-	.cart_d_i       (~cart_rd_n ? cart_do : 8'hFF), // Cart Data
+	.cart_d_i       (cart_do), // Cart Data
 	.cart_d_o       (cart_di),     // Cart data out
 	.cart_bs0_o     (cart_bank_0), // Bank switch 0
 	.cart_bs1_o     (cart_bank_1), // Bank Switch 1
@@ -353,22 +355,65 @@ vp_console vp
 rom  rom
 (
 	.clock(clk_sys),
-	.address((ioctl_download && ioctl_index == 1)? ioctl_addr[13:0] : rom_addr),
+	.address((ioctl_download && ioctl_index < 3)? ioctl_addr[13:0] : rom_addr),
 	.data(ioctl_dout),
-	.wren(ioctl_wr&& ioctl_index == 1),
+	.wren(ioctl_wr&& ioctl_index <3),
+	.rden(XROM ? rom_oe_n : ~cart_rd_n),
 	.q(cart_do)
 );
 
 char_rom  char_rom
 (
 	.clock(clk_sys),
-	.address((ioctl_download && ioctl_index == 2) ? ioctl_addr[8:0] : char_addr),
+	.address((ioctl_download && ioctl_index == 3) ? ioctl_addr[8:0] : char_addr),
 	.data(ioctl_dout),
-	.wren(ioctl_wr && ioctl_index == 2),
+	.wren(ioctl_wr && ioctl_index == 3),
 	.rden(char_en),
 	.q(char_do)
 );
 
+wire [11:0] cart_addr;
+wire [7:0]  cart_do;
+wire [11:0] char_addr;
+wire [7:0]  char_do;
+wire char_en;
+wire cart_bank_0;
+wire cart_bank_1;
+wire cart_rd_n;
+reg [15:0]  cart_size;
+wire XROM;
+wire rom_oe_n = ~(cart_cs_n & cart_bank_0) & cart_rd_n ;
+wire [13:0] rom_addr;
+
+reg old_download = 0;
+
+
+always @(posedge clk_sys) begin
+	old_download <= ioctl_download;
+	
+	if (~old_download & ioctl_download)
+	begin
+		cart_size <= 16'd0;
+		XROM <= (ioctl_index == 2);
+	end
+	else if (ioctl_download & ioctl_wr)
+		cart_size <= cart_size + 16'd1;
+end
+
+
+always @(*)
+  begin
+   if (XROM == 1'b1)
+	   rom_addr <= {2'b0, cart_addr[11:0]};
+	else	    
+    case (cart_size)
+      16'h1000 : rom_addr <= {1'b0,cart_bank_0, cart_addr[11], cart_addr[9:0]};  //4k
+      16'h2000 : rom_addr <= {cart_bank_1,cart_bank_0, cart_addr[11], cart_addr[9:0]};   //8K
+      16'h4000 : rom_addr <= {cart_bank_1,cart_bank_0, cart_addr[11:0]}; //12K (16k banked)
+      default  : rom_addr <= {1'b0, cart_addr[11], cart_addr[9:0]};
+    endcase
+  end
+  
 ////////////////////////////  SOUND  ////////////////////////////////////
 
 wire [3:0] snd;
@@ -588,41 +633,6 @@ wire [1:0] joy_action = {~joya[4], ~joyb[4]};
 wire       joy_reset  = ~joya[5] & ~joyb[5];
 
 
-////////////////////////////  MEMORY  ///////////////////////////////////
-
-wire [11:0] char_addr;
-wire [7:0] char_do;
-wire char_en;
-
-wire [11:0] cart_addr;
-wire [7:0] cart_do;
-wire cart_bank_0;
-wire cart_bank_1;
-wire cart_rd_n;
-reg [15:0] cart_size;
-
-reg old_download = 0;
-
-always @(posedge clk_sys) begin
-	old_download <= ioctl_download;
-	
-	if (~old_download & ioctl_download)
-		cart_size <= 16'd0;
-	else if (ioctl_download & ioctl_wr)
-		cart_size <= cart_size + 16'd1;
-end
-
-	
-wire [13:0] rom_addr;
-always @(*)
-  begin
-    case (cart_size)
-      16'h1000 : rom_addr <= {1'b0,cart_bank_0, cart_addr[11], cart_addr[9:0]};  //4k
-      16'h2000 : rom_addr <= {cart_bank_1,cart_bank_0, cart_addr[11], cart_addr[9:0]};   //8K
-      16'h4000 : rom_addr <= {cart_bank_1,cart_bank_0, cart_addr[11:0]}; //12K (16k banked)
-      default  : rom_addr <= {1'b0, cart_addr[11], cart_addr[9:0]};
-    endcase
-  end
 
 ////////////The Voice /////////////////////////////////////////////////
 
@@ -648,7 +658,7 @@ SPEECH256_TOP speech256 (
 
 
 
-wire ald_n   = !(!rom_addr[7] || cart_wr_n || cart_cs_o);
+wire ald_n   = !(!rom_addr[7] | cart_wr_n | cart_cs);
 wire rst_a_n ;
 
 ls74 ls74

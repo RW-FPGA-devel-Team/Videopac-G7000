@@ -470,10 +470,6 @@ set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/p2-c.vhd"
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/p2.vhd
 set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/p1-c.vhd"
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/p1.vhd
-set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/opc_table-c.vhd"
-set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/opc_table.vhd
-set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/opc_decoder-c.vhd"
-set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/opc_decoder.vhd
 set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/int-c.vhd"
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/int.vhd
 set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/dmem_ctrl-c.vhd"

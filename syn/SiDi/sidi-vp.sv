@@ -477,7 +477,9 @@ wire cart_bank_0;
 wire cart_bank_1;
 wire cart_rd_n;
 reg [15:0] cart_size;
-
+wire XROM;
+wire rom_oe_n = ~(cart_cs_n & cart_bank_0) & cart_rd_n ;
+wire [13:0] rom_addr;
 
 rom  rom
 (
@@ -513,9 +515,7 @@ always @(posedge clk_sys) begin
 		cart_size <= cart_size + 16'd1;
 end
 
-wire XROM;
-wire rom_oe_n = ~(cart_cs_n & cart_bank_0) & cart_rd_n ;
-wire [13:0] rom_addr;
+
 
 
 always @(*)
@@ -530,6 +530,8 @@ always @(*)
       default  : rom_addr <= {1'b0, cart_addr[11], cart_addr[9:0]};
     endcase
   end
+
+//////////////////////////////// SOUND /////////////////////////////////////////////
 
 wire snd_o;
 wire the_voice;
