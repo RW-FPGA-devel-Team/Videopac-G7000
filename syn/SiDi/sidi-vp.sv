@@ -44,23 +44,23 @@ module cyclone_vp
         input         CLOCK_27,
 	`else		  
         input         CLOCK_50,
-		output        SD_SCK,
-		output        SD_MOSI,
-		input         SD_MISO,
-		output        SD_CS,
-	    inout         PS2_CLK,
-		inout         PS2_DAT,		  
+		  output        SD_SCK,
+		  output        SD_MOSI,
+		  input         SD_MISO,
+		  output        SD_CS,
+	     inout         PS2_CLK,
+		  inout         PS2_DAT,		  
 		`ifndef JOYDC
 			output        JOY_CLK,
 			output        JOY_LOAD,
 			input         JOY_DATA,
 			output        JOY_SELECT,
-			output        VGA_BLANK = 1'b1,
-			output        VGA_CLOCK,
 		`else
 			input	wire [5:0]JOYSTICK1,
 			input	wire [5:0]JOYSTICK2,
 			output        JOY_SELECT = 1'b1,
+			output        VGA_BLANK = 1'b1,
+			output        VGA_CLOCK,			
 		`endif	
 		output        MCLK,
 		output        SCLK,
@@ -171,7 +171,7 @@ mist_io #(.STRLEN($size(CONF_STR)>>3)) mist_io
 wire [7:0]R_OSD,G_OSD,B_OSD;
 wire host_scandoubler_disable;
 
-data_io data_io
+data_io #( .sysclk_frequency(16'd709) )data_io // 16'd709: 16'd420
 (
 	.clk(clk_sys),
 	.CLOCK_50(CLOCK_50), //Para modulos de I2s y Joystick
