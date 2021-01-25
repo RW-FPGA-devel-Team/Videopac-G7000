@@ -287,11 +287,11 @@ int main(int argc,char **argv)
 		visible=Menu_Run();
 		dipsw = 0;
 		//Posicion 3 del menu, 0x3 = 2 bits max, <<9 = dips[1:0]	
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[4])  & 0x3) << 9; //[11:9] 
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[5])  & 0x1) << 7; //[7]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[6])  & 0x1) << 1; //[1]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[7])  & 0x1) << 5; //[5]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[8])  & 0x1) << 14; //[14]
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[3])  & 0x3) << 9; //[11:9] 
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[4])  & 0x1) << 7; //[7]
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[5])  & 0x1) << 1; //[1]
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[6])  & 0x1) << 5; //[5]
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[7])  & 0x1) << 14; //[14]
 		HW_HOST(REG_HOST_SW)=dipsw;	// Send the new values to the hardware.
 		// If the menu's visible, prevent keystrokes reaching the host core.
 		HW_HOST(REG_HOST_CONTROL)=(visible ?

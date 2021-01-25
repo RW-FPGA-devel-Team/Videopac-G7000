@@ -625,7 +625,8 @@ debug <= '1' when ioctl_index = X"04" else '0';
 
 ioctl_index <= X"00" when host_loadrom = '1' else
                X"01" when extension(23 downto 0)  = x"42494E" else --BIN
-			      X"02" when extension(23 downto 0)  = x"434852" else --CHR
+			      X"02" when extension(23 downto 0)  = x"524F4D" else --ROM
+			      X"03" when extension(23 downto 0)  = x"434852" else --CHR
 					X"FF";
 					
 host_download<=host_loadrom or host_loadmed;
