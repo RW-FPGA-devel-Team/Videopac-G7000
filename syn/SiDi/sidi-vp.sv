@@ -65,6 +65,7 @@ assign UART_TX = 'Z;
 parameter CONF_STR = {
 	"VIDEOPAC;;",
 	"F,BIN,Load catridge;",
+	"F,ROM,Load XROM;",
 	"F,CHR,Change VDC font;",
 	"OE,System,Odyssey2,Videopac;",
 	"O5,Palette,NTSC,PAL;",
@@ -218,11 +219,11 @@ vp_console vp
 	.res_n_i        (~reset & joy_reset), // low to reset
 
 	// Cart Data
-	.cart_cs_o      (cart_cs_o),
-	.cart_cs_n_o    (),
+	.cart_cs_o      (cart_cs),
+	.cart_cs_n_o    (cart_cs_n),
 	.cart_wr_n_o    (cart_wr_n),   // Cart write
 	.cart_a_o       (cart_addr),   // Cart Address
-	.cart_d_i       (~cart_rd_n ? cart_do : 8'hFF), // Cart Data
+	.cart_d_i       (cart_do), // Cart Data
 	.cart_d_o       (cart_di),     // Cart data out
 	.cart_bs0_o     (cart_bank_0), // Bank switch 0
 	.cart_bs1_o     (cart_bank_1), // Bank Switch 1
@@ -481,18 +482,19 @@ reg [15:0] cart_size;
 rom  rom
 (
 	.clock(clk_sys),
-	.address((ioctl_download && ioctl_index[1:0] == 1)? ioctl_addr[13:0] : rom_addr),
+	.address((ioctl_download && ioctl_index[1:0] < 3)? ioctl_addr[13:0] : rom_addr),
 	.data(ioctl_dout),
-	.wren(ioctl_wr&& ioctl_index[1:0] == 1),
+	.wren(ioctl_wr&& ioctl_index[1:0] < 3),
+	.rden(XROM ? rom_oe_n : ~cart_rd_n),
 	.q(cart_do)
 );
 
 char_rom  char_rom
 (
 	.clock(clk_sys),
-	.address((ioctl_download && ioctl_index[1:0] == 2) ? ioctl_addr[8:0] : char_addr),
+	.address((ioctl_download && ioctl_index[1:0] == 3) ? ioctl_addr[8:0] : char_addr),
 	.data(ioctl_dout),
-	.wren(ioctl_wr && ioctl_index[1:0] == 2),
+	.wren(ioctl_wr && ioctl_index[1:0] == 3),
 	.rden(char_en),
 	.q(char_do)
 );
@@ -503,18 +505,24 @@ always @(posedge clk_sys) begin
 	old_download <= ioctl_download;
 	
 	if (~old_download & ioctl_download)
+	begin
 		cart_size <= 16'd0;
+		XROM <= (ioctl_index == 2);
+	end
 	else if (ioctl_download & ioctl_wr)
 		cart_size <= cart_size + 16'd1;
 end
 
-//wire [12:0] rom_addr = 	{(cart_size >= 16'h2000) 
-//                  ? cart_bank_1 : 1'b0,(cart_size >= 16'h1000)
-//					 	      ? cart_bank_0 : 1'b0, cart_addr[11], cart_addr[9:0]};
-
+wire XROM;
+wire rom_oe_n = ~(cart_cs_n & cart_bank_0) & cart_rd_n ;
 wire [13:0] rom_addr;
+
+
 always @(*)
   begin
+   if (XROM == 1'b1)
+	   rom_addr <= {2'b0, cart_addr[11:0]};
+	else	    
     case (cart_size)
       16'h1000 : rom_addr <= {1'b0,cart_bank_0, cart_addr[11], cart_addr[9:0]};  //4k
       16'h2000 : rom_addr <= {cart_bank_1,cart_bank_0, cart_addr[11], cart_addr[9:0]};   //8K
@@ -566,7 +574,7 @@ SPEECH256_TOP speech256 (
 
 
 
-wire ald_n   = !(!rom_addr[7] || cart_wr_n || cart_cs_o);
+wire ald_n   = !(!rom_addr[7] | cart_wr_n | cart_cs);
 wire rst_a_n ;
 
 ls74 ls74
