@@ -231,6 +231,7 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to SPI_DO
 set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to SPI_SCK
 set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
 set_global_assignment -name SMART_RECOMPILE ON
+set_global_assignment -name VHDL_FILE sys/dac.vhd
 set_global_assignment -name VERILOG_FILE ../../Speech256/speech256_top/speech256_top.v
 set_global_assignment -name VERILOG_FILE ../../Speech256/sd2dac/sd2dac.v
 set_global_assignment -name VERILOG_FILE ../../Speech256/spmul/spmul.v
@@ -240,7 +241,6 @@ set_global_assignment -name VERILOG_FILE ../../Speech256/filter/filter.v
 set_global_assignment -name VERILOG_FILE ../../Speech256/controller/xlat.v
 set_global_assignment -name VERILOG_FILE ../../Speech256/controller/ctrlrom.v
 set_global_assignment -name VERILOG_FILE ../../Speech256/controller/controller.v
-set_global_assignment -name VHDL_FILE dac.vhd
 set_global_assignment -name SYSTEMVERILOG_FILE sys/video_space.sv
 set_global_assignment -name SYSTEMVERILOG_FILE sys/video_mixer.sv
 set_global_assignment -name SYSTEMVERILOG_FILE sys/video_cleaner.sv
