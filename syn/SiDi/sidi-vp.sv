@@ -109,7 +109,7 @@ wire [31:0] status;
 `ifndef CYCLONE
 wire        scandoubler_disable;
 `else
-wire        scandoubler_disable = host_scandoubler_disable;
+wire        scandoubler_disable = host_scandoubler_disable ^ 1;
 `endif
 wire        ioctl_download;
 wire [24:0] ioctl_addr;
