@@ -15,7 +15,6 @@ entity data_io is
 	);
 	port (
 		clk 			: in std_logic;
-		CLOCK_50    : in std_logic;
 		
 		reset_n 	: in std_logic;
 		debug    : out std_logic;
@@ -40,24 +39,6 @@ entity data_io is
 		host_scandoubler_disable : buffer std_logic;
 		host_divert_sdcard : out std_logic;
 		
-	   --Joystick
-		JOY_CLK    : out std_logic;
-		JOY_LOAD   : out std_logic;
-		JOY_DATA   : in std_logic;
-		JOY_SELECT : out std_logic;
-		joy1  : out std_logic_vector(6  downto 0); 	
-		joy2  : out std_logic_vector(6  downto 0); 	
-
-		--Audio I2s
-		dac_MCLK : out std_logic;
-		dac_LRCK : out std_logic;
-		dac_SCLK : out std_logic;
-		dac_SDIN : out std_logic;
-		sigma_L : out std_logic;
-		sigma_R : out std_logic;
-	   L_data : in std_logic_vector(15  downto 0); 	
-	   R_data : in std_logic_vector(15  downto 0); 	
-
 		-- SD card interface
 		spi_miso		: in std_logic := '1';
 		spi_mosi		: out std_logic;
@@ -182,32 +163,7 @@ signal media_ce : std_logic := '0';
 signal ps2_int : std_logic := '0';
 signal ps2_scan : std_logic_vector(7 downto 0);
 signal keys_s : std_logic_vector(7 downto 0);
-signal joystick1 : std_logic_vector(7 downto 0);
-signal joystick2 : std_logic_vector(7 downto 0);
 
-	COMPONENT joydecoder
-		PORT
-		(
-			clk		  :	 IN  STD_LOGIC;
-			JOY_CLK	  :	 OUT STD_LOGIC;
-			JOY_LOAD	  :	 OUT STD_LOGIC;
-			JOY_DATA	  :	 IN  STD_LOGIC;
-			JOY_SELECT :    OUT STD_LOGIC;
-			joystick1  :    OUT STD_LOGIC_VECTOR(7 downto 0);
-			joystick2  :    OUT STD_LOGIC_VECTOR(7 downto 0)
-		);
-	END COMPONENT;
-
-	COMPONENT sigma_delta_dac
-	PORT
-		(			
-			CLK		:	 IN  STD_LOGIC;
-			RESET		:	 IN  STD_LOGIC;
-			DACin		:   IN  STD_LOGIC_VECTOR(15 downto 0);
-			DACout	:   OUT STD_LOGIC
-		);
-	END COMPONENT;
-	
 begin
 
 -- ROM
@@ -554,51 +510,6 @@ port map
 		window_out => open,
 		scanline_ena => '0'
 	);
-
-joyystick : joydecoder 
-port map
-(
-	clk        => CLOCK_50,
-	JOY_CLK    => JOY_CLK,
-	JOY_LOAD   => JOY_LOAD,
-	JOY_DATA   => JOY_DATA,
-	JOY_SELECT => JOY_SELECT,
-	joystick1  => joystick1,
-	joystick2  => joystick2
-);
-
-joy1 <= not joystick1(6 downto 0);
-joy2 <= not joystick2(6 downto 0);
-
-audio_top : entity work.audio_top  
-port map
-(
-	clk_50MHz => CLOCK_50,
-	dac_MCLK  => dac_MCLK,
-	dac_LRCK  => dac_LRCK,
-	dac_SCLK  => dac_SCLK,
-	dac_SDIN  => dac_SDIN,
-	L_data    => L_data,
-	R_data    => R_data
-); 
-
-sigma_delta_dac_l : sigma_delta_dac
-port map
-(
-	CLK => CLOCK_50,
-	RESET => not reset_n,
-	DACin => not L_data(15) & L_data(14 downto 0),
-	DACout => sigma_L
-);
-
-sigma_delta_dac_r : sigma_delta_dac
-port map
-(
-	CLK => CLOCK_50,
-	RESET => not reset_n,
-	DACin => not R_data(15) & R_data(14 downto 0),
-	DACout => sigma_R
-);
 
 ---	
 

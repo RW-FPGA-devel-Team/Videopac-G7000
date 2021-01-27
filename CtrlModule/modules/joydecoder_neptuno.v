@@ -58,7 +58,7 @@ always @(posedge JOY_CLK) begin
     endcase              
 end
 //----DCBAUDLR
-assign joystick1 = joy1; //~joy1;  //Cambio para que 0 sea activo.
-assign joystick2 = joy2; //~joy2;
+assign joystick1 = ~joy1;  //1 sea activo.
+assign joystick2 = ~joy2;
 
 endmodule

@@ -174,7 +174,6 @@ wire host_scandoubler_disable;
 data_io #( .sysclk_frequency(16'd709) )data_io // 16'd709: 16'd420
 (
 	.clk(clk_sys),
-	.CLOCK_50(CLOCK_50), //Para modulos de I2s y Joystick
 	
 	.debug(),
 	
@@ -197,23 +196,6 @@ data_io #( .sysclk_frequency(16'd709) )data_io // 16'd709: 16'd420
 	.host_scandoubler_disable(host_scandoubler_disable),
 	.host_divert_sdcard(),
 	
-`ifndef JOYDC
-	.JOY_CLK(JOY_CLK),
-	.JOY_LOAD(JOY_LOAD),
-	.JOY_DATA(JOY_DATA),
-	.JOY_SELECT(JOY_SELECT),
-	.joy1(joystick_0),
-	.joy2(joystick_1),
-`endif
-	.dac_MCLK(MCLK),
-	.dac_LRCK(LRCLK),
-	.dac_SCLK(SCLK),
-	.dac_SDIN(SDIN),
-	.sigma_L(),
-	.sigma_R(),
-	.L_data(audio_out),
-	.R_data(audio_out),
-
 	.spi_miso(SD_MISO),
 	.spi_mosi(SD_MOSI),
 	.spi_clk(SD_SCK),
@@ -663,9 +645,35 @@ dac #(
 );
 
 wire [15:0] audio_out = (VOICE?{snd, snd, snd,snd} | voice_out[14:0]:{snd,snd,snd,snd}) ;
-
 assign AUDIO_R = AUDIO_L;
 
+
+`ifdef CYCLONE
+wire [15:0] audio_i2s = VOICE?{3'b000,snd,snd,5'b00000} | voice_out[14:0]: {3'b000,snd,snd,5'b00000} ;
+audio_top audio_top
+(
+	.clk_50MHz(CLOCK_50),
+	.dac_MCLK(MCLK),
+	.dac_LRCK(LRCLK),
+	.dac_SCLK(SCLK),
+	.dac_SDIN(SDIN),
+	.L_data(audio_i2s),
+	.R_data(audio_i2s)
+); 
+
+`ifndef JOYDC
+joydecoder joydecoder 
+(
+	.clk(CLOCK_50),
+	.JOY_CLK(JOY_CLK),
+	.JOY_LOAD(JOY_LOAD),
+	.JOY_DATA(JOY_DATA),
+	.JOY_SELECT(JOY_SELECT),
+	.joystick1(joystick_0),
+	.joystick2(joystick_1)
+);
+`endif
+`endif
 
 ////////////The Voice /////////////////////////////////////////////////
 
