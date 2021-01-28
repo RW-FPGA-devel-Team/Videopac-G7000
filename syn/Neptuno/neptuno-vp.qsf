@@ -1,0 +1,395 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2013 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II 64-Bit
+# Version 13.1.0 Build 162 10/23/2013 SJ Web Edition
+# Date created = 23:03:02  January 21, 2021
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		mist-vp_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus II software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+
+# Project-Wide Assignments
+# ========================
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 13.1
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "07:11:53  MARCH 09, 2017"
+set_global_assignment -name LAST_QUARTUS_VERSION "17.1.0 Lite Edition"
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name PRE_FLOW_SCRIPT_FILE "quartus_sh:../SiDi/sys/build_id.tcl"
+set_global_assignment -name SMART_RECOMPILE ON
+
+set_global_assignment -name VERILOG_MACRO "CYCLONE=1"
+
+# Pin & Location Assignments
+# ==========================
+set_location_assignment PIN_T2 -to CLOCK_50
+set_location_assignment PIN_E4 -to LED
+set_location_assignment PIN_F1 -to VGA_R[5]
+set_location_assignment PIN_D2 -to VGA_R[4]
+set_location_assignment PIN_E1 -to VGA_R[3]
+set_location_assignment PIN_C2 -to VGA_R[2]
+set_location_assignment PIN_C1 -to VGA_R[1]
+set_location_assignment PIN_B1 -to VGA_R[0]
+set_location_assignment PIN_P2 -to VGA_G[5]
+set_location_assignment PIN_N2 -to VGA_G[4]
+set_location_assignment PIN_M2 -to VGA_G[3]
+set_location_assignment PIN_J2 -to VGA_G[2]
+set_location_assignment PIN_H2 -to VGA_G[1]
+set_location_assignment PIN_F2 -to VGA_G[0]
+set_location_assignment PIN_R1 -to VGA_B[5]
+set_location_assignment PIN_P1 -to VGA_B[4]
+set_location_assignment PIN_N1 -to VGA_B[3]
+set_location_assignment PIN_M1 -to VGA_B[2]
+set_location_assignment PIN_J1 -to VGA_B[1]
+set_location_assignment PIN_H1 -to VGA_B[0]
+set_location_assignment PIN_B2 -to VGA_VS
+set_location_assignment PIN_B3 -to VGA_HS
+set_location_assignment PIN_A3 -to AUDIO_L
+set_location_assignment PIN_B4 -to AUDIO_R
+
+set_location_assignment PIN_V6 -to SDRAM_A[12]
+set_location_assignment PIN_Y4 -to SDRAM_A[11]
+set_location_assignment PIN_W1 -to SDRAM_A[10]
+set_location_assignment PIN_V5 -to SDRAM_A[9]
+set_location_assignment PIN_Y3 -to SDRAM_A[8]
+set_location_assignment PIN_AA1 -to SDRAM_A[7]
+set_location_assignment PIN_Y2 -to SDRAM_A[6]
+set_location_assignment PIN_V4 -to SDRAM_A[5]
+set_location_assignment PIN_V3 -to SDRAM_A[4]
+set_location_assignment PIN_U1 -to SDRAM_A[3]
+set_location_assignment PIN_U2 -to SDRAM_A[2]
+set_location_assignment PIN_V1 -to SDRAM_A[1]
+set_location_assignment PIN_V2 -to SDRAM_A[0]
+
+set_location_assignment PIN_V11 -to SDRAM_DQ[15]
+set_location_assignment PIN_W10 -to SDRAM_DQ[14]
+set_location_assignment PIN_Y10 -to SDRAM_DQ[13]
+set_location_assignment PIN_V10 -to SDRAM_DQ[12]
+set_location_assignment PIN_V9 -to SDRAM_DQ[11]
+set_location_assignment PIN_Y8 -to SDRAM_DQ[10]
+set_location_assignment PIN_W8 -to SDRAM_DQ[9]
+set_location_assignment PIN_Y7 -to SDRAM_DQ[8]
+set_location_assignment PIN_AB5 -to SDRAM_DQ[7]
+set_location_assignment PIN_AA7 -to SDRAM_DQ[6]
+set_location_assignment PIN_AB7 -to SDRAM_DQ[5]
+set_location_assignment PIN_AA8 -to SDRAM_DQ[4]
+set_location_assignment PIN_AB8 -to SDRAM_DQ[3]
+set_location_assignment PIN_AA9 -to SDRAM_DQ[2]
+set_location_assignment PIN_AB9 -to SDRAM_DQ[1]
+set_location_assignment PIN_AA10 -to SDRAM_DQ[0]
+
+set_location_assignment PIN_W2 -to SDRAM_BA[1]
+set_location_assignment PIN_Y1 -to SDRAM_BA[0]
+
+set_location_assignment PIN_AA5 -to SDRAM_DQML
+set_location_assignment PIN_W7 -to SDRAM_DQMH
+
+set_location_assignment PIN_AB3 -to SDRAM_nRAS
+set_location_assignment PIN_AA4 -to SDRAM_nCAS
+set_location_assignment PIN_AB4 -to SDRAM_nWE
+set_location_assignment PIN_AA3 -to SDRAM_nCS
+set_location_assignment PIN_W6 -to SDRAM_CKE
+set_location_assignment PIN_Y6 -to SDRAM_CLK
+
+set_location_assignment PIN_K21 -to UART_RXD
+set_location_assignment PIN_J21 -to UART_TXD
+
+set_location_assignment PIN_N19 -to PS2_CLK
+set_location_assignment PIN_N20 -to PS2_DAT
+
+set_location_assignment PIN_E22 -to SD_SCK
+set_location_assignment PIN_D22 -to SD_CS
+set_location_assignment PIN_E21 -to SD_MISO
+set_location_assignment PIN_D21 -to SD_MOSI
+
+set_location_assignment PIN_A20 -to JOY_CLK
+set_location_assignment PIN_B20 -to JOY_LOAD
+set_location_assignment PIN_B19 -to JOY_DATA
+set_location_assignment PIN_AA18 -to JOY_SELECT
+
+set_location_assignment PIN_M20 -to SCLK
+set_location_assignment PIN_AB14 -to LRCLK
+set_location_assignment PIN_AA15 -to SDIN
+
+set_location_assignment PIN_Y21 -to STM_RST
+
+set_location_assignment PLL_1 -to "pll:pll|altpll:altpll_component"
+
+# Classic Timing Assignments
+# ==========================
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
+
+# Analysis & Synthesis Assignments
+# ================================
+set_global_assignment -name FAMILY "Cyclone IV E"
+set_global_assignment -name SEARCH_PATH roms/ -tag from_archive
+set_global_assignment -name SEARCH_PATH src/ -tag from_archive
+set_global_assignment -name SEARCH_PATH src/MC6522/ -tag from_archive
+set_global_assignment -name SEARCH_PATH src/RAM/ -tag from_archive
+set_global_assignment -name SEARCH_PATH src/T6502/ -tag from_archive
+set_global_assignment -name SEARCH_PATH src/ps2kybrd/ -tag from_archive
+set_global_assignment -name DEVICE_FILTER_PACKAGE TQFP
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 144
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8
+set_global_assignment -name TOP_LEVEL_ENTITY cyclone_vp
+
+# Fitter Assignments
+# ==================
+set_global_assignment -name DEVICE EP4CE55F23C8
+set_global_assignment -name CYCLONEIII_CONFIGURATION_SCHEME "PASSIVE SERIAL"
+set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
+set_global_assignment -name FORCE_CONFIGURATION_VCCIO ON
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_global_assignment -name CYCLONEII_RESERVE_NCEO_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name RESERVE_DATA0_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name RESERVE_DATA1_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name RESERVE_FLASH_NCE_AFTER_CONFIGURATION "USE AS REGULAR IO"
+
+# EDA Netlist Writer Assignments
+# ==============================
+set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
+
+# Assembler Assignments
+# =====================
+set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
+set_global_assignment -name GENERATE_RBF_FILE ON
+set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
+
+# Power Estimation Assignments
+# ============================
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+
+# Advanced I/O Timing Assignments
+# ===============================
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+
+# start EDA_TOOL_SETTINGS(eda_simulation)
+# ---------------------------------------
+
+	# EDA Netlist Writer Assignments
+	# ==============================
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
+
+# end EDA_TOOL_SETTINGS(eda_simulation)
+# -------------------------------------
+
+# ---------------------
+# start ENTITY(sidi_vp)
+
+	# Pin & Location Assignments
+	# ==========================
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to SDRAM_DQ[*]
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to SDRAM_A[*]
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to SDRAM_BA[0]
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to SDRAM_BA[1]
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to SDRAM_DQMH
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to SDRAM_DQML
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to SDRAM_nRAS
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to SDRAM_nCAS
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to SDRAM_nWE
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to SDRAM_nCS
+set_instance_assignment -name FAST_OUTPUT_ENABLE_REGISTER ON -to SDRAM_DQ[*]
+set_instance_assignment -name FAST_INPUT_REGISTER ON -to SDRAM_DQ[*]
+
+	# Fitter Assignments
+	# ==================
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SDRAM_A[*]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SDRAM_DQ[*]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SDRAM_BA[*]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SDRAM_DQML
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SDRAM_DQMH
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SDRAM_nRAS
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SDRAM_nCAS
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SDRAM_nWE
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SDRAM_nCS
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SDRAM_CKE
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to SDRAM_CLK
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to VGA_R[*]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to VGA_G[*]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to VGA_B[*]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to VGA_HS
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to VGA_VS
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to AUDIO_L
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to AUDIO_R
+set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to SPI_DO
+set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to SPI_SCK
+
+	# start DESIGN_PARTITION(Top)
+	# ---------------------------
+
+		# Incremental Compilation Assignments
+		# ===================================
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+
+	# end DESIGN_PARTITION(Top)
+	# -------------------------
+
+# end ENTITY(sidi_vp)
+# -------------------
+#set_global_assignment -name VERILOG_FILE ../SiDi/sys/data_io.v
+set_global_assignment -name SYSTEMVERILOG_FILE ../../sp0256/compressor.sv
+set_global_assignment -name VHDL_FILE ../../sp0256/sp0256_256b_019_decoded.vhd
+set_global_assignment -name VHDL_FILE ../../sp0256/sp0256.vhd
+set_global_assignment -name VHDL_FILE ../SiDi/sys/dac.vhd
+set_global_assignment -name VHDL_FILE ../../74ls74.vhd
+set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/video_space.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/video_mixer.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/video_cleaner.sv
+set_global_assignment -name VERILOG_FILE ../SiDi/sys/scandoubler.v
+set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/rgb2ypbpr.sv
+set_global_assignment -name VERILOG_FILE ../SiDi/sys/osd.v
+set_global_assignment -name VERILOG_FILE ../SiDi/sys/mist_video.v
+set_global_assignment -name VERILOG_FILE ../SiDi/sys/mist_io.v
+set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/hq2x.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/cofi.sv
+set_global_assignment -name VERILOG_FILE ../../Speech256/speech256_top/speech256_top.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/sd2dac/sd2dac.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/spmul/spmul.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/source/source.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/pwmdac/pwmdac.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/filter/filter.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/controller/xlat.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/controller/ctrlrom.v
+set_global_assignment -name VERILOG_FILE ../../Speech256/controller/controller.v
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/rom_t48.vhd
+set_global_assignment -name VHDL_FILE "../../vp_keymap-c.vhd"
+set_global_assignment -name VHDL_FILE ../../vp_keymap.vhd
+set_global_assignment -name VHDL_FILE "../../configurations/rom_t48-c.vhd"
+set_global_assignment -name VHDL_FILE "../../configurations/t8048_notri-c.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/system/wb_master-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/system/wb_master.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/system/t8048-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/system/t8048_notri.vhd
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/system/t8048.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/system/t48_system_comp_pack-p.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/system/t48_rom-struct-c.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/system/t48_rom-struct-a.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/system/t48_rom-e.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/system/lpm_rom.vhd
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/system/lpm_ram_dq.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/system/generic_ram_ena-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/system/generic_ram_ena.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/timer-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/timer.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/t48_tb_pack-p.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/t48_pack-p.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/t48_core-c.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/t48_core_comp_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/t48_core.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/t48_comp_pack-p.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/psw-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/psw.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/pmem_ctrl-c.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/pmem_ctrl_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/pmem_ctrl.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/p2-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/p2.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/p1-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/p1.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/opc_table-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/opc_table.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/opc_decoder-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/opc_decoder.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/int-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/int.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/dmem_ctrl-c.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/dmem_ctrl_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/dmem_ctrl.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/decoder-c.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/decoder_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/decoder.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/db_bus-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/db_bus.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/cond_branch-c.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/cond_branch_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/cond_branch.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/clock_ctrl-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/clock_ctrl.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/bus_mux-c.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/bus_mux.vhd
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/alu-c.vhd"
+set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/alu_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/alu.vhd
+set_global_assignment -name VHDL_FILE "../../configurations/vp_glue-c.vhd"
+set_global_assignment -name VHDL_FILE "../../configurations/vp_console-c.vhd"
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_top_sync-c.vhd"
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_top_sync.vhd
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_sync_gen-c.vhd"
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_sync_gen.vhd
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_sound-c.vhd"
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_sound_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_sound.vhd
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_pack-p.vhd"
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_minor-c.vhd"
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_minor_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_minor.vhd
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_major-c.vhd"
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_major_quad_obj-c.vhd"
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_major_quad_obj.vhd
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_major_pack-p.vhd"
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_major_obj-c.vhd"
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_major_obj.vhd
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_major.vhd
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_grid-c.vhd"
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_grid_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_grid.vhd
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_cpuio-c.vhd"
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_cpuio.vhd
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_core-c.vhd"
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_core_comp_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_core.vhd
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_comp_pack-p.vhd"
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_col_pack-p.vhd"
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_col_mux-c.vhd"
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_col_mux.vhd
+set_global_assignment -name VHDL_FILE "../../i8244/i8244_charset_rom-c.vhd"
+set_global_assignment -name VHDL_FILE ../../i8244/i8244_charset_rom.vhd
+set_global_assignment -name VHDL_FILE "../../vp_tb_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../vp_glue.vhd
+set_global_assignment -name VHDL_FILE "../../vp_console_comp_pack-p.vhd"
+set_global_assignment -name VHDL_FILE ../../vp_console.vhd
+set_global_assignment -name CDF_FILE jtag.cdf
+set_global_assignment -name QIP_FILE pll.qip
+set_global_assignment -name QIP_FILE ../SiDi/rom.qip
+set_global_assignment -name QIP_FILE ../SiDi/char_rom.qip
+set_global_assignment -name QIP_FILE ../SiDi/voice_rom.qip
+set_global_assignment -name SYSTEMVERILOG_FILE "../sidi/sidi-vp.sv"
+set_global_assignment -name QIP_FILE ../../CtrlModule/CtrlModule.qip
+set_global_assignment -name SDC_FILE "neptuno-vp.sdc"
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

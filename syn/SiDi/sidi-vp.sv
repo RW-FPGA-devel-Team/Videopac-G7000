@@ -17,8 +17,11 @@
 //============================================================================
 
 
-
+`ifndef CYCLONE
 module sidi_vp
+`else
+module cyclone_vp
+`endif
 (       
         output        LED,                                              
         output  [5:0] VGA_R,
@@ -28,6 +31,10 @@ module sidi_vp
         output        VGA_VS,
         output        AUDIO_L,
         output        AUDIO_R,  
+		input         TAPE_IN,
+		input         UART_RX,
+		output        UART_TX,
+	`ifndef CYCLONE
         input         SPI_SCK,
         output        SPI_DO,
         input         SPI_DI,
@@ -35,11 +42,32 @@ module sidi_vp
         input         SPI_SS3,
         input         CONF_DATA0,
         input         CLOCK_27,
-		  input         TAPE_IN,
-		  input         UART_RX,
-		  output        UART_TX,
-		  
-		          
+	`else		  
+        input         CLOCK_50,
+		  output        SD_SCK,
+		  output        SD_MOSI,
+		  input         SD_MISO,
+		  output        SD_CS,
+	     inout         PS2_CLK,
+		  inout         PS2_DAT,		  
+		`ifndef JOYDC
+			output        JOY_CLK,
+			output        JOY_LOAD,
+			input         JOY_DATA,
+			output        JOY_SELECT,
+		`else
+			input	wire [5:0]JOYSTICK1,
+			input	wire [5:0]JOYSTICK2,
+			output        JOY_SELECT = 1'b1,
+			output        VGA_BLANK = 1'b1,
+			output        VGA_CLOCK,			
+		`endif	
+		output        MCLK,
+		output        SCLK,
+		output        LRCLK,
+		output        SDIN,
+		output        STM_RST = 1'b0,
+	`endif          
 		  output [12:0] SDRAM_A,
 		  inout  [15:0] SDRAM_DQ,
         output        SDRAM_DQML,
@@ -78,15 +106,24 @@ parameter CONF_STR = {
 
 wire  [1:0] buttons;
 wire [31:0] status;
+`ifndef CYCLONE
 wire        scandoubler_disable;
-
+`else
+wire        scandoubler_disable = host_scandoubler_disable ^ 1;
+`endif
 wire        ioctl_download;
 wire [24:0] ioctl_addr;
 wire [7:0]  ioctl_dout;
 wire        ioctl_wait;
 wire        ioctl_wr;
 wire  [7:0] ioctl_index;
+`ifndef JOYDC
 wire [15:0] joystick_0,joystick_1;
+assign VGA_CLOCK = clk_sys;
+`else
+wire [15:0] joystick_0 = ~JOYSTICK1[4:0];
+wire [15:0] joystick_1 = ~JOYSTICK2[4:0];
+`endif
 wire [24:0] ps2_mouse;
 
 wire ypbpr;
@@ -101,7 +138,7 @@ wire        joy_swap = status[7];
 wire [15:0] joya = joy_swap ? joystick_1 : joystick_0;
 wire [15:0] joyb = joy_swap ? joystick_0 : joystick_1;
 
-
+`ifndef CYCLONE
 mist_io #(.STRLEN($size(CONF_STR)>>3)) mist_io
 (
    .SPI_SCK   (SPI_SCK),
@@ -130,6 +167,54 @@ mist_io #(.STRLEN($size(CONF_STR)>>3)) mist_io
 
 	.ps2_key   (ps2_key)
 );
+`else
+wire [7:0]R_OSD,G_OSD,B_OSD;
+wire host_scandoubler_disable;
+
+data_io #( .sysclk_frequency(16'd709) )data_io // 16'd709: 16'd420
+(
+	.clk(clk_sys),
+	
+	.debug(),
+	
+	.reset_n(clock_locked), //clockOn
+
+	.vga_hsync(~HSync),
+	.vga_vsync(~VSync),
+	
+	.red_i({colors[23:16]}),  
+	.green_i({colors[15:8]}), 
+	.blue_i({colors[7:0]}),
+	.red_o(R_OSD),
+	.green_o(G_OSD),
+	.blue_o(B_OSD),
+	
+	.ps2k_clk_in(PS2_CLK),
+	.ps2k_dat_in(PS2_DAT),
+	.ps2_key(ps2_key),
+
+	.host_scandoubler_disable(host_scandoubler_disable),
+	.host_divert_sdcard(),
+	
+	.spi_miso(SD_MISO),
+	.spi_mosi(SD_MOSI),
+	.spi_clk(SD_SCK),
+	.spi_cs(SD_CS),
+
+	.img_mounted(),
+	.img_size(),
+
+	.status(status),
+	
+	.ioctl_ce(1'b1),
+	.ioctl_wr(ioctl_wr),
+	.ioctl_addr(ioctl_addr),
+	.ioctl_dout(ioctl_dout),
+	.ioctl_download(ioctl_download),
+	.ioctl_index(ioctl_index),
+	.ioctl_file_ext()
+);
+`endif
 
 
 
@@ -144,7 +229,11 @@ wire clk_sys = PAL ? clk_sys_vp : clk_sys_o2;
 
 pll pll
 (
+`ifndef CYCLONE
 	.inclk0(CLOCK_27),
+`else
+	.inclk0(CLOCK_50),
+`endif
 	.areset(0),
 	.c0(clk_sys_o2),
 	.c1(clk_sys_vp),
@@ -311,11 +400,18 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
 	
 	.line_start(0),
 	.ypbpr_full(1),
-
+`ifndef CYCLONE
 	.R({colors[23:16]  >>2}),
 	.G({colors[15:8]   >>2}),
 	.B({colors[7:0]    >>2})
-
+`else	
+	.R(R_OSD[7:2]),
+	.G(G_OSD[7:2]),
+	.B(B_OSD[7:2]),
+	.SPI_SCK(),
+	.SPI_SS3(),
+	.SPI_DI()
+`endif
 );
 
 
@@ -546,12 +642,38 @@ dac #(
    .res_n_i      (1      ),
    .dac_i        (audio_out),
    .dac_o        (AUDIO_L)
-  );
+);
 
 wire [15:0] audio_out = (VOICE?{snd,snd,snd,snd} | {voice_out[7:0],voice_out[7:0]}:{snd, snd, snd,snd}) ;
-
 assign AUDIO_R = AUDIO_L;
 
+
+`ifdef CYCLONE
+wire [15:0] audio_i2s = VOICE?{3'b000,snd,snd,5'b00000} | {signed_voice_out[9:0],6'b0} : {3'b000,snd,snd,5'b00000} ;
+audio_top audio_top
+(
+	.clk_50MHz(CLOCK_50),
+	.dac_MCLK(MCLK),
+	.dac_LRCK(LRCLK),
+	.dac_SCLK(SCLK),
+	.dac_SDIN(SDIN),
+	.L_data(audio_i2s),
+	.R_data(audio_i2s)
+); 
+
+`ifndef JOYDC
+joydecoder joydecoder 
+(
+	.clk(CLOCK_50),
+	.JOY_CLK(JOY_CLK),
+	.JOY_LOAD(JOY_LOAD),
+	.JOY_DATA(JOY_DATA),
+	.JOY_SELECT(JOY_SELECT),
+	.joystick1(joystick_0),
+	.joystick2(joystick_1)
+);
+`endif
+`endif
 
 ////////////The Voice /////////////////////////////////////////////////
 
