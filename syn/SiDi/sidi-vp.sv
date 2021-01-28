@@ -649,7 +649,7 @@ assign AUDIO_R = AUDIO_L;
 
 
 `ifdef CYCLONE
-wire [15:0] audio_i2s = VOICE?{3'b000,snd,snd,5'b00000} | {voice_out[7:0],voice_out[7:0]} : {3'b000,snd,snd,5'b00000} ;
+wire [15:0] audio_i2s = VOICE?{3'b000,snd,snd,5'b00000} | {signed_voice_out[9:0],6'b0} : {3'b000,snd,snd,5'b00000} ;
 audio_top audio_top
 (
 	.clk_50MHz(CLOCK_50),
