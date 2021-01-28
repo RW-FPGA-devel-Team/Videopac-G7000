@@ -231,16 +231,11 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to SPI_DO
 set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to SPI_SCK
 set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
 set_global_assignment -name SMART_RECOMPILE ON
+set_global_assignment -name SYSTEMVERILOG_FILE sys/compressor.sv
+set_global_assignment -name VHDL_FILE ../../sp0256/sp0256_al2_decoded.vhd
+set_global_assignment -name VHDL_FILE ../../sp0256/sp0256_256b_019_decoded.vhd
+set_global_assignment -name VHDL_FILE ../../sp0256/sp0256.vhd
 set_global_assignment -name VHDL_FILE sys/dac.vhd
-set_global_assignment -name VERILOG_FILE ../../Speech256/speech256_top/speech256_top.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/sd2dac/sd2dac.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/spmul/spmul.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/source/source.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/pwmdac/pwmdac.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/filter/filter.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/controller/xlat.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/controller/ctrlrom.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/controller/controller.v
 set_global_assignment -name SYSTEMVERILOG_FILE sys/video_space.sv
 set_global_assignment -name SYSTEMVERILOG_FILE sys/video_mixer.sv
 set_global_assignment -name SYSTEMVERILOG_FILE sys/video_cleaner.sv
@@ -287,10 +282,6 @@ set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/p2-c.vhd"
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/p2.vhd
 set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/p1-c.vhd"
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/p1.vhd
-set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/opc_table-c.vhd"
-set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/opc_table.vhd
-set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/opc_decoder-c.vhd"
-set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/opc_decoder.vhd
 set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/int-c.vhd"
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/int.vhd
 set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/dmem_ctrl-c.vhd"
@@ -355,6 +346,5 @@ set_global_assignment -name CDF_FILE jtag.cdf
 set_global_assignment -name QIP_FILE pll.qip
 set_global_assignment -name QIP_FILE rom.qip
 set_global_assignment -name QIP_FILE char_rom.qip
-set_global_assignment -name QIP_FILE voice_rom.qip
 set_global_assignment -name VHDL_FILE ../../74ls74.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

@@ -223,7 +223,7 @@ data_io #( .sysclk_frequency(16'd709) )data_io // 16'd709: 16'd420
 wire clock_locked;
 wire clk_sys_o2;
 wire clk_sys_vp;
-wire clk_voice;
+wire clk_2m5;
 
 wire clk_sys = PAL ? clk_sys_vp : clk_sys_o2;
 
@@ -237,7 +237,7 @@ pll pll
 	.areset(0),
 	.c0(clk_sys_o2),
 	.c1(clk_sys_vp),
-	.c2(clk_voice),
+	.c2(clk_2m5),
 	.locked(clock_locked)
 );
 
@@ -317,7 +317,7 @@ vp_console vp
 	.cart_bs0_o     (cart_bank_0), // Bank switch 0
 	.cart_bs1_o     (cart_bank_1), // Bank Switch 1
 	.cart_psen_n_o  (cart_rd_n),   // Program Store Enable (read)
-	.cart_t0_i      (kb_read_ack || !ldq), // KB/Voice ack
+	.cart_t0_i      (kb_read_ack || ~ldq), // KB/Voice ack
 	.cart_t0_o      (),
 	.cart_t0_dir_o  (),
 	
@@ -644,12 +644,12 @@ dac #(
    .dac_o        (AUDIO_L)
 );
 
-wire [15:0] audio_out = (VOICE?{snd, snd, snd,snd} | voice_out[14:0]:{snd,snd,snd,snd}) ;
+wire [15:0] audio_out = (VOICE?{snd,snd,snd,snd} | {voice_out[7:0],voice_out[7:0]}:{snd, snd, snd,snd}) ;
 assign AUDIO_R = AUDIO_L;
 
 
 `ifdef CYCLONE
-wire [15:0] audio_i2s = VOICE?{3'b000,snd,snd,5'b00000} | voice_out[14:0]: {3'b000,snd,snd,5'b00000} ;
+wire [15:0] audio_i2s = VOICE?{3'b000,snd,snd,5'b00000} | {voice_out[7:0],voice_out[7:0]} : {3'b000,snd,snd,5'b00000} ;
 audio_top audio_top
 (
 	.clk_50MHz(CLOCK_50),
@@ -677,29 +677,33 @@ joydecoder joydecoder
 
 ////////////The Voice /////////////////////////////////////////////////
 
-wire sample_stb;
-reg signed [15:0] signed_voice_out;
-reg        [15:0] voice_out;
+
+reg signed [9:0] signed_voice_out;
+reg        [8:0] voice_out;
     
 wire ldq;
          
 
-SPEECH256_TOP speech256 (
-        .clk        (clk_voice),
-        .rst_an     (rst_a_n),
-        .ldq        (ldq),
+sp0256 sp0256 (
+        .clk_2m5    (clk_2m5),
+        .reset      (rst_a_n),
+        .lrq        (ldq),
         .data_in    (rom_addr[6:0]),
-        .data_stb   (ald_n),
-        .pwm_out    (the_voice),
-        .sample_out (signed_voice_out),
-        .sample_stb ()
+        .ald        (ald),
+        .audio_out  (signed_voice_out),
 );
 
+compressor compressor
+(
+        .clk  (clk_sys),
+        .din  ( signed_voice_out),
+        .dout ( voice_out)
+);
+
+wire ald     = !rom_addr[7] | cart_wr_n | cart_cs;
+wire rst_a_n;
 
 
-
-wire ald_n   = !(!rom_addr[7] | cart_wr_n | cart_cs);
-wire rst_a_n ;
 
 ls74 ls74
 (
@@ -707,18 +711,11 @@ ls74 ls74
   .clr   (VOICE? 1'b1: 1'b0),
   .q     (rst_a_n),
   .pre   (1'b1),
-  .clk   (!ald_n)
+  .clk   (ald)
 );
 
 
-always @* begin
-  if (signed_voice_out < 16'd0) begin
-    voice_out = ~signed_voice_out;
-  end
-  else begin
-    voice_out = signed_voice_out ;
-  end
-end
+assign LED=ldq;
 
 ///////////////////////////////////////////////////////////////////////
 
