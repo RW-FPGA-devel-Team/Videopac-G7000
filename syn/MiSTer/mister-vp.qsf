@@ -424,16 +424,11 @@ set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 
 # end ENTITY(sys_top)
 # -------------------
+set_global_assignment -name SYSTEMVERILOG_FILE ../../sp0256/compressor.sv
+set_global_assignment -name VHDL_FILE ../../sp0256/sp0256_al2_decoded.vhd
+set_global_assignment -name VHDL_FILE ../../sp0256/sp0256_256b_019_decoded.vhd
+set_global_assignment -name VHDL_FILE ../../sp0256/sp0256.vhd
 set_global_assignment -name VHDL_FILE ../../74ls74.vhd
-set_global_assignment -name VERILOG_FILE ../../Speech256/spmul/spmul.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/source/source.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/sd2dac/sd2dac.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/pwmdac/pwmdac.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/filter/filter.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/controller/xlat.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/controller/ctrlrom.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/controller/controller.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/speech256_top/speech256_top.v
 set_global_assignment -name SYSTEMVERILOG_FILE "mister-vp.sv"
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/rom_t48.vhd
 set_global_assignment -name VHDL_FILE "../../vp_keymap-c.vhd"
