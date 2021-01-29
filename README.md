@@ -37,7 +37,7 @@ When loading a ROM, most games will prompt the user with "SELECT GAME". Press 0-
 * **Antonio Sanchez** For the LX16 port.
 * **Wilco2009** For the SD-cart for the real console and for helping with hardware internals and tricks his [sd cartridge](https://wilco2009.blogspot.com/2020/) for the real console is a must!.
 * [**Neuro**](https://github.com/neurorulez) For the Neptuno and Unamiga reloaded Ports.
-* [**Benitoss**](https://github.com/benitoss) for the ZZX Next port (soon)
+* [**Benitoss**](https://github.com/benitoss) for the ZX Next port (soon)
 
 ## Some ROMS.
 *  You can download almost all the console roms from the [René van dem Enden](http://www.ozyr.com/rene/VP_O2-roms777.zip) site. This .zip file contains 220 games and is 765 kB. 
