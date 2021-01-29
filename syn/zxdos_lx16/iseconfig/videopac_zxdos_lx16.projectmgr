@@ -1,0 +1,280 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--This is an ISE project configuration file.-->
+<!--It holds project specific layout data for the projectmgr plugin.-->
+<!--Copyright (c) 1995-2009 Xilinx, Inc.  All rights reserved.-->
+<Project version="2" owner="projectmgr" name="videopac_zxdos_lx16" >
+   <!--This is an ISE project configuration file.-->
+   <ItemView engineview="SynthesisOnly" guiview="Source" compilemode="AutoCompile" >
+      <ClosedNodes>
+         <ClosedNodesVersion>2</ClosedNodesVersion>
+         <ClosedNode>/CtrlModule - rtl |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|CtrlModule|CtrlModule|RTL|CtrlModule.vhd</ClosedNode>
+         <ClosedNode>/sp0256 - syn |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|sp0256|sp0256.vhd</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/MyCtrlModule - CtrlModule - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/dblscan_b - DBLSCAN - RTL</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/multiboot_lx16 - multiboot</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/ps2_keyboard_b - ps2_keyboard_interface - my_ps2_keyboard</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/romload - rom_loader</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/rom_1k_b - t48_rom - struct</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/alu_b - t48_alu - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/bus_mux_b - t48_bus_mux - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/cond_branch_b - t48_cond_branch - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/cond_branch_b - t48_cond_branch - rtl/t48_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/db_bus_b - t48_db_bus - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/decoder_b - t48_decoder - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/dmem_ctrl_b - t48_dmem_ctrl - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/p1_b - t48_p1 - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/p2_b - t48_p2 - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/pmem_ctrl_b - t48_pmem_ctrl - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/psw_b - t48_psw - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/t48_alu_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/t48_comp_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/t48_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/timer_b - t48_timer - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/cpuio_b - i8244_cpuio - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/grid_b - i8244_grid - rtl/i8244_grid_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/grid_b - i8244_grid - rtl/i8244_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_comp_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_grid_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_major_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_minor_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_sound_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/major_b - i8244_major - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/minor_b - i8244_minor - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/sync_gen_b - i8244_sync_gen - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/MyCtrlModule - CtrlModule - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/dblscan_b - DBLSCAN - RTL</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/multiboot_lx16 - multiboot</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/ps2_keyboard_b - ps2_keyboard_interface - my_ps2_keyboard</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/romload - rom_loader</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/cpuio_b - i8244_cpuio - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/grid_b - i8244_grid - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_comp_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_grid_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_major_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_major_pack/i8244_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_minor_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_sound_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/major_b - i8244_major - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/major_b - i8244_major - rtl/i8244_comp_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/major_b - i8244_major - rtl/i8244_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/major_b - i8244_major - rtl/obj_b - i8244_major_obj - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/major_b - i8244_major - rtl/obj_b - i8244_major_quad_obj - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx16|rtl|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/sync_gen_b - i8244_sync_gen - rtl</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem>videopac_zxdos_lx16 - struct (/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxdos_lx16/rtl/videopac_zxdos_lx16.vhd)</SelectedItem>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff000000000000000100000001000000000000000000000000000000000202000000010000000100000064000001d8000000020000000000000000000000000200000064ffffffff000000810000000300000002000001d80000000100000003000000000000000100000003</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >true</UserChangedColumnWidths>
+      <CurrentItem>videopac_zxdos_lx16 - struct (/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxdos_lx16/rtl/videopac_zxdos_lx16.vhd)</CurrentItem>
+   </ItemView>
+   <ItemView engineview="SynthesisOnly" sourcetype="DESUT_VHDL_ARCHITECTURE" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+         <ClosedNode>Configure Target Device</ClosedNode>
+         <ClosedNode>Design Utilities</ClosedNode>
+         <ClosedNode>Implement Design/Map</ClosedNode>
+         <ClosedNode>Implement Design/Place &amp; Route</ClosedNode>
+         <ClosedNode>Implement Design/Translate</ClosedNode>
+         <ClosedNode>User Constraints</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem>Design Summary/Reports</SelectedItem>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000203000000010000000100000000000000000000000064ffffffff000000810000000000000001000002030000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem>Design Summary/Reports</CurrentItem>
+   </ItemView>
+   <ItemView guiview="File" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems/>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000000000000010000000000000000000000000000000000000390000000040101000100000000000000000000000064ffffffff000000810000000000000004000001900000000100000000000000d60000000100000000000000840000000100000000000000a60000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem>../../CtrlModule/CtrlModule/CharROM/CharROM_ROM.vhd</CurrentItem>
+   </ItemView>
+   <ItemView guiview="Library" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems/>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000000000000010000000000000000000000000000000000000119000000010001000100000000000000000000000064ffffffff000000810000000000000001000001190000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem>work</CurrentItem>
+   </ItemView>
+   <ItemView engineview="SynthesisOnly" sourcetype="DESUT_VHDL_PACKAGE_DECL" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000212000000010000000100000000000000000000000064ffffffff000000810000000000000001000002120000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+   <SourceProcessView>000000ff0000000000000002000001a1000000e401000000060100000002</SourceProcessView>
+   <CurrentView>Implementation</CurrentView>
+   <ItemView engineview="SynthesisOnly" sourcetype="DESUT_VERILOG" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+         <ClosedNode>Design Utilities</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem></SelectedItem>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000212000000010000000100000000000000000000000064ffffffff000000810000000000000001000002120000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem></CurrentItem>
+   </ItemView>
+   <ItemView engineview="BehavioralSim" guiview="Source" compilemode="AutoCompile" >
+      <ClosedNodes>
+         <ClosedNodesVersion>2</ClosedNodesVersion>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/MyCtrlModule - CtrlModule - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/dblscan_b - DBLSCAN - RTL</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/multiboot_lx16 - multiboot</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/ps2_keyboard_b - ps2_keyboard_interface - my_ps2_keyboard</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/romload - rom_loader</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx16 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|zxdos_lx16|videopac_zxdos_lx16.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem>tb_ps2test (/home/avlixa/FPGA/ZXDOS/VideoPac-ZXDOS/src/test/tb_ps2test.v)</SelectedItem>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000002020000000100000001000000640000030a000000020000000000000000000000000200000064ffffffff0000008100000003000000020000030a0000000100000003000000000000000100000003</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem>tb_ps2test (/home/avlixa/FPGA/ZXDOS/VideoPac-ZXDOS/src/test/tb_ps2test.v)</CurrentItem>
+   </ItemView>
+   <ItemView engineview="BehavioralSim" sourcetype="" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+         <ClosedNode>Design Utilities/Compile HDL Simulation Libraries</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000020f000000010000000100000000000000000000000064ffffffff0000008100000000000000010000020f0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+   <ItemView engineview="BehavioralSim" sourcetype="DESUT_VHDL_ARCHITECTURE" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000020f000000010000000100000000000000000000000064ffffffff0000008100000000000000010000020f0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+   <ItemView engineview="BehavioralSim" sourcetype="DESUT_VHDL_PACKAGE_BODY" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000020f000000010000000100000000000000000000000064ffffffff0000008100000000000000010000020f0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+   <ItemView engineview="BehavioralSim" sourcetype="DESUT_VHDL_PACKAGE_DECL" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000020f000000010000000100000000000000000000000064ffffffff0000008100000000000000010000020f0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+   <ItemView engineview="SynthesisOnly" sourcetype="DESUT_CDC" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000020f000000010000000100000000000000000000000064ffffffff0000008100000000000000010000020f0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+   <ItemView engineview="BehavioralSim" sourcetype="DESUT_VERILOG" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000020f000000010000000100000000000000000000000064ffffffff0000008100000000000000010000020f0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+   <CopyAdditionalFiles/>
+   <ItemView engineview="SynthesisOnly" sourcetype="DESUT_VHDL_PACKAGE_BODY" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000212000000010000000100000000000000000000000064ffffffff000000810000000000000001000002120000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+   <ItemView engineview="SynthesisOnly" sourcetype="" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+         <ClosedNode>Design Utilities</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000212000000010000000100000000000000000000000064ffffffff000000810000000000000001000002120000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+</Project>

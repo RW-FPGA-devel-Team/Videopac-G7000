@@ -16,7 +16,7 @@
    * **SiDi**
    * **Neptuno**
    * **Unamiga Reloaded**
-   * **ZxDOS** (soon)
+   * **ZxDOS**
    * **ZX Next** (Soon)
  
 

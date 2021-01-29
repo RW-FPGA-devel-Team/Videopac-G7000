@@ -294,103 +294,44 @@ begin
     function tag_overlap_f(pix  : in std_logic_vector(7 downto 0);
                            mask : in std_logic_vector(7 downto 0);
                            idx  : in natural) return boolean is
-      variable pix_or_v, mask_or_v   : std_logic;
       variable pix_res_v, mask_res_v : boolean;
-      variable pix_check, pix_check1, pix_check2, pix_mask: std_logic_vector(7 downto 0);
+      variable pix_check, pix_mask: std_logic_vector(7 downto 0);
       variable idx_mask, idx_mask_n: std_logic_vector(7 downto 0);
       variable init_mask: std_logic_vector(7 downto 0);
     begin
-      --pix_res_v := false;
+      -- reestructuración logica de colision by avlixa - 2020
       init_mask := X"01";
-      -- mascaras para eliminar el propio pixel probado
+      -- mascara para eliminar el propio pixel probado
       idx_mask := std_logic_vector(shift_left(unsigned(init_mask), idx));
+      -- mascara para mantener todo excepto el propio pixel probado
       idx_mask_n := not idx_mask;
       -- identificar si el pixel testeado está activo
-      pix_mask := pix and idx_mask; --( pix or "00110000") and idx_mask;
+      pix_mask := pix and idx_mask;
+      -- pix_res_v == true si el propio pixel a verificar (idx) está a 1
       pix_res_v := (pix_mask(0) = '1' or pix_mask(1) = '1' or pix_mask(2) = '1' or pix_mask(3) = '1' or 
                       pix_mask(4) = '1' or pix_mask(5) = '1' or pix_mask(6) = '1' or pix_mask(7) = '1');
-                      -- añado chequeo del
-                      
-                      -- esto me da la colisión con los grid como '01'
-                      --(mask(4) = '1' and pix_check(4) = '1' )  or (mask(5)  = '1' and pix_check(5) = '1' ) or pix_mask(6) = '1' or pix_mask(7) = '1');
-
-      --A eliminar el propio pixel probado
-      --pix_check := pix and idx_mask_n; --esto genera 21 en gh y 11 en gv
-      --B chequeando con la máscara en gh y vh evita el 21 y 11, pero siguen errores al cruzar meta en coches
-      -- pix_check := (pix(7 downto 6) & mask(5 downto 4) & pix(3 downto 0)) and idx_mask_n; 
-      --chequeando con la máscara en gh y vh evita el 21 y 11, y no chequeo minor si no tienen mascara, 
-      --así no dan error los coches al cruzar meta y los pistoleros no se mueven cuando choca el otro
-      --C quedan algunos fallos: el baloncesto la bola no choca con la pared vertical
-      --pix_check := (pix(7 downto 6) & mask(5 downto 4) & (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
---      --D separo la comprobación de grid y de minor y no sirve, sigue igual y los coches colisionan cuando lo hace el otro
---      pix_check1 := (pix(7 downto 6) & mask(5 downto 4) & (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
---      pix_check2 := (pix(7 downto 6) & mask(5 downto 4) & pix(3 downto 0)) and idx_mask_n; 
---      pix_check  :=  pix_check2 when (idx_mask(5) = '1' or idx_mask(4) = '1') else pix_check1;
---      --E probando para evitar el baloncesto la bola no choca con la pared vertical --va peor 
---      pix_check := (pix(7 downto 6) & (mask(5 downto 4) or pix(5 downto 4))
---                   & (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
---      --F nuevo intento: igual que C y soluciona errores de mascara 01
---      pix_check := ((pix(7 downto 6) and mask(7 downto 6)) & 
---                    mask(5 downto 4) & 
---                    (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
---      --G nuevo intento: igual que F incluyo chequeo de pixel de grid hor por mascara - ok marcianitos - ko globo
---      pix_check := ((pix(7 downto 6) and mask(7 downto 6)) & 
---                    mask(5) & 
---                    ( pix(4) and mask(4)) &
---                    (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
-      --H nuevo intento: igual que F añadiendo chequeo de pixel de grid ver por mascara 
+                
+      -- Solo verificar los pixeles que tengan la máscara activa, excepto el que estamos verificando
       pix_check := ((pix(7 downto 6) and mask(7 downto 6)) & 
                     ( pix(5) and mask(5)) &
                     ( pix(4) and mask(4)) &
                     (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
 
-      -- colisión si el propio pixel está activo y hay otros
+      -- La colisión se verifica desde el punto de vista de cada pixel que equivale a 
+      -- un tipo de objeto (major, vertical grid, horizontal grid, minor 0-1-2-3, y externo)
+      -- si el pixel a verificar está activo (pix_chek) y alguno de los otros después
+      -- de aplicar la máscara también lo están, entonces se marca colisión en ese pixel/objeto
+      -- Ejemplo:
+      --        pixel: 10000011
+      --      mascara: 00010001
+      -- Al verificar el idx 7 encuentra 1 objetos (idx=0) con máscara y pixel activos y por tanto 
+      -- marca el idx como colision
+      -- Tras aplicar a los 8 bits el resultado sería: 10000010
       mask_res_v := ( pix_check(0) = '1' or pix_check(1) = '1' or pix_check(2) = '1' 
                       or pix_check(3) = '1' or pix_check(4) = '1' or pix_check(5) = '1' 
                       or pix_check(6) = '1' or pix_check(7) = '1');
       
-      
---      pix_or_v  := '0';
---      mask_or_v := '0';
---
---      for pos in pix'range loop
---        -- OR all pix / masked pix except for the given index
---        if pos /= idx then
---          --pix_or_v  := pix_or_v or pix(pos);   --avlixa original
---          --pix_or_v  := pix_or_v or (pix(pos) and mask(pos));   --avlixa no sirve evita algo pero no todo
---          --avlixa
---            if ((pos<4) or (pos>6)) then --minor and major objects
---            --if (pos>6) then --major objects --así siguen chocando los coches con meta
---               pix_or_v  := pix_or_v or (pix(pos) and mask(pos));
---            else --vertical/horizontal grid & minor
---               pix_or_v  := pix_or_v or pix(pos);
---            end if;
---          --fin avlixa
---          mask_or_v := mask_or_v or (pix(pos) and mask(pos)); 
---        end if;
---      end loop;
---
---      -- 1) overlap bit for idx has to be set when
---      --    this channel overlaps with other enabled pix channels
---      pix_res_v  := pix(idx) = '1' and mask_or_v = '1' ;   --avlixa original
---      -- pix_res_v  := pix(idx) = '1' and mask_or_v = '1' and mask(idx) = '1' ;   --avlixa funciona, pero voy a probar solo con minor
-----      -- avlixa ini
-----      if ((idx<4) or (idx>6)) then --minor and major objects  --avlixa casí, pero no chocan los menores entre sí
-----      --if (idx>6) then --major objects --así siguen chocando los coches con meta
-----         pix_res_v  := pix(idx) = '1' and mask_or_v = '1' and mask(idx) = '1' ; 
-----      else --vertical/horizontal grid & minor
-----         pix_res_v  := pix(idx) = '1' and mask_or_v = '1' ;
-----      end if;
-----      -- fin avlixa
---      
---      -- 2) overlap bit for idx has to be set when
---      --    mask enables this bit and other pix channels collide
---      mask_res_v := (pix(idx) and mask(idx)) = '1' and
---                    pix_or_v = '1';
-
-      
-		--return  mask_res_v or pix_res_v;  --avlixa - original
-      return  mask_res_v and pix_res_v;  --avlixa 
+      return  mask_res_v and pix_res_v;
     end;
 
   begin

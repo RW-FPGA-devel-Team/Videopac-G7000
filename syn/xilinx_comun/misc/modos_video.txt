@@ -1,0 +1,52 @@
+Resoluciones http://www.geocities.ws/podernixie/htpc/modes-en.html
+
+Modeline "640x480_60,0Hz 15,7KHz (60Hz)" 12.324 640 648 706 784 480 483 489 524 interlace -hsync -vsync
+Modeline "640x480 PAL  (50Hz)" 13.320 640 672 734 852 480 540 545 625 interlace -hsync -vsync   
+Modeline "640x480 NTSC (60Hz)" 13.400 640 672 734 852 480 488 493 525 interlace -hsync -vsync   
+Modeline "NTSC 640x480 (60Hz)" 12.336 640 662 720 784 480 488 494 525 interlace -hsync -vsync
+
+Modeline "PAL  720x576 (50Hz)" 13.875 720 741 806 888 576 581 586 625 interlace -hsync -vsync
+Modeline "PAL  720x576 (50Hz)" 13.875 720 741 806 888 576 581 586 625 interlace -hsync -vsync
+
+http://tinyvga.com/vga-timing/640x480@60Hz
+
+VGA Signal 640 x 480 @ 60 Hz Industry standard timing
+
+Interested in easy to use VGA solution for embedded applications? Click here!
+
+General timing
+Screen refresh rate	60 Hz
+Vertical refresh	31.46875 kHz
+Pixel freq.	25.175 MHz
+Horizontal timing (line)
+Polarity of horizontal sync pulse is negative.
+
+Scanline part	Pixels	Time [µs]
+Visible area	640	25.422045680238
+Front porch	16	0.63555114200596
+Sync pulse	96	3.8133068520357
+Back porch	48	1.9066534260179
+Whole line	800	31.777557100298
+Vertical timing (frame)
+Polarity of vertical sync pulse is negative.
+
+Frame part	Lines	Time [ms]
+Visible area	480	15.253227408143
+Front porch	10	0.31777557100298
+Sync pulse	2	0.063555114200596
+Back porch	33	1.0486593843098
+Whole frame	525	16.683217477656
+
+timing-details-of-720x576-progressive-video
+pixel clock 27Mhz
+Hor pixel    720
+Hor blanking 144
+Hor sync off  12
+Hor sync pul  64
+
+Vert lines   576
+Ver blanking  49
+Vert sync off  5
+vety sync width 5
+
+

@@ -1,0 +1,110 @@
+# Clock
+NET "clk50mhz" LOC = A10;
+NET "clk50mhz" IOSTANDARD = LVTTL;
+#NET "clk50mhz" CLOCK_DEDICATED_ROUTE = FALSE;
+
+
+# SRAM
+NET "sram_addr<0>"    LOC="H14"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<1>"    LOC="J16"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<2>"    LOC="J11"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<3>"    LOC="J13"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<4>"    LOC="K16"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<5>"    LOC="K11"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<6>"    LOC="L12"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<7>"    LOC="M13"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<8>"    LOC="M15"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<9>"    LOC="N14"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<10>"   LOC="L14"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<11>"   LOC="M14"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<12>"   LOC="K14"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<13>"   LOC="L13"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<14>"   LOC="J12"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<15>"   LOC="T14"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<16>"   LOC="T15"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<17>"   LOC="R14"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<18>"   LOC="R16"  | IOSTANDARD = LVCMOS33;
+#NET "sram_addr<19>"   LOC="F10"  | IOSTANDARD = LVCMOS33;
+#NET "sram_addr<20>"   LOC="A12"  | IOSTANDARD = LVCMOS33;
+NET "sram_addr<19>"     IOSTANDARD = LVCMOS33;
+NET "sram_addr<20>"     IOSTANDARD = LVCMOS33;
+
+NET "sram_data<0>"    LOC="K15"  | IOSTANDARD = LVCMOS33;
+NET "sram_data<1>"    LOC="N16"  | IOSTANDARD = LVCMOS33;
+NET "sram_data<2>"    LOC="L16"  | IOSTANDARD = LVCMOS33;
+NET "sram_data<3>"    LOC="K12"  | IOSTANDARD = LVCMOS33;
+NET "sram_data<4>"    LOC="J14"  | IOSTANDARD = LVCMOS33;
+NET "sram_data<5>"    LOC="P15"  | IOSTANDARD = LVCMOS33;
+NET "sram_data<6>"    LOC="P16"  | IOSTANDARD = LVCMOS33;
+NET "sram_data<7>"    LOC="R15"  | IOSTANDARD = LVCMOS33;
+
+NET "sram_we_n"       LOC="M16"  | IOSTANDARD = LVCMOS33;
+#NET "sram_ub_n"       LOC="E13"  | IOSTANDARD = LVCMOS33;
+#NET "sram_lb_n"       LOC="C11"  | IOSTANDARD = LVCMOS33;
+
+# Video
+NET "VGA_R<5>" LOC = "G11" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#C7  - 0.5K || 10K
+NET "VGA_R<4>" LOC = "F13" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#C6  - 1K
+NET "VGA_R<3>" LOC = "F14" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#C5  - 2K
+NET "VGA_R<2>" LOC = "G14" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#C4  - 4K
+NET "VGA_R<1>" LOC = "G16" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#C14 - 8K
+NET "VGA_R<0>" LOC = "H15" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#C12 - 16K
+NET "VGA_G<5>" LOC = "B16" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B7  - 0.5K || 10K
+NET "VGA_G<4>" LOC = "C16" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B6  - 1K
+NET "VGA_G<3>" LOC = "D16" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B5  - 2K
+NET "VGA_G<2>" LOC = "E16" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B4  - 4K
+NET "VGA_G<1>" LOC = "F16" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B13 - 8K
+NET "VGA_G<0>" LOC = "F12" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B12 - 16K
+NET "VGA_B<5>" LOC = "E12" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B3  - 0.5K || 10K
+NET "VGA_B<4>" LOC = "B15" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B2  - 1K
+NET "VGA_B<3>" LOC = "C15" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B1  - 2K
+NET "VGA_B<2>" LOC = "D14" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B0  - 4K
+NET "VGA_B<1>" LOC = "E15" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B15 - 8K
+NET "VGA_B<0>" LOC = "F15" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#B14 - 16K
+NET "hsync" LOC = "G12" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#C3  - 75
+NET "vsync" LOC = "H16" 	|IOSTANDARD = LVTTL |DRIVE = 8 |SLEW = FAST ;	#C2  - 75
+
+
+# LEDs and buttons
+NET "testled0"  LOC = "T9" |IOSTANDARD = LVTTL |SLEW = SLOW |DRIVE = 8 |PULLDOWN ;	#A1  - 330
+NET "testled1"  LOC = "R9" |IOSTANDARD = LVTTL |SLEW = SLOW |DRIVE = 8 |PULLDOWN ;	#A2  - 330
+# NET "btn<1>"  LOC = "R7" |IOSTANDARD = LVTTL |PULLUP ;	#B10 - to +
+# NET "btn<0>"  LOC = "T8" |IOSTANDARD = LVTTL |PULLUP ;	#B8  - to +
+
+#NET debugled<7>           LOC="A14"  | IOSTANDARD = LVCMOS33;
+#NET debugled<6>           LOC="B14"  | IOSTANDARD = LVCMOS33;
+#NET debugled<5>           LOC="C13"  | IOSTANDARD = LVCMOS33;
+#NET debugled<4>           LOC="A13"  | IOSTANDARD = LVCMOS33;
+#NET debugled<3>           LOC="B12"  | IOSTANDARD = LVCMOS33;
+#NET debugled<2>           LOC="A12"  | IOSTANDARD = LVCMOS33;
+#NET debugled<1>           LOC="C11"  | IOSTANDARD = LVCMOS33;
+#NET debugled<0>           LOC="A11"  | IOSTANDARD = LVCMOS33;
+
+# Keyboard
+NET "clkps2"	LOC="M11"  |IOSTANDARD = LVTTL |DRIVE=8 |SLEW=SLOW |PULLUP; # C0
+NET "dataps2"	LOC="P12"  |IOSTANDARD = LVTTL |DRIVE=8 |SLEW=SLOW |PULLUP; # C1
+
+# Mouse
+# NET "PS2DATB"	LOC="P11"  |IOSTANDARD = LVTTL |DRIVE=8 |SLEW=SLOW |PULLUP; # A12
+# NET "PS2CLKB"	LOC="M10"  |IOSTANDARD = LVTTL |DRIVE=8 |SLEW=SLOW |PULLUP; # A13
+
+# Audio
+NET "audioL"	LOC="H11"  |IOSTANDARD = LVTTL |DRIVE=8 |SLEW=SLOW;          # A14
+NET "audioR"	LOC="H13"  |IOSTANDARD = LVTTL |DRIVE=8 |SLEW=SLOW;          # A15
+
+# Joysticks
+NET "joy_data"        LOC="T13"  | IOSTANDARD = LVCMOS33;
+NET "joy_load_n"      LOC="T12"  | IOSTANDARD = LVCMOS33;
+NET "joy_clk"         LOC="R12"  | IOSTANDARD = LVCMOS33;
+
+# SD card
+NET "sd_cs_n"         LOC="N9"   | IOSTANDARD = LVCMOS33;
+NET "sd_clk"          LOC="T6"   | IOSTANDARD = LVCMOS33;
+NET "sd_mosi"         LOC="M9"   | IOSTANDARD = LVCMOS33;
+NET "sd_miso"         LOC="T7"   | IOSTANDARD = LVCMOS33 | PULLUP;
+
+
+NET clk50mhz TNM_NET=clk50mhz;
+TIMESPEC TS_CLK50MHZ = PERIOD CLK50MHZ 20.00 ns HIGH 50%;
+#PIN "pll_dual/clkout3_buf.O" CLOCK_DEDICATED_ROUTE = FALSE;
+#PIN "pll_dual/clkout2_buf.O" CLOCK_DEDICATED_ROUTE = FALSE;
