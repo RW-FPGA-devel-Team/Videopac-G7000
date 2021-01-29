@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Videopac charset editor</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<style>
+		body {
+			margin: 0px;
+			overflow: hidden;
+		}
+		.unselectable {
+			-moz-user-select: -moz-none;
+			-khtml-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+		</style>
+
+	</head>
+
+	<body>
+
+		<script>
+
+			/*
+				Charset editor by yomboprime
+				Released under public domain 2021
+			*/
+
+			var canvasPixelSize = 64;
+
+			var bytesEdit = document.createElement( 'input' );
+			bytesEdit.type = "text";
+			bytesEdit.maxlength = 16;
+			bytesEdit.size = 20;
+			//bytesEdit.value = "C06030180C060300";
+			bytesEdit.value = "383812FEB8286C00";
+
+			bytesEdit.addEventListener( 'keydown', ( evt ) => {
+				if ( evt.key === "Enter" ) {
+					hexToCanvas();
+				}
+			}, false );
+
+			var canvas = document.createElement( 'canvas' );
+			canvas.width = 8 * canvasPixelSize;
+			canvas.height = 8 * canvasPixelSize;
+			var ctx2d = canvas.getContext( "2d" );
+
+			var painting = 0;
+			var erasing = 0;
+			canvas.addEventListener( 'mousedown', ( evt ) => {
+				var pixel = ( ( evt.button === 0 ) ? 1 : 0 );
+				if ( pixel ) {
+					painting = 1;
+				}
+				else {
+					erasing = 1;
+				}
+				setPixel( Math.floor( evt.clientX / canvasPixelSize ), Math.floor( evt.clientY / canvasPixelSize ), pixel );
+			}, false );
+			canvas.addEventListener( 'mouseup', ( evt ) => {
+				painting = 0;
+				erasing = 0;
+			}, false );
+			canvas.addEventListener( 'mousemove', ( evt ) => {
+				if ( painting !== 0 ) {
+					setPixel( Math.floor( evt.clientX / canvasPixelSize ), Math.floor( evt.clientY / canvasPixelSize ), 1 );
+				}
+				else if ( erasing !== 0 ) {
+					setPixel( Math.floor( evt.clientX / canvasPixelSize ), Math.floor( evt.clientY / canvasPixelSize ), 0 );
+				}
+			}, false );
+			canvas.addEventListener( 'contextmenu', ( evt ) => { evt.preventDefault(); }, false );
+
+			var canvasDiv = document.createElement( 'div' );
+			canvasDiv.appendChild( canvas );
+			document.body.appendChild( canvasDiv );
+			document.body.appendChild( bytesEdit );
+
+			var currentPixels = null;
+
+			hexToCanvas();
+
+			function hexToCanvas( pixels ) {
+
+				if ( pixels ) {
+					currentPixels = pixels;
+				}
+				else {
+
+					var hexString = bytesEdit.value.toLowerCase();
+
+					if ( hexString.length !== 16 ) {
+						alert( "HEX String must be 16 nibbles in length." );
+						return;
+					}
+
+					var bytes = [];
+					for ( var b = 0; b < 8; b++ ) {
+						var hexChar = hexString[ b * 2 ] + hexString[ b * 2 + 1 ];
+						var char = parseInt( hexChar, 16 );
+						if ( char === NaN ) {
+							alert( "Error converting HEX String. Please check the value." );
+							return;
+						}
+						bytes.push( char );
+					}
+
+					currentPixels = [];
+
+					for ( var j = 0; j < 8; j++ ) {
+						for ( var i = 0; i < 8; i++ ) {
+
+							var pixel = ( bytes[ j ] & ( 1 << i ) ) !== 0 ? 1 : 0;
+							currentPixels[ i + j * 8 ] = pixel;
+
+						}
+					}
+
+				}
+
+				for ( var j = 0; j < 8; j++ ) {
+					for ( var i = 0; i < 8; i++ ) {
+
+						var pixel = currentPixels[ i + j * 8 ];
+
+						ctx2d.fillStyle = pixel ? "green" : "black";
+						ctx2d.fillRect( ( 7 - i ) * canvasPixelSize, j * canvasPixelSize, canvasPixelSize, canvasPixelSize );
+
+					}
+				}
+
+
+			}
+
+			function setPixel( x, y, pixel ) {
+
+				// x: 0..7
+				// y: 0..7
+				// pixel: 0..1
+
+				currentPixels[ ( 7 - x ) + y * 8 ] = pixel;
+
+				hexToCanvas( currentPixels );
+
+				bytesToHex();
+
+			}
+
+			function bytesToHex() {
+
+				// currentPixels must be valid
+
+				var theString = "";
+
+				for ( var j = 0; j < 8; j++ ) {
+
+					var byte = 0;
+
+					for ( var i = 0; i < 8; i++ ) {
+
+						if ( currentPixels[ i + j * 8 ] !== 0 ) {
+							byte |= 1 << i;
+						}
+
+					}
+
+					var char = byte.toString( 16 );
+					if ( char.length < 2 ) {
+						char = "0" + char;
+					}
+
+					theString += char;
+				}
+
+				bytesEdit.value = theString;
+
+			}
+
+		</script>
+
+	</body>
+</html>
