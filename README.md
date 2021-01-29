@@ -1,16 +1,23 @@
-# Videopac G700 / Odyssey2 for FPGA.
+# Videopac G7000 / Odyssey2 for FPGA.
 
 ### This is an FPGA implementation of the Magnavox Oddysey2/Videopac G700 based on FPGA videopac by Arnim Laeuger and ported to MiSTer (With additional work from wsoltys) by [Jamie Dickson](https://github.com/Kitrinx).
 
 ## Features
  * Switch between Odyssey2 and Videopac mode.
+ * Switch between two palettes (composite RF emulation and RGB for more vivid colours)
  * Fully working keyboard.
  * Joystick buttons for keys 0-9.
- * Composite/RGB palettes.
  * loadable **VDC ROM charset** for some custom roms.
  * Correct Sound, timings and better collision detection.
- * "The Voice" peripheral (alpha).
- * available for **MiSTer**,**MiST** and **SiDi** FPGA. (more to come).
+ * "The Voice" peripheral.
+ * available on:
+   * **MiSTer**
+   * **MiST**
+   * **SiDi**
+   * **Neptuno**
+   * **Unamiga Reloaded**
+   * **ZxDOS** (soon)
+   * **ZX Next** (Soon)
  
 
 ## Installation
@@ -20,16 +27,17 @@ When loading a ROM, most games will prompt the user with "SELECT GAME". Press 0-
 
 ## Known Issues
 
-* The roms of "**the voice**" need to be replaced by the origial ones.
-* Still a few glitches.
+* Still a few graphic glitches.
 
 ## Thanks to:
 
 * **René van den Enden** Videopac guru. helped us via email and posted lots of information on [videopac.nl](http://www.videopac.nl)
 * **Mejias3D** Support on videopac internals and 8048 assembler programming.
-* **avlixa** For the **ZXDOS** port.
+* [**avlixa**](https://github.com/avlixa) For the **ZXDOS** port.
 * **Antonio Sanchez** For the LX16 port.
 * **Wilco2009** For the SD-cart for the real console and for helping with hardware internals and tricks his [sd cartridge](https://wilco2009.blogspot.com/2020/) for the real console is a must!.
+* [**Neuro**](https://github.com/neurorulez) For the Neptuno and Unamiga reloaded Ports.
+* [**Benitoss**](https://github.com/benitoss) for the ZZX Next port (soon)
 
 ## Some ROMS.
 *  You can download almost all the console roms from the [René van dem Enden](http://www.ozyr.com/rene/VP_O2-roms777.zip) site. This .zip file contains 220 games and is 765 kB. 
