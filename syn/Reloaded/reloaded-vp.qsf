@@ -41,7 +41,7 @@
 # ========================
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 13.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "07:11:53  MARCH 09, 2017"
-set_global_assignment -name LAST_QUARTUS_VERSION "17.1.0 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "17.0.2 Lite Edition"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name PRE_FLOW_SCRIPT_FILE "quartus_sh:../SiDi/sys/build_id.tcl"
 set_global_assignment -name SMART_RECOMPILE ON
@@ -124,7 +124,9 @@ set_location_assignment PIN_W6 -to SDRAM_CKE
 set_location_assignment PIN_Y6 -to SDRAM_CLK
 
 set_location_assignment PIN_M19 -to PS2_CLK
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PS2_CLK
 set_location_assignment PIN_M20 -to PS2_DAT
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PS2_DAT
 
 set_location_assignment PIN_A20 -to AUDIO_IN
 
@@ -139,6 +141,12 @@ set_location_assignment PIN_B18 -to JOYSTICK1[2]
 set_location_assignment PIN_B19 -to JOYSTICK1[3]
 set_location_assignment PIN_B14 -to JOYSTICK1[4]
 set_location_assignment PIN_B13 -to JOYSTICK1[5]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK1[0]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK1[1]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK1[2]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK1[3]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK1[4]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK1[5]
 
 set_location_assignment PIN_B7 -to JOYSTICK2[0]
 set_location_assignment PIN_B8 -to JOYSTICK2[1]
@@ -146,6 +154,12 @@ set_location_assignment PIN_B9 -to JOYSTICK2[2]
 set_location_assignment PIN_B10 -to JOYSTICK2[3]
 set_location_assignment PIN_B5 -to JOYSTICK2[4]
 set_location_assignment PIN_B4 -to JOYSTICK2[5]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK2[0]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK2[1]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK2[2]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK2[3]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK2[4]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to JOYSTICK2[5]
 
 set_location_assignment PIN_A15 -to JOY_SELECT
 
@@ -278,30 +292,22 @@ set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 # end ENTITY(sidi_vp)
 # -------------------
 #set_global_assignment -name VERILOG_FILE ../SiDi/sys/data_io.v
+set_global_assignment -name SYSTEMVERILOG_FILE sys/hq2x.sv
+set_global_assignment -name VERILOG_FILE sys/scandoubler.v
+set_global_assignment -name SYSTEMVERILOG_FILE sys/video_mixer.sv
+set_global_assignment -name SYSTEMVERILOG_FILE "../SiDi/sidi-vp.sv"
 set_global_assignment -name VHDL_FILE ../../sp0256/sp0256_256b_019_decoded.vhd
 set_global_assignment -name VHDL_FILE ../../sp0256/sp0256.vhd
 set_global_assignment -name SYSTEMVERILOG_FILE ../../sp0256/compressor.sv
 set_global_assignment -name VHDL_FILE ../SiDi/sys/dac.vhd
 set_global_assignment -name VHDL_FILE ../../74ls74.vhd
 set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/video_space.sv
-set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/video_mixer.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/video_cleaner.sv
-set_global_assignment -name VERILOG_FILE ../SiDi/sys/scandoubler.v
 set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/rgb2ypbpr.sv
 set_global_assignment -name VERILOG_FILE ../SiDi/sys/osd.v
 set_global_assignment -name VERILOG_FILE ../SiDi/sys/mist_video.v
 set_global_assignment -name VERILOG_FILE ../SiDi/sys/mist_io.v
-set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/hq2x.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/cofi.sv
-set_global_assignment -name VERILOG_FILE ../../Speech256/speech256_top/speech256_top.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/sd2dac/sd2dac.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/spmul/spmul.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/source/source.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/pwmdac/pwmdac.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/filter/filter.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/controller/xlat.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/controller/ctrlrom.v
-set_global_assignment -name VERILOG_FILE ../../Speech256/controller/controller.v
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/rom_t48.vhd
 set_global_assignment -name VHDL_FILE "../../vp_keymap-c.vhd"
 set_global_assignment -name VHDL_FILE ../../vp_keymap.vhd
@@ -337,10 +343,6 @@ set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/p2-c.vhd"
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/p2.vhd
 set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/p1-c.vhd"
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/p1.vhd
-set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/opc_table-c.vhd"
-set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/opc_table.vhd
-set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/opc_decoder-c.vhd"
-set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/opc_decoder.vhd
 set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/int-c.vhd"
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/int.vhd
 set_global_assignment -name VHDL_FILE "../../t48/rtl/vhdl/dmem_ctrl-c.vhd"
@@ -403,7 +405,6 @@ set_global_assignment -name CDF_FILE jtag.cdf
 set_global_assignment -name QIP_FILE pll.qip
 set_global_assignment -name QIP_FILE ../SiDi/rom.qip
 set_global_assignment -name QIP_FILE ../SiDi/char_rom.qip
-set_global_assignment -name QIP_FILE ../SiDi/voice_rom.qip
-set_global_assignment -name SYSTEMVERILOG_FILE "../sidi/sidi-vp.sv"
 set_global_assignment -name QIP_FILE ../../CtrlModule/CtrlModule.qip
+set_global_assignment -name SDC_FILE "reloaded-vp.sdc"
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

@@ -36,3 +36,7 @@ c5_pin_model_dump.txt
 *~
 *.xml
 *.cdf
+*.rbf
+*.ua2
+*.np1
+

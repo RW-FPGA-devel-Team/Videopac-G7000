@@ -157,7 +157,7 @@ parameter CONF_STR = {
 	"F3,CHR,Change VDC font;",
 	"-;",
 	"OE,System,Odyssey2,Videopac;",
-	"O6,Palette,NTSC,PAL;",
+	"O6,Palette,Tv (RF),RGB;",
 	"O8,Aspect ratio,4:3,16:9;",
 	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%,CRT 75%;",
 	"O1,The Voice,Off,on;",

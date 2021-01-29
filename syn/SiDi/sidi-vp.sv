@@ -24,9 +24,6 @@ module cyclone_vp
 `endif
 (       
         output        LED,                                              
-        output  [5:0] VGA_R,
-        output  [5:0] VGA_G,
-        output  [5:0] VGA_B,
         output        VGA_HS,
         output        VGA_VS,
         output        AUDIO_L,
@@ -42,6 +39,10 @@ module cyclone_vp
         input         SPI_SS3,
         input         CONF_DATA0,
         input         CLOCK_27,
+		  output  [5:0] VGA_R,
+        output  [5:0] VGA_G,
+        output  [5:0] VGA_B,
+
 	`else		  
         input         CLOCK_50,
 		  output        SD_SCK,
@@ -55,11 +56,19 @@ module cyclone_vp
 			output        JOY_LOAD,
 			input         JOY_DATA,
 			output        JOY_SELECT,
+			output  [5:0] VGA_R,
+         output  [5:0] VGA_G,
+         output  [5:0] VGA_B,
+
 		`else
 			input	wire [5:0]JOYSTICK1,
 			input	wire [5:0]JOYSTICK2,
-			output        JOY_SELECT = 1'b1,
-			output        VGA_BLANK = 1'b1,
+			output          JOY_SELECT = 1'b1,
+			output          VGA_BLANK = 1'b1,
+			output  [7:0]   VGA_R,
+         output  [7:0]   VGA_G,
+         output  [7:0]   VGA_B,
+
 			output        VGA_CLOCK,			
 		`endif	
 		output        MCLK,
@@ -96,7 +105,7 @@ parameter CONF_STR = {
 	"F,ROM,Load XROM;",
 	"F,CHR,Change VDC font;",
 	"OE,System,Odyssey2,Videopac;",
-	"O5,Palette,NTSC,PAL;",
+	"O5,Palette,TV RF,RGB;",
 	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%;",
 	"O1,The Voice,Off,on;",
 	"O7,Swap Joysticks,No,Yes;",
@@ -119,20 +128,22 @@ wire        ioctl_wr;
 wire  [7:0] ioctl_index;
 `ifndef JOYDC
 wire [15:0] joystick_0,joystick_1;
-assign VGA_CLOCK = clk_sys;
 `else
-wire [15:0] joystick_0 = ~JOYSTICK1[4:0];
-wire [15:0] joystick_1 = ~JOYSTICK2[4:0];
+wire [15:0] joystick_0 = {10'd0,~JOYSTICK1[5:0]};
+wire [15:0] joystick_1 = {10'd0,~JOYSTICK2[5:0]};
+assign VGA_CLOCK = clk_sys;
+//assign VGA_BLANK = 1'b1;
+assign JOY_SELECT = 1'b1;
 `endif
 wire [24:0] ps2_mouse;
 
 wire ypbpr;
 
 
-wire        PAL  = status[14];
+wire        PAL   = status[14];
 wire        VOICE = status[1];
-wire        MODE = status[5];
-
+wire        MODE  = status[5];
+ 
 wire        joy_swap = status[7];
 
 wire [15:0] joya = joy_swap ? joystick_1 : joystick_0;
@@ -391,27 +402,47 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
 	.HSync(~HSync),
 	.VSync(~VSync),
 	.clk_sys(clk_sys),
-	.ce_pix_actual(ce_pix),
-	.scandoubler_disable(scandoubler_disable),
-	.scanlines(scandoubler_disable ? 2'b00 : {scale==3, scale==2}),
 	//.scanlines(0),
 	.hq2x(scale==1),
 	.mono(0),
 	
-	.line_start(0),
-	.ypbpr_full(1),
 `ifndef CYCLONE
+   .ce_pix_actual(ce_pix),
+	.scandoubler_disable(scandoubler_disable),
+	.scanlines(scandoubler_disable ? 2'b00 : {scale==3, scale==2}),
 	.R({colors[23:16]  >>2}),
 	.G({colors[15:8]   >>2}),
-	.B({colors[7:0]    >>2})
+	.B({colors[7:0]    >>2}),
+	.ypbpr_full(1),
+	.line_start(0),
+
+
 `else	
+`ifndef JOYDC
+  	.ce_pix_actual(ce_pix),
+	.line_start(0),
+
+   .scandoubler_disable(scandoubler_disable),
+	.scanlines(scandoubler_disable ? 2'b00 : {scale==3, scale==2}),
 	.R(R_OSD[7:2]),
 	.G(G_OSD[7:2]),
 	.B(B_OSD[7:2]),
 	.SPI_SCK(),
 	.SPI_SS3(),
-	.SPI_DI()
+	.SPI_DI(),
+	.ypbpr_full(1)
+`else
+   .scandoubler(!scandoubler_disable),
+	.scanlines(scandoubler ? {scale==3, scale==2}:2'b00),
+	.ce_pix_out(),
+	.HBlank(HBlank),
+	.VBlank(VBlank),
+	.VGA_DE(VGA_BLANK),
+	.R(R_OSD[7:0]>>2),
+	.G(G_OSD[7:0]>>2),
+	.B(B_OSD[7:0]>>2),
 `endif
+`endif 
 );
 
 
@@ -649,7 +680,7 @@ assign AUDIO_R = AUDIO_L;
 
 
 `ifdef CYCLONE
-wire [15:0] audio_i2s = VOICE?{3'b000,snd,snd,5'b00000} | {signed_voice_out[9:0],6'b0} : {3'b000,snd,snd,5'b00000} ;
+wire [15:0] audio_i2s = VOICE?{1'b0,snd,snd,7'b0000000} | {signed_voice_out[9:0],6'b0} : {1'b0,snd,snd,7'b0000000} ;
 audio_top audio_top
 (
 	.clk_50MHz(CLOCK_50),
@@ -719,7 +750,6 @@ assign LED=ldq;
 
 ///////////////////////////////////////////////////////////////////////
 
-
 // LUT using calibrated palette
 wire [23:0] color_lut_ntsc[16] = '{
 	24'h000000,    //BLACK
@@ -758,6 +788,5 @@ wire [23:0] color_lut_pal[16] = '{
 	24'hb6b6b6,     //WHITE 
 	24'hffffff      //WHITE LUMA
 };
-
 
 endmodule
