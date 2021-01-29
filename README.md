@@ -7,7 +7,7 @@
  * Switch between two palettes (composite RF emulation and RGB for more vivid colours)
  * Fully working keyboard.
  * Joystick buttons for keys 0-9.
- * loadable **VDC ROM charset** for some custom roms.
+ * loadable **VDC ROM charset** for some custom roms. For info and examples,  read the [manual](https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/doc/Charset%20Edit). Also have some ready to use [custom roms](https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/custom_roms).
  * Correct Sound, timings and better collision detection.
  * "The Voice" peripheral.
  * available on:
