@@ -158,6 +158,7 @@ parameter CONF_STR = {
 	"-;",
 	"OE,System,Odyssey2,Videopac;",
 	"O6,Palette,Tv (RF),RGB;",
+	"O4,TV Set,Color,B/W;",
 	"O8,Aspect ratio,4:3,16:9;",
 	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%,CRT 75%;",
 	"O1,The Voice,Off,on;",
@@ -218,6 +219,7 @@ wire       joy_swap = status[7];
 
 wire       VOICE = status[1];
 wire       MODE = status[6];
+wire       SCREEN = status[4];
 
 wire [15:0] joya = joy_swap ? joystick_1 : joystick_0;
 wire [15:0] joyb = joy_swap ? joystick_0 : joystick_1;
@@ -468,6 +470,17 @@ always @(posedge ce_pix) begin
 	ce_h_cnt <= (~old_h & HSync) ? 16'd0 : (ce_h_cnt + 16'd1);
 end
 
+
+wire [9:0] grayscale;
+vga_to_greyscale vga_to_greyscale
+(
+  .r_in  ({colors[23:18],colors[23:20]}),
+  .g_in  ({colors[15:10],colors[15:12]}),
+  .b_in  ({colors[7:2],colors[7:4]}),
+  .y_out (grayscale) 
+);
+
+
 video_mixer #(.LINE_LENGTH(455)) video_mixer
 (
 	.*,
@@ -483,9 +496,10 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
 	.hq2x(scale==1),
 	.mono(0),
 
-	.R(colors[23:16]),
-	.G(colors[15:8]),
-	.B(colors[7:0])
+	.R(SCREEN ? grayscale[9:2] : colors[23:16]),
+	.G(SCREEN ? grayscale[9:2] : colors[15:8] ),
+	.B(SCREEN ? grayscale[9:2] : colors[7:0]  ),
+
 );
 
 

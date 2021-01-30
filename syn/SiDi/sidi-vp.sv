@@ -106,6 +106,7 @@ parameter CONF_STR = {
 	"F,CHR,Change VDC font;",
 	"OE,System,Odyssey2,Videopac;",
 	"O5,Palette,TV RF,RGB;",
+	"O6,TV Set,Color,B/W;",
 	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%;",
 	"O1,The Voice,Off,on;",
 	"O7,Swap Joysticks,No,Yes;",
@@ -143,6 +144,7 @@ wire ypbpr;
 wire        PAL   = status[14];
 wire        VOICE = status[1];
 wire        MODE  = status[5];
+wire        SCREEN = status[6];
  
 wire        joy_swap = status[7];
 
@@ -396,6 +398,21 @@ always @(posedge ce_pix) begin
 	ce_h_cnt <= (~old_h & HSync) ? 16'd0 : (ce_h_cnt + 16'd1);
 end
 
+wire [9:0] grayscale;
+//vga_to_greyscale vga_to_greyscale
+//(
+//  .r_in  (colors[23:16]),
+//  .g_in  (colors[15:8]),
+//  .b_in  (colors[7:0]),
+//  .y_out (grayscale) 
+//);
+vga_to_greyscale vga_to_greyscale
+(
+  .r_in  ({colors[23:18],colors[23:20]}),
+  .g_in  ({colors[15:10],colors[15:12]}),
+  .b_in  ({colors[7:2],colors[7:4]}),
+  .y_out (grayscale) 
+);
 video_mixer #(.LINE_LENGTH(455)) video_mixer
 (
 	.*,
@@ -410,10 +427,10 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
    .ce_pix_actual(ce_pix),
 	.scandoubler_disable(scandoubler_disable),
 	.scanlines(scandoubler_disable ? 2'b00 : {scale==3, scale==2}),
-	.R({colors[23:16]  >>2}),
-	.G({colors[15:8]   >>2}),
-	.B({colors[7:0]    >>2}),
-	.ypbpr_full(1),
+	.R(SCREEN ? grayscale [9:4] : {colors[23:16]  >>2}),
+	.G(SCREEN ? grayscale [9:4] : {colors[15:8]   >>2}),
+	.B(SCREEN ? grayscale [9:4] : {colors[7:0]    >>2}),
+	.ypbpr_full(0),
 	.line_start(0),
 
 

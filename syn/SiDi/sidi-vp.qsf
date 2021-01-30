@@ -247,6 +247,7 @@ set_global_assignment -name VERILOG_FILE sys/mist_io.v
 set_global_assignment -name SYSTEMVERILOG_FILE sys/hq2x.sv
 set_global_assignment -name VERILOG_FILE sys/data_io.v
 set_global_assignment -name SYSTEMVERILOG_FILE sys/cofi.sv
+set_global_assignment -name VERILOG_FILE sys/vga_to_greyscale.v
 set_global_assignment -name VHDL_FILE ../../t48/rtl/vhdl/rom_t48.vhd
 set_global_assignment -name VHDL_FILE "../../vp_keymap-c.vhd"
 set_global_assignment -name VHDL_FILE ../../vp_keymap.vhd
