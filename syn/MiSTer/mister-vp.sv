@@ -129,8 +129,6 @@ module emu
 
 assign {UART_RTS, UART_TXD, UART_DTR} = 0;
 
-assign AUDIO_S   = 0;
-assign AUDIO_MIX = 0;
 
 assign LED_USER  = ioctl_download;
 assign LED_DISK  = 0;
@@ -431,11 +429,17 @@ wire [7:0] cart_di;
 // T0_i high if SP0256 command buffer full
 
 
-wire [15:0] audio_out = (VOICE?{snd,snd,snd,snd} | {voice_out[7:0],voice_out[7:0]}:{snd, snd, snd,snd}) ;
+//wire [15:0] audio_out = (VOICE?{snd,snd,snd,snd} | {voice_out[7:0],voice_out[7:0]}:{snd, snd, snd,snd}) ;
 
-assign AUDIO_L = audio_out;
+assign AUDIO_L = VOICE ? {4'b0,snd,snd,4'b0} + voice_out * 2 :{2'b0, snd, snd,6'b0};//{audio, 6'd0};
+assign AUDIO_R = AUDIO_L;
+assign AUDIO_S = 1;
+assign AUDIO_MIX = 0;
+
 assign AUDIO_R = AUDIO_L;
 
+assign AUDIO_S   = 1;
+assign AUDIO_MIX = 0;
 
 ////////////////////////////  VIDEO  ////////////////////////////////////
 
@@ -651,8 +655,7 @@ wire       joy_reset  = ~joya[5] & ~joyb[5];
 ////////////The Voice /////////////////////////////////////////////////
 
 
-reg signed [9:0] signed_voice_out;
-reg        [8:0] voice_out;
+reg signed [9:0] voice_out;
     
 wire ldq;
          
@@ -663,15 +666,10 @@ sp0256 sp0256 (
         .lrq        (ldq),
         .data_in    (rom_addr[6:0]),
         .ald        (ald),
-        .audio_out  (signed_voice_out),
+        .audio_out  (voice_out),
 );
 
-compressor compressor
-(
-        .clk  (clk_sys),
-        .din  ( signed_voice_out),
-        .dout ( voice_out)
-);
+
 
 wire ald     = !rom_addr[7] | cart_wr_n | cart_cs;
 wire rst_a_n;

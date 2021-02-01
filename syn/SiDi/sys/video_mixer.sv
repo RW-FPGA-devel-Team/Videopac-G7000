@@ -72,7 +72,9 @@ module video_mixer
 	// interlace sync. Positive pulses.
 	input        HSync,
 	input        VSync,
-
+   input        HBlank,
+	input        VBlank,
+	
 	// Falling of this signal means start of informative part of line.
 	// It can be horizontal blank signal.
 	// This signal can be used to reduce amount of required FPGA RAM for HQ2x scan doubler
@@ -96,15 +98,16 @@ wire [DWIDTH:0] R_sd;
 wire [DWIDTH:0] G_sd;
 wire [DWIDTH:0] B_sd;
 wire hs_sd, vs_sd;
+wire VGA_DE=~(HBlank | VBlank);
 
 scandoubler #(.LENGTH(LINE_LENGTH), .HALF_DEPTH(HALF_DEPTH)) scandoubler
 (
 	.*,
 	.hs_in(HSync),
 	.vs_in(VSync),
-	.r_in(R),
-	.g_in(G),
-	.b_in(B),
+	.r_in(VGA_DE ? R : 6'b0),
+	.g_in(VGA_DE ? G : 6'b0),
+	.b_in(VGA_DE ? B : 6'b0),
 
 	.hs_out(hs_sd),
 	.vs_out(vs_sd),

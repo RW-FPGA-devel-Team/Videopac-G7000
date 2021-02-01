@@ -418,6 +418,8 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
 	.*,
 	.HSync(~HSync),
 	.VSync(~VSync),
+	.HBlank(HBlank),
+	.VBlank(VBlank),
 	.clk_sys(clk_sys),
 	//.scanlines(0),
 	.hq2x(scale==1),
@@ -441,9 +443,9 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
 
    .scandoubler_disable(scandoubler_disable),
 	.scanlines(scandoubler_disable ? 2'b00 : {scale==3, scale==2}),
-	.R(R_OSD[7:2]),
-	.G(G_OSD[7:2]),
-	.B(B_OSD[7:2]),
+	.R(SCREEN ? grayscale [9:4] : R_OSD[7:2]),
+	.G(SCREEN ? grayscale [9:4] : G_OSD[7:2]),
+	.B(SCREEN ? grayscale [9:4] : B_OSD[7:2]),
 	.SPI_SCK(),
 	.SPI_SS3(),
 	.SPI_DI(),
@@ -452,12 +454,10 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
    .scandoubler(!scandoubler_disable),
 	.scanlines(scandoubler ? {scale==3, scale==2}:2'b00),
 	.ce_pix_out(),
-	.HBlank(HBlank),
-	.VBlank(VBlank),
 	.VGA_DE(VGA_BLANK),
-	.R(R_OSD[7:0]>>2),
-	.G(G_OSD[7:0]>>2),
-	.B(B_OSD[7:0]>>2),
+	.R(SCREEN ? grayscale [9:4] : R_OSD[7:0]>>2),
+	.G(SCREEN ? grayscale [9:4] : G_OSD[7:0]>>2),
+	.B(SCREEN ? grayscale [9:4] : B_OSD[7:0]>>2),
 `endif
 `endif 
 );
@@ -683,21 +683,19 @@ wire [3:0] snd;
 wire cart_wr_n;
 wire [7:0] cart_di;
 
-dac #(
-   .c_bits         (16))
-  audiodac_l(
+dac audiodac_l(
    .clk_i        (clk_sys),
    .res_n_i      (1      ),
    .dac_i        (audio_out),
    .dac_o        (AUDIO_L)
 );
 
-wire [15:0] audio_out = (VOICE?{snd,snd,snd,snd} | {voice_out[7:0],voice_out[7:0]}:{snd, snd, snd,snd}) ;
+wire [9:0] audio_out = VOICE ? {2'b0,snd,snd} + voice_out : {2'b0,snd,snd};
 assign AUDIO_R = AUDIO_L;
 
 
 `ifdef CYCLONE
-wire [15:0] audio_i2s = VOICE?{1'b0,snd,snd,7'b0000000} | {signed_voice_out[9:0],6'b0} : {1'b0,snd,snd,7'b0000000} ;
+wire [15:0] audio_i2s = VOICE? {2'b0,snd,snd,6'b0} | {2'b0,voice_out,4'b0} : {2'b0,snd,snd,6'b0} ;
 audio_top audio_top
 (
 	.clk_50MHz(CLOCK_50),
@@ -726,7 +724,6 @@ joydecoder joydecoder
 ////////////The Voice /////////////////////////////////////////////////
 
 
-reg signed [9:0] signed_voice_out;
 reg        [8:0] voice_out;
     
 wire ldq;
@@ -738,15 +735,9 @@ sp0256 sp0256 (
         .lrq        (ldq),
         .data_in    (rom_addr[6:0]),
         .ald        (ald),
-        .audio_out  (signed_voice_out),
+        .audio_out  (voice_out),
 );
 
-compressor compressor
-(
-        .clk  (clk_sys),
-        .din  ( signed_voice_out),
-        .dout ( voice_out)
-);
 
 wire ald     = !rom_addr[7] | cart_wr_n | cart_cs;
 wire rst_a_n;

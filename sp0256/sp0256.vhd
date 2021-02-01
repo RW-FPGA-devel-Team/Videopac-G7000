@@ -126,7 +126,7 @@ port
 	data_in        : in  std_logic_vector(6 downto 0);
 	ald            : in  std_logic;
 	
-	audio_out      : out std_logic_vector(9 downto 0)
+	audio_out      : out signed(9 downto 0)
 );
 end sp0256;
 
@@ -151,8 +151,9 @@ architecture syn of sp0256 is
  signal sum_in1,sum_out_ul : signed(15 downto 0);
  signal sum_out            : signed(15 downto 0);
  signal divider            : std_logic;
- signal audio              : signed(15 downto 0);
-
+ signal audio              : signed(9 downto 0);
+ signal audio_int          : signed(8 downto 0);
+ 
  signal is_noise  : std_logic;
  signal noise_rng : std_logic_vector(15 downto 0) := X"0001";
  
@@ -188,6 +189,17 @@ architecture syn of sp0256 is
     488,    489,    490,    491,    492,    493,    494,    495,
     496,    497,    498,    499,    500,    501,    502,    503,
     504,    505,    506,    507,    508,    509,    510,    511);
+
+
+component compressor is port 
+ (
+		 clk   : in std_logic;
+		 din   : in signed(9 downto 0);
+		 dout  : out signed(8 downto 0)
+ );
+ 
+ 
+end component;
 
 begin
 
@@ -378,11 +390,11 @@ process (clk_2m5, reset)
 						f5_z2    <= f5_z1;
 						
 						if sum_out > 510*16 then
-							audio <= to_signed(1023,16);
+							audio <= to_signed(511,10);
 						elsif sum_out < -510*16 then
-							audio <= to_signed(0,16);
+						   audio <= to_signed(-512,10);
 						else
-							audio <= (sum_out/16)+X"0200";						
+							audio <= sum_out(13 downto 4);
 						end if;
 					
 					when 20 =>					
@@ -419,8 +431,17 @@ process (clk_2m5, reset)
 	end if;
 end process;
 
+compr: compressor
+port map
+(
+        clk  => clk_2m5,
+        din  => audio,
+        dout => audio_int
+);
 
-audio_out <= std_logic_vector(unsigned(audio(9 downto 0)));
+
+audio_out <= audio_int(8) & audio_int;
+
 
 -- filter computation
 coeff_idx <= rom_do(6 downto 0) when rom_do(7)='0' else
@@ -447,12 +468,17 @@ sum_out <= to_signed( 32767,16) when sum_out_ul >  32767 else
 -- data => rom_do  
 --);
 
-sp0256_256b_019_decoded : ENTITY work.sp0256_256b_019_decoded
+sp0256_003_decoded : ENTITY work.sp0256_003_decoded
 port map(
  clk  => clk_2m5_n,
  addr => rom_addr,
  data => rom_do  
 );
 
-
+--sp0256_004_decoded : ENTITY work.sp0256_004_decoded
+--port map(
+-- clk  => clk_2m5_n,
+-- addr => rom_addr,
+-- data => rom_do  
+--);
 end syn;

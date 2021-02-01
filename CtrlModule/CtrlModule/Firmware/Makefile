@@ -1,4 +1,4 @@
-BASE	= /home/user/zpugcc/toolchain/install/bin/zpu-elf
+BASE	= /opt/zpu//bin/zpu-elf
 CC      = $(BASE)-gcc
 LD      = $(BASE)-gcc
 AS      = $(BASE)-as

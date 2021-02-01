@@ -78,8 +78,15 @@ static char *st_system[]=
 
 static char *st_pal[]=
 {
-	"Ntsc",
-	"Pal"
+	"Composite",
+	"RGB"
+};
+
+
+static char *st_tv[]=
+{
+	"TV Color",
+	"TV B/W"
 };
 
 static char *st_voice[]=
@@ -106,6 +113,7 @@ static struct menu_entry topmenu[]=
 	{MENU_ENTRY_CYCLE,(char *)st_voice,MENU_ACTION(2)},
 	{MENU_ENTRY_CYCLE,(char *)st_pal,MENU_ACTION(2)},
 	{MENU_ENTRY_CYCLE,(char *)st_system,MENU_ACTION(2)},
+	{MENU_ENTRY_CYCLE,(char *)st_tv,MENU_ACTION(2)},
 	{MENU_ENTRY_CALLBACK,"Cargar Cartucho/Font \x10",MENU_ACTION(&FileSelector_Show)},
 	{MENU_ENTRY_CALLBACK,"Exit",MENU_ACTION(&Menu_Hide)},
 	{MENU_ENTRY_NULL,0,0}
@@ -292,6 +300,7 @@ int main(int argc,char **argv)
 		dipsw |= (MENU_CYCLE_VALUE(&topmenu[5])  & 0x1) << 1; //[1]
 		dipsw |= (MENU_CYCLE_VALUE(&topmenu[6])  & 0x1) << 5; //[5]
 		dipsw |= (MENU_CYCLE_VALUE(&topmenu[7])  & 0x1) << 14; //[14]
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[8])  & 0x1) << 6; //[6]
 		HW_HOST(REG_HOST_SW)=dipsw;	// Send the new values to the hardware.
 		// If the menu's visible, prevent keystrokes reaching the host core.
 		HW_HOST(REG_HOST_CONTROL)=(visible ?
