@@ -142,7 +142,7 @@ begin
             shift_cnt_q <= shift_cnt_max_c;
 
             -- generate interrupt
-            int_q <= true;
+            --int_q <= true; -- nobody gets interrupts from here!
           else
             shift_cnt_q <= shift_cnt_q - 1;
             snd_q(23 downto 0) <= snd_q(0) & snd_q(23 downto 1);
