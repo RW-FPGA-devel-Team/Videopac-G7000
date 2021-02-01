@@ -77,8 +77,8 @@ architecture rtl of i8244_sound is
   constant pre_0k9_max_c : unsigned(3 downto 0) := to_unsigned(15, 4);
   signal   prescaler_q   : unsigned(3 downto 0);
 
-  constant shift_cnt_max_c : unsigned(7 downto 0) := to_unsigned(255, 8);
-  signal   shift_cnt_q     : unsigned(7 downto 0);
+  constant shift_cnt_max_c : unsigned(15 downto 0) := to_unsigned(65535, 16);
+  signal   shift_cnt_q     : unsigned(15 downto 0);
 
   signal noise_lfsr_q : std_logic_vector(15 downto 0);
 
