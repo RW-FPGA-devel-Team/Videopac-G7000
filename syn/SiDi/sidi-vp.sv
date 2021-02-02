@@ -195,9 +195,9 @@ data_io #( .sysclk_frequency(16'd709) )data_io // 16'd709: 16'd420
 	.vga_hsync(~HSync),
 	.vga_vsync(~VSync),
 	
-	.red_i({colors[23:16]}),  
-	.green_i({colors[15:8]}), 
-	.blue_i({colors[7:0]}),
+	.red_i(SCREEN ? grayscale [9:4] : colors[23:16]),  
+	.green_i(SCREEN ? grayscale [9:4] : colors[15:8]), 
+	.blue_i(SCREEN ? grayscale [9:4] : colors[7:0]),
 	.red_o(R_OSD),
 	.green_o(G_OSD),
 	.blue_o(B_OSD),
@@ -443,9 +443,9 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
 
    .scandoubler_disable(scandoubler_disable),
 	.scanlines(scandoubler_disable ? 2'b00 : {scale==3, scale==2}),
-	.R(SCREEN ? grayscale [9:4] : R_OSD[7:2]),
-	.G(SCREEN ? grayscale [9:4] : G_OSD[7:2]),
-	.B(SCREEN ? grayscale [9:4] : B_OSD[7:2]),
+	.R(R_OSD[7:2]),
+	.G(G_OSD[7:2]),
+	.B(B_OSD[7:2]),
 	.SPI_SCK(),
 	.SPI_SS3(),
 	.SPI_DI(),
@@ -455,9 +455,9 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
 	.scanlines(scandoubler ? {scale==3, scale==2}:2'b00),
 	.ce_pix_out(),
 	.VGA_DE(VGA_BLANK),
-	.R(SCREEN ? grayscale [9:4] : R_OSD[7:0]>>2),
-	.G(SCREEN ? grayscale [9:4] : G_OSD[7:0]>>2),
-	.B(SCREEN ? grayscale [9:4] : B_OSD[7:0]>>2),
+	.R(R_OSD[7:0]>>2),
+	.G(G_OSD[7:0]>>2),
+	.B(B_OSD[7:0]>>2),
 `endif
 `endif 
 );
