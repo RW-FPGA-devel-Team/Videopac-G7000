@@ -170,6 +170,7 @@ architecture struct of videopac_zxuno_lx9 is
 	  CLK_OUT1          : out    std_logic; --50Mhz
 	  CLK_OUT2          : out    std_logic; --70.833Mhz
 	  CLK_OUT3          : out    std_logic; --42.500Mhz
+     CLK_OUT4          : out    std_logic; --141.666Mhz
      -- Status and control signals
 	  LOCKED            : out    std_logic
 	 );
@@ -185,28 +186,27 @@ architecture struct of videopac_zxuno_lx9 is
   
   component joydecoder
     port (
-      clk: in  std_logic;
-      joy_data: in  std_logic;
-      joy_clk: out  std_logic;
-      joy_load_n: out  std_logic;
-      joy1up: out  std_logic;
-      joy1down: out  std_logic;
-      joy1left: out  std_logic;
-      joy1right: out  std_logic;
-      joy1fire1: out  std_logic;
-      joy1fire2: out  std_logic;
-      joy1fire3: out  std_logic;
-      joy1start: out  std_logic;
-      joy2up: out  std_logic;
-      joy2down: out  std_logic;
-      joy2left: out  std_logic;
-      joy2right: out  std_logic;
-      joy2fire1: out  std_logic;
-      joy2fire2: out  std_logic;
-      joy2fire3: out  std_logic;
-      joy2start: out  std_logic
+      clk_sys: in  std_logic;
+      boardzxuno: in  std_logic_vector(1 downto 0);
+      JOY_U: in  std_logic;
+      JOY_D: in  std_logic;
+      JOY_L: in  std_logic;
+      JOY_R: in  std_logic;
+      JOY_A: in  std_logic;
+      JOY_B: in  std_logic;
+      joy_c: inout  std_logic;
+      JOY2_U: in  std_logic;
+      JOY2_D: in  std_logic;
+      JOY2_L: in  std_logic;
+      JOY2_R: in  std_logic;
+      JOY2_A: in  std_logic;
+      JOY2_B: in  std_logic;
+      
+      joy1: out  std_logic_vector(7 downto 0);
+      joy2: out  std_logic_vector(7 downto 0)
     );
   end component;
+
 
   component rom_loader
     port (
@@ -309,6 +309,7 @@ architecture struct of videopac_zxuno_lx9 is
   signal clk_50m_s      : std_logic; --50Mhz
   signal clk_71m_s      : std_logic; --70.833Mhz
   signal clk_2m5_s      : std_logic; --2.5 Mhz
+  signal clk_170m_s     : std_logic; --170.0Mhz
 
   signal clk_sys       :  std_logic;
   signal clk_cpu       :  std_logic;
@@ -319,6 +320,10 @@ architecture struct of videopac_zxuno_lx9 is
   signal is_pal_i      :  integer;
   signal clk_sysp, clk_sysp_next :  std_logic;
   signal clk_sysn, clk_sysn_next :  std_logic;
+  signal clkcolor4x    :  std_logic;
+  signal NTSC_s        :  std_logic;
+  signal PAL_s         :  std_logic;
+  signal is_rgb_s      :  std_logic;
   
   signal glob_res_n_s   : std_logic;
   
@@ -499,7 +504,9 @@ architecture struct of videopac_zxuno_lx9 is
   signal joinjoystick_s:     std_logic;
 
   -- Joystick type for zxuno
+  --    UNO board: (0) single joystick / (1) 2 joystick splitter / (2) 2 joystick VGA2M
   signal zxunoboard: std_logic_vector(1 downto 0);
+  
   
   -- Monochrome output
   signal vga2grey: std_logic_vector(1 downto 0);
@@ -532,7 +539,7 @@ begin
 	-- Reset
 	glob_res_n_s <= por_n_s and dcm_locked_s and control_rst_n;
 	reset_n_s <= glob_res_n_s and dcm_locked_s  --;-- and
-					and not(keyb_f1 or keyb_f2 or keyb_f3)
+					and not(keyb_f1 or keyb_f3) --or keyb_f2 
 					and host_reset_n;
                --(but_tl_s(0) or but_tr_s(0));
 	reset_s   <= not reset_n_s;
@@ -572,6 +579,7 @@ begin
 	  CLK_OUT1          => clk_50m_s,       --50Mhz
 	  CLK_OUT2          => clk_71m_s,       --70.833Mhz
 	  CLK_OUT3          => clk_43m_s,       --42.500Mhz
+     CLK_OUT4          => clk_170m_s,      --170.000Mhz
      --CLK_OUT3          => clk_50m_s,       --50Mhz
 	  -- Status and control signals
 	  LOCKED            => dcm_locked_s
@@ -1018,79 +1026,67 @@ begin
     end if;
   end process vga_rgb;
   
---  -- Joysticks
---  joys : joydecoder
---    port map (
---      clk => clk_sysn,
---      joy_data => joy_data,
---      joy_clk => joy_clk,
---      joy_load_n => joy_load_n,
---      joy1up => but_up_s1,
---      joy1down => but_down_s1,
---      joy1left => but_left_s1,
---      joy1right => but_right_s1,
---      joy1fire1 => but_action_s1,
---      joy1fire2 => but_f2_s1,
---      joy1fire3 => open,
---      joy1start => open,
---      joy2up => but_up_s0,
---      joy2down => but_down_s0,
---      joy2left => but_left_s0,
---      joy2right => but_right_s0,
---      joy2fire1 => but_action_s0,
---      joy2fire2 => but_f2_s0,
---      joy2fire3 => open,
---      joy2start => open
---    );
+  -- Joysticks
+  joys : joydecoder
+    port map (
+      clk_sys => clk_cpu_en_sn,
+      boardzxuno => zxunoboard,
+      --Joystick1
+      JOY_U => JOY_U,
+      JOY_D => JOY_D,
+      JOY_L => JOY_L,
+      JOY_R => JOY_R,
+      JOY_A => JOY_A,
+      JOY_B => JOY_B,
+      joy_c => JOY_C,
+      --Joystick2
+      JOY2_U => JOY2_U,
+      JOY2_D => JOY2_D,
+      JOY2_L => JOY2_L,
+      JOY2_R => JOY2_R,
+      JOY2_A => JOY2_A,
+      JOY2_B => JOY2_B,
+      --output joystick
+      joy1 => joy1(7 downto 0),  --    SACBRLDU - active = 0
+      joy2 => joy2(7 downto 0)   --    SACBRLDU - active = 0
 
---   but_up_s(0) <= (but_up_s0 and but_up_s1) when (joinjoystick_s = '1') else
---                  but_up_s0 when (swapjoystick_s = '0') else but_up_s1;
---   but_down_s(0) <= (but_down_s0 and but_down_s1) when (joinjoystick_s = '1') else
---                     but_down_s0 when (swapjoystick_s = '0') else but_down_s1;
---   but_left_s(0) <= (but_left_s0 and but_left_s1) when (joinjoystick_s = '1') else
---                     but_left_s0 when (swapjoystick_s = '0') else but_left_s1;
---   but_right_s(0) <= (but_right_s0 and but_right_s1) when (joinjoystick_s = '1') else
---                     but_right_s0 when (swapjoystick_s = '0') else but_right_s1;
---   but_action_s(0) <= (but_action_s0 and but_action_s1) when (joinjoystick_s = '1') else
---                     but_action_s0 when (swapjoystick_s = '0') else but_action_s1;
---   
---   but_up_s(1) <= (but_up_s0 and but_up_s1) when (joinjoystick_s = '1') else
---                     but_up_s1 when (swapjoystick_s = '0') else but_up_s0;
---   but_down_s(1) <=  (but_down_s0 and but_down_s1) when (joinjoystick_s = '1') else
---                     but_down_s1 when (swapjoystick_s = '0') else but_down_s0;
---   but_left_s(1) <=  (but_left_s0 and but_left_s1) when (joinjoystick_s = '1') else
---                     but_left_s1 when (swapjoystick_s = '0') else but_left_s0;
---   but_right_s(1) <=  (but_right_s0 and but_right_s1) when (joinjoystick_s = '1') else
---                     but_right_s1 when (swapjoystick_s = '0') else but_right_s0;
---   but_action_s(1) <=  (but_action_s0 and but_action_s1) when (joinjoystick_s = '1') else
---                     but_action_s1 when (swapjoystick_s = '0') else but_action_s0;
+    );
 
-   but_up_s1 <= JOY_U;
-   but_down_s1 <= JOY_D;
-   but_left_s1 <= JOY_L;
-   but_right_s1 <= JOY_R;
-   but_action_s1 <= JOY_A;
-   but_f2_s1 <= JOY_B;
+   but_up_s1 <= joy1(0);
+   but_down_s1 <= joy1(1);
+   but_left_s1 <= joy1(2);
+   but_right_s1 <= joy1(3);
+   but_action_s1 <= joy1(4);
+   but_f2_s1 <= joy1(5);
 
-   but_up_s0 <= JOY2_U;
-   but_down_s0 <= JOY2_D;
-   but_left_s0 <= JOY2_L;
-   but_right_s0 <= JOY2_R;
-   but_action_s0 <= JOY2_A;
-   but_f2_s0 <= JOY2_B;
+   but_up_s0 <= joy2(0);
+   but_down_s0 <= joy2(1);
+   but_left_s0 <= joy2(2);
+   but_right_s0 <= joy2(3);
+   but_action_s0 <= joy2(4);
+   but_f2_s0 <= joy2(5);
 
-   but_up_s(0) <= but_up_s0 when (swapjoystick_s = '0') else but_up_s1;
-   but_down_s(0) <= but_down_s0 when (swapjoystick_s = '0') else but_down_s1;
-   but_left_s(0) <= but_left_s0 when (swapjoystick_s = '0') else but_left_s1;
-   but_right_s(0) <= but_right_s0 when (swapjoystick_s = '0') else but_right_s1;
-   but_action_s(0) <= but_action_s0 when (swapjoystick_s = '0') else but_action_s1;
-   
-   but_up_s(1) <= but_up_s1 when (swapjoystick_s = '0') else but_up_s0;
-   but_down_s(1) <= but_down_s1 when (swapjoystick_s = '0') else but_down_s0;
-   but_left_s(1) <= but_left_s1 when (swapjoystick_s = '0') else but_left_s0;
-   but_right_s(1) <= but_right_s1 when (swapjoystick_s = '0') else but_right_s0;
-   but_action_s(1) <= but_action_s1 when (swapjoystick_s = '0') else but_action_s0;
+   but_up_s(0) <= (but_up_s0 and but_up_s1) when (joinjoystick_s = '1') else
+                  but_up_s0 when (swapjoystick_s = '0') else but_up_s1;
+   but_down_s(0) <= (but_down_s0 and but_down_s1) when (joinjoystick_s = '1') else
+                     but_down_s0 when (swapjoystick_s = '0') else but_down_s1;
+   but_left_s(0) <= (but_left_s0 and but_left_s1) when (joinjoystick_s = '1') else
+                     but_left_s0 when (swapjoystick_s = '0') else but_left_s1;
+   but_right_s(0) <= (but_right_s0 and but_right_s1) when (joinjoystick_s = '1') else
+                     but_right_s0 when (swapjoystick_s = '0') else but_right_s1;
+   but_action_s(0) <= (but_action_s0 and but_action_s1) when (joinjoystick_s = '1') else
+                     but_action_s0 when (swapjoystick_s = '0') else but_action_s1;
 
+   but_up_s(1) <= (but_up_s0 and but_up_s1) when (joinjoystick_s = '1') else
+                     but_up_s1 when (swapjoystick_s = '0') else but_up_s0;
+   but_down_s(1) <=  (but_down_s0 and but_down_s1) when (joinjoystick_s = '1') else
+                     but_down_s1 when (swapjoystick_s = '0') else but_down_s0;
+   but_left_s(1) <=  (but_left_s0 and but_left_s1) when (joinjoystick_s = '1') else
+                     but_left_s1 when (swapjoystick_s = '0') else but_left_s0;
+   but_right_s(1) <=  (but_right_s0 and but_right_s1) when (joinjoystick_s = '1') else
+                     but_right_s1 when (swapjoystick_s = '0') else but_right_s0;
+   but_action_s(1) <=  (but_action_s0 and but_action_s1) when (joinjoystick_s = '1') else
+                     but_action_s1 when (swapjoystick_s = '0') else but_action_s0;
 
   -----------------------------------------------------------------------------
   -- Keyboard components
@@ -1134,15 +1130,15 @@ begin
 	   keyb_f3         => keyb_f3
     );
 
---	-- pal/ntsc selection - F2
---	function_keys_f2 : process(keyb_f2, reset_video_s)
---	begin
---	  if (reset_video_s = '1') then
---			is_pal_s <= '0';
---	  elsif keyb_f2'event and keyb_f2 = '1' then
---			is_pal_s <= not is_pal_s;
---	  end if;
---	end process;
+	-- rgb/composite selection - F2
+	function_keys_f2 : process(keyb_f2, reset_video_s)
+	begin
+	  if (reset_video_s = '1') then
+			is_rgb_s <= '0';
+	  elsif keyb_f2'event and keyb_f2 = '1' then
+			is_rgb_s <= not is_rgb_s;
+	  end if;
+	end process;
 
 --	-- VOICE ON/OFF selection - F2
 --	function_keys_f2 : process(keyb_f2, reset_video_s)
@@ -1187,16 +1183,17 @@ begin
   ps2k_dat_out <= '1';
 
   --Entrada de joystick para control de zpuflex (SACBRLDU) --(SACUDLRB)
-  joy2zpuflex <= "0" -- 1 - ZXUNO, 0 - ZXDOS
-					& not (joy1(7 downto 0) and (joy2(7 downto 6) & "1" & joy2(4 downto 0)) ) ;
+  joy2zpuflex <= "1" -- 1 - ZXUNO, 0 - ZXDOS
+					& not (joy1(7 downto 0) and (joy2(7 downto 0)) ) ;
+               --& not (joy1(7 downto 0) and (joy2(7 downto 6) & "1" & joy2(4 downto 0)) ) ;
 --					& not (joy1_aux(7 downto 5) and joy2_aux(7 downto 5) )
 --					& not (joy1_aux(0) and joy2_aux(0) )
 --					& not (joy1_aux(1) and joy2_aux(1) )
 --					& not (joy1_aux(2) and joy2_aux(2) )
 --					& not (joy1_aux(3) and joy2_aux(3) )
 --					& not (joy1_aux(4) and joy2_aux(4) ) ;
-  joy1 <= "111111" & but_f2_s1 & but_action_s1 & but_right_s1 & but_left_s1 & but_down_s1 & but_up_s1;
-  joy2 <= "111111" & but_f2_s0 & but_action_s0 & but_right_s0 & but_left_s0 & but_down_s0 & but_up_s0;
+--  joy1 <= "111111" & but_f2_s1 & but_action_s1 & but_right_s1 & but_left_s1 & but_down_s1 & but_up_s1;
+--  joy2 <= "111111" & but_f2_s0 & but_action_s0 & but_right_s0 & but_left_s0 & but_down_s0 & but_up_s0;
   
   --Block keyboard signals from reaching the host when host_divert_keyboard is high.
   host_ps2_data <= dataps2 or host_divert_keyboard;
@@ -1293,7 +1290,8 @@ begin
   vga_hsync_aux <= vga_hsync_i when (video_mode = '0')
 					else not (vga_hsync_i xor vga_vsync_i) ;  --!(hs_orig ^ vs_orig)
   vsync <= vga_vsync_i when (video_mode = '0')
-					else '1';
+					else '1' when (is_rgb_s = '1') 
+               else clkcolor4x;
 
   rgb_r_o_prev(1 downto 0) <= rgb_r_o_prev(9 downto 8);
   rgb_g_o_prev(1 downto 0) <= rgb_g_o_prev(9 downto 8);
@@ -1326,8 +1324,19 @@ begin
 			         ) when (vga2grey = "11") --orange
 				  else (others=>'0'); --green
    
-   PAL_o <= '1' when (is_pal_s = '1') else '0';
-   NTSC_o <= '0' when (is_pal_s = '1') else '1';
+   PAL_s  <= '0' when (is_pal_s = '1') else '1';
+   NTSC_s <= '1' when (is_pal_s = '1') else '0';
+   NTSC_o <= NTSC_s;
+   PAL_o  <= PAL_s;
+   --Portadora para Video compuesto NTSC/PAL
+   gencolorclk : entity work.gencolorclk
+   port map
+	(
+      clk    =>     clk_170m_s,       -- reloj lo ms rpido posible (ahora mismo, 140 MHz o 170 Mhz segun valor de altern)
+      mode   =>     PAL_s,            -- 0=PAL, 1=NTSC
+      altern =>     '1',              -- 0=140 MHz, 1=170 MHz
+      clkcolor4x => clkcolor4x --(17.734475 MHz PAL  14.31818 MHz NTSC)
+   );
    
    ------------------------------------------------------------
 	-- master reset CTRL+ALT+BACKSPACE

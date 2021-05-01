@@ -207,6 +207,7 @@ module rom_loader (
 	wire [7:0] vp_data_aux;
 	wire [13:0] addr_testrom;
 	wire [7:0]  data_testrom;
+//`ifndef ZX1
 	assign addr_testrom = {2'b0, cart_addr};
 
 	rom_test rom_test
@@ -214,5 +215,9 @@ module rom_loader (
 		 .addr(addr_testrom[10:0]),
 		 .data(data_testrom)
 	);
+//`else
+//   assign addr_testrom = 14'b0;
+//   assign data_testrom = 8'b0;
+//`endif
 
 endmodule

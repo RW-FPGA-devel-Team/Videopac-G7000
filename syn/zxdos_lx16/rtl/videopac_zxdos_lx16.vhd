@@ -872,39 +872,39 @@ begin
       --// $E8, $E9, and $EA external rom banks
       --// T0_i high if SP0256 command buffer full
     
-    ldq_s <= '1'; --voice no habilitado
-    voice_o_s <= (others=>'0'); --voice no habilitado
+--    ldq_s <= '1'; --voice no habilitado
+--    voice_o_s <= (others=>'0'); --voice no habilitado
     
---    sp0256_imp : sp0256 
---    port map (
---        clk_2m5    => clk_2m5_s,
---        reset      => reset_v_n_s,
---        lrq        => ldq_s,
---        data_in    => rom_addr_s(6 downto 0),
---        ald        => ald_s,
---        audio_out  => voice_os_s
---    );
---    
---    --signed_voice_o_s <= to_signed(voice_os_s);
---    ald_s <= '1' when (rom_addr_s(7) = '0' or  cart_wr_n_s = '1' or cart_cs_s = '1')
---                 else '0';
---    --voice_o_s <= voice_os_s(9 downto 1); --compressor no habilitado
---    compressor_imp : compressor
---    port map (
---        clk  => clk_main,
---        --din  => signed_voice_o_s,
---        din  => voice_os_s,
---        dout => voice_o_s
---    );
---    
---    ls74_imp : ls74
---    port map (
---     d     => cart_d_from_vp_s(5),
---     clr   => voice_on_s,
---     q     => reset_v_n_s,
---     pre   => '1',
---     clk   => ald_s
---    );
+    sp0256_imp : sp0256 
+    port map (
+        clk_2m5    => clk_2m5_s,
+        reset      => reset_v_n_s,
+        lrq        => ldq_s,
+        data_in    => rom_addr_s(6 downto 0),
+        ald        => ald_s,
+        audio_out  => voice_os_s
+    );
+    
+    --signed_voice_o_s <= to_signed(voice_os_s);
+    ald_s <= '1' when (rom_addr_s(7) = '0' or  cart_wr_n_s = '1' or cart_cs_s = '1')
+                 else '0';
+    --voice_o_s <= voice_os_s(9 downto 1); --compressor no habilitado
+    compressor_imp : compressor
+    port map (
+        clk  => clk_main,
+        --din  => signed_voice_o_s,
+        din  => voice_os_s,
+        dout => voice_o_s
+    );
+    
+    ls74_imp : ls74
+    port map (
+     d     => cart_d_from_vp_s(5),
+     clr   => voice_on_s,
+     q     => reset_v_n_s,
+     pre   => '1',
+     clk   => ald_s
+    );
     
   -----------------------------------------------------------------------------
   -- Multicard controller

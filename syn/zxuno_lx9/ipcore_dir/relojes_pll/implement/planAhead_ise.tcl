@@ -50,7 +50,7 @@
 set projDir [file dirname [info script]]
 set projName relojes_pll
 set topName relojes_pll_exdes
-set device xc6slx16ftg256-2
+set device xc6slx9tqg144-2
 
 create_project $projName $projDir/results/$projName -part $device
 

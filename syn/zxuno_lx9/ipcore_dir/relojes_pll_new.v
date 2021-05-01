@@ -1,3 +1,4 @@
+// file: relojes_pll.v
 // 
 // (c) Copyright 2008 - 2011 Xilinx, Inc. All rights reserved.
 // 
@@ -64,20 +65,103 @@
 //----------------------------------------------------------------------------
 // __primary__________50.000____________0.010
 
-// The following must be inserted into your Verilog file for this
-// core to be instantiated. Change the instance name and port connections
-// (in parentheses) to your own signal names.
+`timescale 1ps/1ps
 
-//----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
+module relojes_pll
+ (// Clock in ports
+  input wire        CLK_IN1,
+  // Clock out ports
+  output wire        CLK_OUT1,
+  output wire        CLK_OUT2,
+  output wire        CLK_OUT3,
+  output wire        CLK_OUT4,
+  // Status and control signals
+  output wire        LOCKED
+ );
 
-  relojes_pll instance_name
-   (// Clock in ports
-    .CLK_IN1(CLK_IN1),      // IN
-    // Clock out ports
-    .CLK_OUT1(CLK_OUT1),     // OUT
-    .CLK_OUT2(CLK_OUT2),     // OUT
-    .CLK_OUT3(CLK_OUT3),     // OUT
-    .CLK_OUT4(CLK_OUT4),     // OUT
+  // Input buffering
+  //------------------------------------
+  IBUFG clkin1_buf
+   (.O (clkin1),
+    .I (CLK_IN1));
+
+
+  // Clocking primitive
+  //------------------------------------
+  // Instantiation of the PLL primitive
+  //    * Unused inputs are tied off
+  //    * Unused outputs are labeled unused
+  wire [15:0] do_unused;
+  wire        drdy_unused;
+  wire        clkfbout;
+  wire        clkfbout_buf;
+  wire        clkin1;
+  wire        clkout0;
+  wire        clkout1;
+  wire        clkout2;
+  wire        clkout3;
+  wire        clkout4_unused;
+  wire        clkout5_unused;
+
+  PLL_BASE
+  #(.BANDWIDTH              ("OPTIMIZED"),
+    .CLK_FEEDBACK           ("CLKFBOUT"),
+    .COMPENSATION           ("SYSTEM_SYNCHRONOUS"),
+    .DIVCLK_DIVIDE          (1),
+    .CLKFBOUT_MULT          (20),
+    .CLKFBOUT_PHASE         (0.000),
+    .CLKOUT0_DIVIDE         (20),
+    .CLKOUT0_PHASE          (0.000),
+    .CLKOUT0_DUTY_CYCLE     (0.500),
+    .CLKOUT1_DIVIDE         (14),
+    .CLKOUT1_PHASE          (0.000),
+    .CLKOUT1_DUTY_CYCLE     (0.500),
+    .CLKOUT2_DIVIDE         (23),
+    .CLKOUT2_PHASE          (0.000),
+    .CLKOUT2_DUTY_CYCLE     (0.500),
+    .CLKOUT3_DIVIDE         (6),
+    .CLKOUT3_PHASE          (0.000),
+    .CLKOUT3_DUTY_CYCLE     (0.500),
+    .CLKIN_PERIOD           (20.0),
+    .REF_JITTER             (0.010))
+  pll_base_inst
+    // Output clocks
+   (.CLKFBOUT              (clkfbout),
+    .CLKOUT0               (clkout0),
+    .CLKOUT1               (clkout1),
+    .CLKOUT2               (clkout2),
+    .CLKOUT3               (clkout3),
+    .CLKOUT4               (clkout4_unused),
+    .CLKOUT5               (clkout5_unused),
     // Status and control signals
-    .LOCKED(LOCKED));      // OUT
-// INST_TAG_END ------ End INSTANTIATION Template ---------
+    .LOCKED                (LOCKED),
+    .RST                   (1'b0),
+     // Input clock control
+    .CLKFBIN               (clkfbout_buf),
+    .CLKIN                 (clkin1));
+
+
+  // Output buffering
+  //-----------------------------------
+  BUFG clkf_buf
+   (.O (clkfbout_buf),
+    .I (clkfbout));
+
+  BUFG clkout1_buf
+   (.O   (CLK_OUT1),
+    .I   (clkout0));
+
+
+  assign CLK_OUT2 = clkout1;
+
+  BUFG clkout3_buf
+   (.O   (CLK_OUT3),
+    .I   (clkout2));
+
+  BUFG clkout4_buf
+   (.O   (CLK_OUT4),
+    .I   (clkout3));
+
+
+
+endmodule

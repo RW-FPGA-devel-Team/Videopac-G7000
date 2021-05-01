@@ -405,7 +405,7 @@ int main(int argc,char **argv)
 	// bit 4 - NTSC-Odyssey2/PAL-Videopac
 	// bit 5-6 - Color (0)- Monochrome (1) - Green phosphor (2) - Amber monochrome(3)
 	// bit 7 - Join joysticks
-  // bit 8 - Loading rom/charset
+    // bit 8 - Loading rom/charset
 	// bit 9 - The voice on/off
 
 	// Put the host core in reset while we initialise...
@@ -465,23 +465,21 @@ int main(int argc,char **argv)
 
 		// bit 0 - Scanlines
 		// bit 1 - Swap joysticks
-		// bit 2-3 - UNO board
+		// bit 2-3 - UNO board: (0) single joystick / (1) 2 joystick splitter / (2) 2 joystick VGA2M
 		// bit 4 - NTSC-Odyssey2/PAL-Videopac
 		// bit 5-6 - Color (0)- Monochrome (1) - Green phosphor (2) - Amber monochrome(3)
 		// bit 7 - Join joysticks
-		// bit 8 - The voice on/off
+		// bit 8 - Loading rom/charset
+		// bit 9 - The voice on/off
+		dipsw=(MENU_CYCLE_VALUE(&topmenu[8])<<4);	// (1bit: 4)Take the value of NTSC/PAL mode
+		dipsw|=(MENU_CYCLE_VALUE(&topmenu[9])<<5);	// (2bit: 5:6)Take the value of the color mode
 
-		//if(joy_pins & 0x100) { //ZXUNO
-			dipsw=(MENU_CYCLE_VALUE(&topmenu[8])<<4);	// (1bit: 4)Take the value of NTSC/PAL mode
-			dipsw|=(MENU_CYCLE_VALUE(&topmenu[9])<<5);	// (2bit: 5:6)Take the value of the color mode
-			dipsw|=(MENU_CYCLE_VALUE(&topmenu[10])<<9);	// (1bit: 9)Take the value of the voice mode
-	    /*}
+		if(joy_pins & 0x100) { //ZXUNO
+			dipsw|=(MENU_CYCLE_VALUE(&topmenu[10])<<2);	// (2bit: 2:3)Take the value of the board model
+		} 
 		else { //ZXDOS
-			dipsw=(MENU_CYCLE_VALUE(&topmenu[8])<<4);	// (1bit: 4)Take the value of NTSC/PAL mode
-			dipsw|=(MENU_CYCLE_VALUE(&topmenu[9])<<5);	// (2bit: 5:6)Take the value of the color mode
 			dipsw|=(MENU_CYCLE_VALUE(&topmenu[10])<<9);	// (1bit: 9)Take the value of the voice mode
-			//dipsw|=(MENU_CYCLE_VALUE(&topmenu1[6])<<2);	// (2bit: 2:3)Take the value of the board model
-		}*/
+		}
 
 		//dipsw=MENU_CYCLE_VALUE(&topmenu[1]);	// Take the value of the TestPattern cycle menu entry.
 		if(MENU_TOGGLE_VALUES&1)

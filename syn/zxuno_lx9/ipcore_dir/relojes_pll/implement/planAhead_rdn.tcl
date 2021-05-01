@@ -47,7 +47,7 @@
 # PART OF THIS FILE AT ALL TIMES.
 # 
 
-set device xc6slx16ftg256-2
+set device xc6slx9tqg144-2
 set projName relojes_pll
 set design relojes_pll
 set projDir [file dirname [info script]]
