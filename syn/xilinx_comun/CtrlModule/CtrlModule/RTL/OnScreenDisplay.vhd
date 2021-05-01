@@ -24,7 +24,7 @@ port(
 	-- Video
 	hsync_n : in std_logic;
 	vsync_n : in std_logic;
-	vblank : out std_logic;
+	vblank: out std_logic;
 	enabled : out std_logic;
 	pixel : out std_logic;
    bkgrnd : out std_logic_vector(2 downto 0);
@@ -49,15 +49,21 @@ architecture rtl of OnScreenDisplay is
 -- Counted in terms of master clocks.
 signal hframe : std_logic_vector(15 downto 0);
 signal vframe : std_logic_vector(15 downto 0);
-signal hcounter : unsigned(15 downto 0);
-signal vcounter: unsigned(15 downto 0);
+signal hcounter, hcounter_nxt : unsigned(15 downto 0);
+signal vcounter, vcounter_nxt : unsigned(15 downto 0);
+signal vblank_nxt : std_logic;
 
 signal hsync_pol : std_logic; -- Polarity
 signal vsync_pol : std_logic; -- Polarity
 signal hsync_p : std_logic; -- Previous state
 signal vsync_p : std_logic; -- Previous state
-signal newline : std_logic;
-signal newframe : std_logic;
+signal newline, newline_nxt : std_logic;
+signal newframe, newframe_nxt : std_logic;
+signal vsync_rise : boolean;
+signal vsync_fall : boolean;
+signal vsync_change : boolean;
+signal hsync_rise : boolean;
+signal hsync_fall : boolean;
 
 -- Pixel clock generation
 
@@ -94,72 +100,67 @@ begin
 enabled<=osd_enable;
 
 -- Monitor hsync and count the pulse widths
-
-process(clk,hsync_n)
+hsync_rise <= (hsync_n='1') and (hsync_p='0');
+hsync_fall <= (hsync_n='0') and (hsync_p='1');
+vsync_change <= vsync_p=vsync_pol and vsync_n/=vsync_pol;
+process(clk,hsync_n,reset_n)
 begin
-	if rising_edge(clk) then
-		hsync_p<=hsync_n;
---		if pix='1' then
-			hcounter<=hcounter+1;
---		end if;
-
-		newline<='0';
-		if hsync_n='1' then
-			if hsync_p='0' then -- rising edge?
-				if vsync_p=vsync_pol and vsync_n/=vsync_pol then
-					hframe(15 downto 8)<=std_logic_vector(hcounter(13 downto 6));
-				end if;
-				hcounter<=(others => '0'); -- Reset counter
-				newline<=hsync_pol; -- New line starts here if polarity is reversed
-			end if;
-		else
-			if hsync_p='1' then -- falling edge?
-				if vsync_p=vsync_pol and vsync_n/=vsync_pol then
-					hframe(7 downto 0)<=std_logic_vector(hcounter(13 downto 6));
-				end if;
-				hcounter<=(others => '0'); -- Reset counter
-				newline<=not hsync_pol; -- New line starts here if polarity is not reversed 
-			end if;		
+	if reset_n='0' then
+      newline  <= '0';
+      hcounter <= (others => '0');
+      hframe   <= (others => '0');
+	elsif rising_edge(clk) then
+		hsync_p  <= hsync_n;
+      hcounter <= hcounter_nxt;
+      newline <= newline_nxt;
+		if (hsync_rise and vsync_change) then -- rising edge?
+			hframe(15 downto 8)<=std_logic_vector(hcounter(13 downto 6));
+      end if;
+		if (hsync_fall and vsync_change) then -- falling edge?
+			hframe(7 downto 0)<=std_logic_vector(hcounter(13 downto 6));
 		end if;
 	end if;
 end process;
-
+hcounter_nxt <= (others => '0') when (hsync_rise or hsync_fall) else hcounter+1;
+newline_nxt <= hsync_pol when (hsync_rise) else (not hsync_pol) when (hsync_fall) else '0';
 
 -- Monitor newline and count the vsync pulses
-
-process(clk,hsync_n)
+vsync_rise <= (vsync_n='1') and (vsync_p='0');
+vsync_fall <= (vsync_n='0') and (vsync_p='1');
+process(clk,hsync_n,reset_n)
 begin
-	if rising_edge(clk) then
-		newframe<='0';
-		vblank<='0';
+	if reset_n='0' then
+      newframe <= '0';
+      vblank   <= '0';
+      vcounter <= (others => '0');
+      vframe   <= (others => '0');
+   elsif rising_edge(clk) then
+      newframe <= newframe_nxt;
+      vblank   <= vblank_nxt;
+      
 		if newline='1' then
 			vsync_p<=vsync_n;
-			vcounter<=vcounter+1;
-			if vsync_n='1' then
-				if vsync_p='0' then -- rising edge?
+         vcounter <= vcounter_nxt;
+			if vsync_rise then -- rising edge?
 					vframe(15 downto 8)<=std_logic_vector(vcounter(10 downto 3));
-					vcounter<=(others => '0'); -- Reset counter
-					newframe<=vsync_pol;
-					vblank<=not vsync_pol;
-				end if;
-			else
-				if vsync_p='1' then -- falling edge?
+         end if;
+			if vsync_fall then -- falling edge?
 					vframe(7 downto 0)<=std_logic_vector(vcounter(10 downto 3));
-					vcounter<=(others => '0'); -- Reset counter
-					newframe<=not vsync_pol;
-					vblank<=vsync_pol;
-				end if;		
 			end if;
 		end if;
 	end if;
 end process;
-
+newframe_nxt <= vsync_pol when (vsync_rise) else (not vsync_pol) when (vsync_fall) else '0';
+vblank_nxt <= (not vsync_pol) when (vsync_rise) else (vsync_pol) when (vsync_fall) else '0';
+vcounter_nxt <= (others => '0') when (vsync_rise or vsync_fall) else vcounter+1;
 
 -- Increment pixel counter and generate pixel pulse.
-
-process(clk)
+process(clk,reset_n)
 begin
-	if rising_edge(clk) then
+	if reset_n='0' then
+		pix<='0';
+      pixelcounter<="0000";
+	elsif rising_edge(clk) then
 		if pixelcounter=pixelclock then
 			pixelcounter<="0000";
 			pix<='1';
@@ -203,6 +204,7 @@ begin
 --		if char_req='1' then
 --			char_ack<='1';
 --		end if;
+
 	end if;
 
 	case addr(7 downto 0) is
@@ -334,25 +336,27 @@ pixel <= pixelaux;
 --bkgrnd(1) <= not pixelaux and ( xpixelpos(4) or not rainbowactive ) ;
 --bkgrnd(0) <= not pixelaux and ( xpixelpos(3) or not rainbowactive ) ;
 
-process(rainbowactive,pixelaux,xpixelpos)
+process(clk,rainbowactive,pixelaux,xpixelpos)
 begin
-	if rainbowactive='0' then	-- white background
-		if pixelaux='1' then
-			bkgrnd <= "000"; -- black if pixel
-		else
-			bkgrnd <= "111"; -- white
-		end if;
-	else
-		if xpixelpos(4 downto 3)= "00" then --red
-			bkgrnd <= "100"; -- 
-		elsif xpixelpos(4 downto 3)= "01" then --yellow
-			bkgrnd <= "110"; -- 		
-		elsif xpixelpos(4 downto 3)= "10" then --green
-			bkgrnd <= "010"; -- 		
-		else --cyan
-			bkgrnd <= "011"; -- 				
-		end if;
-	end if;
+	if rising_edge(clk) then
+      if rainbowactive='0' then	-- white background
+         if pixelaux='1' then
+            bkgrnd <= "000"; -- black if pixel
+         else
+            bkgrnd <= "111"; -- white
+         end if;
+      else
+         if xpixelpos(4 downto 3)= "00" then --red
+            bkgrnd <= "100"; -- 
+         elsif xpixelpos(4 downto 3)= "01" then --yellow
+            bkgrnd <= "110"; -- 		
+         elsif xpixelpos(4 downto 3)= "10" then --green
+            bkgrnd <= "010"; -- 		
+         else --cyan
+            bkgrnd <= "011"; -- 				
+         end if;
+      end if;
+   end if;
 end process;
 
 

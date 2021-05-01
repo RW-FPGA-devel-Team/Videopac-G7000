@@ -23,7 +23,7 @@
 ## Installation
 Copy the *.rbf file to your SD card. Create an **Videopac** folder on the card, and place Odyssey2/Videopac roms (\*.BIN) inside this folder. XROM dumps (at the moment only known Musician and 4 in a row) must be renamed to \*.rom.
 
-When loading a ROM, most games will prompt the user with "SELECT GAME". Press 0-9 on the keyboard or mapped controller button to play the game. Unfortunately, there is no on-screen display of the game options, so looking at the [instruction manuals](https://videopac.weebly.com/) may be helpful in selecting a game. Note that the system did not have a well defined player 1 or player 2 controller, they would alternate on a game-to-game basis. You may need to swap controllers to use the input.
+When loading a ROM, most games will prompt the user with "SELECT GAME". Press 0-9 on the keyboard or mapped controller button to play the game. Unfortunately, there is no on-screen display of the game options, so looking at the [instruction manuals](https://videopac.ch/) may be helpful in selecting a game. Note that the system did not have a well defined player 1 or player 2 controller, they would alternate on a game-to-game basis. You may need to swap controllers to use the input.
 
 ## Known Issues
 

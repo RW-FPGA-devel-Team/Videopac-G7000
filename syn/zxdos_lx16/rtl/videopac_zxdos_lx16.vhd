@@ -219,6 +219,7 @@ architecture struct of videopac_zxdos_lx16 is
 		host_bootdata_size: in  std_logic_vector(15 downto 0);
 		currentROM: out std_logic_vector(15 downto 0);
 	   loadchr: in  std_logic;
+      default_vmode: out  std_logic;
       test_rom: in  std_logic;
 		test_led: out  std_logic
     );
@@ -238,17 +239,13 @@ architecture struct of videopac_zxdos_lx16 is
 
 
   component charset_ram
-  generic (
-    addr_width_g : integer := 9;
-    data_width_g : integer := 8
-  );
   port (
     clk_a_i  : in  std_logic;
     we_i     : in  std_logic;
     rd_i     : in  std_logic;
-    addr_a_i : in  std_logic_vector(addr_width_g-1 downto 0);
-    data_a_i : in  std_logic_vector(data_width_g-1 downto 0);
-    data_a_o : out std_logic_vector(data_width_g-1 downto 0)
+    addr_a_i : in  std_logic_vector(8 downto 0);
+    data_a_i : in  std_logic_vector(7 downto 0);
+    data_a_o : out std_logic_vector(7 downto 0)
   );
   end component;
 
@@ -267,7 +264,7 @@ architecture struct of videopac_zxdos_lx16 is
    component compressor is
    port(
       clk : in  std_logic;
-      din : in  signed(9 downto 0);
+      din : in  std_logic_vector(9 downto 0);
       dout: out std_logic_vector(8 downto 0)
    );
    end component;
@@ -316,7 +313,7 @@ architecture struct of videopac_zxdos_lx16 is
   constant cnt_vdc_cn    : unsigned(3 downto 0) := to_unsigned(5, 4);
   -- VGA clock = PLL clock 42.5 MHz / 3 (2x VDC clock) = 14.166
   constant cnt_vga_cn    : unsigned(3 downto 0) := to_unsigned(2, 4);
-  -- The voice clock = PLL clock 42.5 MHz / 16 (2x VDC clock) = 2.656
+  -- The voice clock = PLL clock 42.5 MHz / 17 (2x VDC clock) = 2.5
   constant cnt_voice_cn  : unsigned(4 downto 0) := to_unsigned(16, 5);
   --
   signal cnt_cpu_qn      : unsigned(3 downto 0);
@@ -438,7 +435,7 @@ architecture struct of videopac_zxdos_lx16 is
   signal osd_bkgr: std_logic_vector(2 downto 0);
   signal joy2zpuflex: std_logic_vector(8 downto 0); -- 8: 0 - ZXDOS/1 - ZXUNO, [7:0] - Joystick (SACUDLRB)
   signal key_hard_reset:  std_logic; 
-  signal key_videomode, video_mode:  std_logic;
+  signal key_videomode, video_mode, default_vmode:  std_logic;
   signal joykeys    : std_logic_vector(15 downto 0);
   signal ps2k_clk_in : std_logic;
   signal ps2k_clk_out : std_logic;
@@ -633,11 +630,21 @@ begin
 
     end if;
   end process clk_en;
+  
+  
+  clk_2m5en: process (clk_cpu_en_sn, reset_video_s)
+  begin
+    if reset_video_s = '1' then
+		clk_2m5_s <= '0';
+    elsif rising_edge(clk_cpu_en_sn) then
+      clk_2m5_s <= not clk_2m5_s ;
+    end if;
+  end process clk_2m5en;
   --
   clk_sysn_next <= '1' when clk_sysn = '0' else '0';
   clk_cpu_en_sn <= '1' when cnt_cpu_qn = 0 else '0';
   clk_vdc_en_sn <= '1' when cnt_vdc_qn = 0 else '0';
-  clk_2m5_s <= '1' when cnt_voice_qn = 0 else '0';
+  --clk_2m5_s <= '1' when cnt_voice_qn = 0 else '0';
 --  clk_vga_en_qn <= '1' when cnt_vga_qn = 0 else '0';
   --
   -----------------------------------------------------------------------------
@@ -757,6 +764,7 @@ begin
 		host_bootdata_size => size,
 		currentROM => currentROM,
       loadchr => loadchr_s,
+      default_vmode => default_vmode,
 		test_rom => test_rom,
 		test_led => testled1
     );
@@ -850,7 +858,7 @@ begin
       dac_i => dac_i_s,
       dac_o => audio_s
     );
-    dac_i_s <= "00" & (('0' & snd_vec_s & snd_vec_s) or voice_o_s) when ( voice_on_s = '1')
+    dac_i_s <= "000" & ((snd_vec_s & snd_vec_s) or voice_o_s(7 downto 0)) when ( voice_on_s = '1')
                else ("000" & snd_vec_s & snd_vec_s);
 --   audio_s <= snd_s;
 
@@ -864,8 +872,8 @@ begin
       --// $E8, $E9, and $EA external rom banks
       --// T0_i high if SP0256 command buffer full
     
-    ldq_s <= '1'; --no habilitado
-    voice_o_s <= (others=>'0');
+    ldq_s <= '1'; --voice no habilitado
+    voice_o_s <= (others=>'0'); --voice no habilitado
     
 --    sp0256_imp : sp0256 
 --    port map (
@@ -877,16 +885,17 @@ begin
 --        audio_out  => voice_os_s
 --    );
 --    
---    signed_voice_o_s <= signed(voice_os_s);
+--    --signed_voice_o_s <= to_signed(voice_os_s);
 --    ald_s <= '1' when (rom_addr_s(7) = '0' or  cart_wr_n_s = '1' or cart_cs_s = '1')
 --                 else '0';
---    voice_o_s <= voice_os_s(9 downto 1);
-----    compressor_imp : compressor
-----    port map (
-----        clk  => clk_main,
-----        din  => signed_voice_o_s,
-----        dout => voice_o_s
-----    );
+--    --voice_o_s <= voice_os_s(9 downto 1); --compressor no habilitado
+--    compressor_imp : compressor
+--    port map (
+--        clk  => clk_main,
+--        --din  => signed_voice_o_s,
+--        din  => voice_os_s,
+--        dout => voice_o_s
+--    );
 --    
 --    ls74_imp : ls74
 --    port map (
@@ -1089,15 +1098,15 @@ begin
 --	  end if;
 --	end process;
 
-	-- VOICE ON/OFF selection - F2
-	function_keys_f2 : process(keyb_f2, reset_video_s)
-	begin
-	  if (reset_video_s = '1') then
-			voice_on_s <= '0';
-	  elsif keyb_f2'event and keyb_f2 = '1' then
-			voice_on_s <= not voice_on_s;
-	  end if;
-	end process;
+--	-- VOICE ON/OFF selection - F2
+--	function_keys_f2 : process(keyb_f2, reset_video_s)
+--	begin
+--	  if (reset_video_s = '1') then
+--			voice_on_s <= '0';
+--	  elsif keyb_f2'event and keyb_f2 = '1' then
+--			voice_on_s <= not voice_on_s;
+--	  end if;
+--	end process;
 
 	-- test_rom selection - F1
 	function_keys_f1 : process(keyb_f1, reset_video_s)
@@ -1113,7 +1122,7 @@ begin
 	videomode_keys : process(key_videomode, reset_video_s)
 	begin
 	  if (reset_video_s = '1') then
-			video_mode <= '0';
+			video_mode <= default_vmode;
 	  elsif key_videomode'event and key_videomode = '1' then
 			video_mode <= not video_mode;
 	  end if;
@@ -1178,7 +1187,8 @@ begin
 		dipswitches(16 downto 15) => dipswt_nc(16 downto 15),
 		dipswitches(14 downto 13) => dipswt_nc(14 downto 13),
 		dipswitches(12 downto 11) => dipswt_nc(12 downto 11),
-		dipswitches(10 downto 9) => dipswt_nc(10 downto 9),
+		dipswitches(10) => dipswt_nc(10),
+      dipswitches(9) => voice_on_s,
       dipswitches(8) => loadchr_s,
       dipswitches(7) => joinjoystick_s,
       dipswitches(6 downto 5) => vga2grey,

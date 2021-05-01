@@ -6,6 +6,7 @@
 int joykeys; // (VM)(HR) xxxBRLDU (P2) xxxBRLDU (P1)
 int keys_p1[5] = { 0x1d, 0x1b, 0x1c, 0x23, 0x2b}; // WSAD -> F (Default)
 int keys_p2[5] = { 0x43, 0x42, 0x3b, 0x4b, 0x33}; // IKJL -> H (Default)
+extern int dipsw;
 
 //joystick input
 extern int joy_pins; //(ZXUNO/ZXDOS)SACBRLDU
@@ -125,6 +126,11 @@ int Menu_Run()
 	joykeys=0;
 
 	int auxkey;
+
+	if(TestKey(KEY_F2)&2) // Swapping video mode
+	{
+		dipsw^=16;
+  }
 
 	if(TestKey(KEY_F4)&2) // Swapping players keys...
 	{

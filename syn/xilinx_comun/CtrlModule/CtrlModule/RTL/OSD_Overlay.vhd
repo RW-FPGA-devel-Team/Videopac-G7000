@@ -39,7 +39,7 @@ begin
 	process(clk, window_in, osd_window_in, osd_pixel_in,red_in, green_in, blue_in, scanline, scanline_ena, osd_bkgr_in)
 	begin
 	
---		if rising_edge(clk) then
+		if rising_edge(clk) then
 			window_out<=window_in;
 			
 			if osd_window_in='1' then
@@ -59,7 +59,7 @@ begin
 				blue_out<=blue_in;
 			end if;
 			
---		end if;
+		end if;
 	
 	end process;
 

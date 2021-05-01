@@ -58,6 +58,7 @@ module rom_loader (
 	input wire  [15:0] host_bootdata_size,
 	output wire [15:0] currentROM,
    input wire loadchr,
+   output wire default_vmode,
 	input wire  test_rom,
 	output wire test_led
 
@@ -163,6 +164,20 @@ module rom_loader (
    wire reset_done;
    reg  loader_done_r;
 
+	// Power-on RESET (8 clocks) + scandoubler read
+	reg [7:0] poweron_reset_r = 8'h00;
+   reg  def_vmode_r;
+   wire poweron_reset;
+   assign poweron_reset = !poweron_reset_r[7];
+	always @(posedge clk) begin
+	  if (poweron_reset)
+		  def_vmode_r <= !sram_data[0]; //avlixa
+	  
+		poweron_reset_r <= {poweron_reset_r[6:0],1'b1};
+	end
+   assign default_vmode = def_vmode_r;
+   
+
    //reset Videopac
    assign vp_rst_n = (reset)? 1'b0 : loader_done;
    assign test_led = !loader_done;
@@ -171,7 +186,8 @@ module rom_loader (
                    (cartgt8k == 1'b1) ? {2'b0,cart_bs1,cart_bs0, cart_addr[11], cart_addr[9:0]} :
                    (cartgt4k == 1'b1) ? {3'b0,cart_bs0, cart_addr[11], cart_addr[9:0]} :
                    {3'b0, cart_addr[11], cart_addr[9:0]};
-   assign sram_addr = ( loader_write || !loader_done) ? loader_addr : { 5'b0,rom_addr_s};
+   assign sram_addr =  (poweron_reset) ? 19'h08FD5 : // magic place where the scandoubler settings have been stored  
+                        ( loader_write || !loader_done) ? loader_addr : { 5'b0,rom_addr_s};
    assign rom_addr  = rom_addr_s;
    
    //SRAM memory signals

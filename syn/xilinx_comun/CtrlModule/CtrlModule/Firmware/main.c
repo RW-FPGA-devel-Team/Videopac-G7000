@@ -17,6 +17,13 @@ extern int currentrow;
 int dipsw=16; //traspaso de opciones a core
 int vdcload=0; //carga de charset de VDC activada
 
+//static struct menu_entry topmenu[]; // Forward declaration.
+static struct menu_entry KeyboardHelp[]; // Forward declaration.
+static struct menu_entry CoreCredits[]; // Forward declaration.
+
+struct menu_entry *topmenu;
+
+
 int OSD_Puts(char *str)
 {
 	int c;
@@ -25,23 +32,6 @@ int OSD_Puts(char *str)
 	return(1);
 }
 
-/*
-void TriggerEffect(int row)
-{
-	int i,v;
-	Menu_Hide();
-	for(v=0;v<=16;++v)
-	{
-		for(i=0;i<4;++i)
-			PS2Wait();
-
-		HW_HOST(REG_HOST_SCALERED)=v;
-		HW_HOST(REG_HOST_SCALEGREEN)=v;
-		HW_HOST(REG_HOST_SCALEBLUE)=v;
-	}
-	Menu_Show();
-}
-*/
 void Delay()
 {
 	int c=16384; // delay some cycles
@@ -75,6 +65,17 @@ void NoSelection(int row)
 {
 }
 
+void Core_Credits(int row)
+{
+	CoreCredits[13].action=MENU_ACTION(Menu_Get()); // Set parent menu entry
+	Menu_Set(CoreCredits);
+}
+
+void Keyboard_Help(int row)
+{
+	KeyboardHelp[13].action=MENU_ACTION(Menu_Get()); // Set parent menu entry
+	Menu_Set(KeyboardHelp);
+}
 
 void Select(int row)
 {
@@ -94,13 +95,20 @@ void Start(int row)
 
 
 
-static struct menu_entry topmenu[]; // Forward declaration.
+//static struct menu_entry topmenu[]; // Forward declaration.
 
 // joystick type
 static char *consolemode_labels[]=
 {
 	"Mode: Odyssey2 (NTSC)",
 	"Mode: Videopac (PAL)"
+};
+
+// joystick type
+static char *thevoice_labels[]=
+{
+	"The voice: Off",
+	"The voice: On"
 };
 
 
@@ -123,10 +131,10 @@ static char *board_labels[]=
 };
 
 // Our toplevel menu for ZX2
-static struct menu_entry topmenu[]=
+static struct menu_entry topmenu2[]=
 {
-	{MENU_ENTRY_CALLBACK,"== Videopac for ZXDOS ==",MENU_ACTION(&NoSelection)},
-	{MENU_ENTRY_CALLBACK,"========================",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"== Videopac for ZXDOS ==",MENU_ACTION(&Core_Credits)},
+	{MENU_ENTRY_CALLBACK,"========================",MENU_ACTION(&Core_Credits)},
 	{MENU_ENTRY_CALLBACK,"Reset",MENU_ACTION(&Reset)},
 	{MENU_ENTRY_TOGGLE,"Scanlines",MENU_ACTION(0)},
 	{MENU_ENTRY_TOGGLE,"Swap joysticks",MENU_ACTION(1)},
@@ -135,6 +143,8 @@ static struct menu_entry topmenu[]=
 	{MENU_ENTRY_CALLBACK,"Load VDC font \x10",MENU_ACTION(&FileSelectorCHAR_Show)},
 	{MENU_ENTRY_CYCLE,(char *)consolemode_labels,MENU_ACTION(2)},
 	{MENU_ENTRY_CYCLE,(char *)colormode_labels,MENU_ACTION(4)},
+	{MENU_ENTRY_CYCLE,(char *)thevoice_labels,MENU_ACTION(2)},
+	{MENU_ENTRY_CALLBACK,"Help",MENU_ACTION(&Keyboard_Help)},
 	{MENU_ENTRY_CALLBACK,"Exit",MENU_ACTION(&Menu_Hide)},
 	{MENU_ENTRY_NULL,0,0}
 };
@@ -142,8 +152,8 @@ static struct menu_entry topmenu[]=
 // Our toplevel menu for ZX1
 static struct menu_entry topmenu1[]=
 {
-	{MENU_ENTRY_CALLBACK,"== Videopac for ZXUNO ==",MENU_ACTION(&NoSelection)},
-	{MENU_ENTRY_CALLBACK,"========================",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"== Videopac for ZXUNO ==",MENU_ACTION(&Core_Credits)},
+	{MENU_ENTRY_CALLBACK,"========================",MENU_ACTION(&Core_Credits)},
 	{MENU_ENTRY_CALLBACK,"Reset",MENU_ACTION(&Reset)},
 	{MENU_ENTRY_TOGGLE,"Scanlines",MENU_ACTION(0)},
 	{MENU_ENTRY_TOGGLE,"Swap joysticks",MENU_ACTION(1)},
@@ -153,7 +163,80 @@ static struct menu_entry topmenu1[]=
 	{MENU_ENTRY_CYCLE,(char *)consolemode_labels,MENU_ACTION(2)},
 	{MENU_ENTRY_CYCLE,(char *)colormode_labels,MENU_ACTION(4)},
 	{MENU_ENTRY_CYCLE,(char *)board_labels,MENU_ACTION(3)},
+	{MENU_ENTRY_CALLBACK,"Help",MENU_ACTION(&Keyboard_Help)},
 	{MENU_ENTRY_CALLBACK,"Exit",MENU_ACTION(&Menu_Hide)},
+	{MENU_ENTRY_NULL,0,0}
+};
+
+// Keyboard Help
+static struct menu_entry KeyboardHelp[]=
+{
+	/*
+	0        1         2         3
+	1---.----0----.----0----.----0
+	Scroll Lock: change between
+	RGB and VGA video mode.
+	F3: Soft Reset
+	Ctrl+Alt+Backspace: Hard reset
+    Esc or joystick bt.2: to show
+	or hide the options menu.
+	WASD / cursor keys / joystick  
+	to select menu option.
+	Enter / Fire to choose option.
+	In most games press 0-9 after 
+	loading a ROM to play the game
+	*/
+
+	{MENU_ENTRY_CALLBACK,"=== Videopac Special HELP ===",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"==============================",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"Scroll Lock: change between", MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"RGB and VGA video mode",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"F3: Soft Reset" ,MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"Ctrl+Alt+Backspace: Hard reset" ,MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"Esc or joystick bt.2: to show",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"or hide the options menu.",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"WASD / cursor keys / joystick",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"to select menu option.",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"Enter / Fire to choose option.",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"In most games press 0-9 after",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"loading a ROM to play the game",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_SUBMENU,"OK",MENU_ACTION(&topmenu)},
+	{MENU_ENTRY_NULL,0,0}
+};
+
+// Core Credits
+static struct menu_entry CoreCredits[]=
+{
+	/*
+	0        1         2         3
+	1---.----0----.----0----.----0	
+	Philips Videopac / Magnavox 
+	Odyssey2 core for ZXUNO, ZXDOS
+	and ZXDOS+ boards.
+	Original core by:Arnim Laeuger 
+	Port made by: yomboprime, 
+	 rampa069, neurorulez, Antonio
+	 Sanchez, AvlixA, Mejias3D, 
+	 Wilco2009 and Benitoss
+	Special Thanks to: René van 
+	 den Enden for his info on 
+	 videopac.nl
+	*/
+
+	{MENU_ENTRY_CALLBACK,"=== Videopac Core Credits ===",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"=============================",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"Philips Videopac / Magnavox",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"Odyssey2 core for ZXUNO, ZXDOS" ,MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"and ZXDOS+ boards." ,MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"Original core by:Arnim Laeuger",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"Port made by: yomboprime, ",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK," rampa069, neurorulez, Antonio",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK," Sanchez, AvlixA, Mejias3D, ",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK," Wilco2009 and Benitoss",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK,"Special Thanks to: Rene van ",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK," den Enden for his info on ",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_CALLBACK," videopac.nl",MENU_ACTION(&NoSelection)},
+	{MENU_ENTRY_SUBMENU,"OK",MENU_ACTION(&topmenu)},
 	{MENU_ENTRY_NULL,0,0}
 };
 
@@ -234,11 +317,11 @@ static int LoadROM(const char *filename, const char *extension)
 			MegaDelay();
 			MegaDelay();
 			MegaDelay();
-			//Menu_Set(topmenu);
-			if(joy_pins & 0x100) //(ZXUNO/ZXDOS)(SACUDLRB) => (ZXUNO/ZXDOS)SACBRLDU
-				Menu_Set(topmenu1); //ZXUNO menu
-			else
-				Menu_Set(topmenu); //ZXDOS menu
+			Menu_Set(topmenu);
+			// if(joy_pins & 0x100) //(ZXUNO/ZXDOS)(SACUDLRB) => (ZXUNO/ZXDOS)SACBRLDU
+			// 	Menu_Set(topmenu1); //ZXUNO menu
+			// else
+			// 	Menu_Set(topmenu); //ZXDOS menu
 			return 1;
 
 		}
@@ -296,11 +379,14 @@ static int LoadROM(const char *filename, const char *extension)
 
 	if(result) {
 	//	OSD_Show(0);
-	//	Menu_Set(topmenu);
-		if(joy_pins & 0x100)
-			Menu_Set(topmenu1); //ZXUNO menu
-		else
-			Menu_Set(topmenu); //ZXDOS menu
+		Menu_Set(topmenu);
+    		//HW_HOST(REG_HOST_CONTROL)=HOST_CONTROL_RESET;
+		//MegaDelay();
+		//HW_HOST(REG_HOST_CONTROL)=HOST_CONTROL_DIVERT_KEYBOARD; //Release control reset
+		// if(joy_pins & 0x100)
+		// 	Menu_Set(topmenu1); //ZXUNO menu
+		// else
+		// 	Menu_Set(topmenu); //ZXDOS menu
 	}
 	else
 		Menu_Set(loadfailed);
@@ -312,12 +398,15 @@ int main(int argc,char **argv)
 {
 	int i;
 	//int dipsw=16;
+	dipsw=16; //traspaso de opciones a core. Default: PAL Videopac
 	// bit 0 - Scanlines
 	// bit 1 - Swap joysticks
 	// bit 2-3 - UNO board
 	// bit 4 - NTSC-Odyssey2/PAL-Videopac
 	// bit 5-6 - Color (0)- Monochrome (1) - Green phosphor (2) - Amber monochrome(3)
 	// bit 7 - Join joysticks
+  // bit 8 - Loading rom/charset
+	// bit 9 - The voice on/off
 
 	// Put the host core in reset while we initialise...
 //	HW_HOST(REG_HOST_CONTROL)=HOST_CONTROL_RESET;
@@ -355,9 +444,11 @@ int main(int argc,char **argv)
 	HW_HOST(REG_HOST_SW)=dipsw;
 
 	if(joy_pins & 0x100)
-		Menu_Set(topmenu1); //ZXUNO menu
+		topmenu = topmenu1; //ZXUNO menu
 	else
-		Menu_Set(topmenu); //ZXDOS menu
+		topmenu = topmenu2; //ZXDOS menu
+	
+	Menu_Set(topmenu); //ZXUNO/ZXDOS menu
 
 	currentrow=6; //Load ROM as default option
 	Menu_Show();
@@ -378,22 +469,24 @@ int main(int argc,char **argv)
 		// bit 4 - NTSC-Odyssey2/PAL-Videopac
 		// bit 5-6 - Color (0)- Monochrome (1) - Green phosphor (2) - Amber monochrome(3)
 		// bit 7 - Join joysticks
+		// bit 8 - The voice on/off
 
-		if(joy_pins & 0x100) { //ZXUNO
-			dipsw=(MENU_CYCLE_VALUE(&topmenu1[8])<<4);	// (1bit: 4)Take the value of NTSC/PAL mode
-			dipsw|=(MENU_CYCLE_VALUE(&topmenu1[9])<<5);	// (2bit: 5:6)Take the value of the color mode
-			dipsw|=(MENU_CYCLE_VALUE(&topmenu1[10])<<2);	// (2bit: 2:3)Take the value of the board model
-	  }
-		else { //ZXDOS
-			dipsw=(MENU_CYCLE_VALUE(&topmenu[8])<<4);	// (1bit: 1)Take the value of NTSC/PAL mode
+		//if(joy_pins & 0x100) { //ZXUNO
+			dipsw=(MENU_CYCLE_VALUE(&topmenu[8])<<4);	// (1bit: 4)Take the value of NTSC/PAL mode
 			dipsw|=(MENU_CYCLE_VALUE(&topmenu[9])<<5);	// (2bit: 5:6)Take the value of the color mode
+			dipsw|=(MENU_CYCLE_VALUE(&topmenu[10])<<9);	// (1bit: 9)Take the value of the voice mode
+	    /*}
+		else { //ZXDOS
+			dipsw=(MENU_CYCLE_VALUE(&topmenu[8])<<4);	// (1bit: 4)Take the value of NTSC/PAL mode
+			dipsw|=(MENU_CYCLE_VALUE(&topmenu[9])<<5);	// (2bit: 5:6)Take the value of the color mode
+			dipsw|=(MENU_CYCLE_VALUE(&topmenu[10])<<9);	// (1bit: 9)Take the value of the voice mode
 			//dipsw|=(MENU_CYCLE_VALUE(&topmenu1[6])<<2);	// (2bit: 2:3)Take the value of the board model
-		}
+		}*/
 
 		//dipsw=MENU_CYCLE_VALUE(&topmenu[1]);	// Take the value of the TestPattern cycle menu entry.
 		if(MENU_TOGGLE_VALUES&1)
 			dipsw|=1;	// Add in the scanlines bit.
-	  if(MENU_TOGGLE_VALUES&2)
+	    if(MENU_TOGGLE_VALUES&2)
 	  	dipsw|=2;	// Add in the swap joystick option
 		if(MENU_TOGGLE_VALUES&4)
 			dipsw|=128;	// Add in the join joystick option
