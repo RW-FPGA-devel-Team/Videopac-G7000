@@ -234,6 +234,14 @@ architecture rtl of i8244_cpuio is
          spr1_col_s,
 			spr2_col_s,
 			spr3_col_s   : std_logic;
+  
+  --avlixa test voley
+  signal spr0_col_pre_s,
+         spr1_col_pre_s,
+			spr2_col_pre_s,
+			spr3_col_pre_s   : std_logic;
+  --avlixa test voley
+  
   signal hgrid_s,
          vgrid_s      : std_logic;
 
@@ -290,8 +298,10 @@ begin
   --
   seq: process (clk_i, res_i)
     variable pix_vec_v     : byte_t;
+    variable pix_vec_pre_v     : byte_t;
 
     function tag_overlap_f(pix  : in std_logic_vector(7 downto 0);
+                           pix_pre  : in std_logic_vector(7 downto 0); --test voley
                            mask : in std_logic_vector(7 downto 0);
                            idx  : in natural) return boolean is
       variable pix_res_v, mask_res_v : boolean;
@@ -312,11 +322,21 @@ begin
                       pix_mask(4) = '1' or pix_mask(5) = '1' or pix_mask(6) = '1' or pix_mask(7) = '1');
                 
       -- Solo verificar los pixeles que tengan la máscara activa, excepto el que estamos verificando
-      pix_check := ((pix(7 downto 6) and mask(7 downto 6)) & 
-                    ( pix(5) and mask(5)) &
-                    ( pix(4) and mask(4)) &
-                    (pix(3 downto 0) and mask(3 downto 0))) and idx_mask_n; 
-
+      --pix_check := ((pix(7) and mask(7)) & --OK, excepto voley
+      --             (pix(6 downto 0) and mask(6 downto 0))) and idx_mask_n; 
+      --avlixa test voley
+      pix_check := ((mask(7) and pix(7) ) & --test, voley
+                    (pix(6 downto 4) and mask(6 downto 4)) &
+                    (pix_pre(3 downto 0) and mask(3 downto 0))
+                    ) and idx_mask_n; 
+      
+      --      pixel_pre:   00000001
+      --      pixel:       10000000
+      --      mascara:     10001111
+      --      resultado:   1000      -pre
+      --                       0000  -act
+      --avlixa fin test voley
+                      
       -- La colisión se verifica desde el punto de vista de cada pixel que equivale a 
       -- un tipo de objeto (major, vertical grid, horizontal grid, minor 0-1-2-3, y externo)
       -- si el pixel a verificar está activo (pix_chek) y alguno de los otros después
@@ -518,6 +538,27 @@ begin
 		spr1_col_s <= minor_pix_i(1);
 		spr2_col_s <= minor_pix_i(2);
 		spr3_col_s <= minor_pix_i(3);
+      --avlixa test voley: parece que hay un ligero retraso en los pixel minor
+      --                   y la detección de los mismos (voley) se produce de 
+      --                   forma ligeramente desplazada a la derecha
+      if clk_rise_en_i then
+         spr0_col_pre_s <= spr0_col_s;
+         spr1_col_pre_s <= spr1_col_s;
+         spr2_col_pre_s <= spr2_col_s;
+         spr3_col_pre_s <= spr3_col_s;
+      end if;
+
+		pix_vec_pre_v := major_pix_i 
+						 & cx_i 
+						 & hgrid_s 
+						 & vgrid_s 
+						 & spr3_col_pre_s 
+						 & spr2_col_pre_s
+						 & spr1_col_pre_s
+						 & spr0_col_pre_s;            
+      --avlixa fin test voley
+      
+      
 		hgrid_s <= grid_hpix_i or grid_dpix_i;
 		--vgrid_s <=  grid_vpix_i and not major_pix_i; --avlixa original
 		vgrid_s <=  grid_vpix_i; --solucionar problema con canasta
@@ -531,6 +572,8 @@ begin
 						 & spr2_col_s
 						 & spr1_col_s
 						 & spr0_col_s;
+
+             
 						 
       -- detect overlap -------------------------------------------------------
 --      pix_vec_v := (bit_over_major_c  => major_pix_i,
@@ -545,6 +588,7 @@ begin
       if clk_rise_en_i or clk_fall_en_i then
         for idx in byte_t'range loop
           if tag_overlap_f(pix  => pix_vec_v,
+                           pix_pre  => pix_vec_pre_v, --avlixa test voley
                            mask => (reg_enoverlap_q),
                            idx  => idx) then
             reg_overlap_q(idx) <= '1' ;
