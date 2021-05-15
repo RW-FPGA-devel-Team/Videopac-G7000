@@ -235,12 +235,12 @@ architecture rtl of i8244_cpuio is
 			spr2_col_s,
 			spr3_col_s   : std_logic;
   
-  --avlixa test voley
+  --avlixa colision voley
   signal spr0_col_pre_s,
          spr1_col_pre_s,
 			spr2_col_pre_s,
 			spr3_col_pre_s   : std_logic;
-  --avlixa test voley
+  --avlixa colision voley
   
   signal hgrid_s,
          vgrid_s      : std_logic;
@@ -301,7 +301,7 @@ begin
     variable pix_vec_pre_v     : byte_t;
 
     function tag_overlap_f(pix  : in std_logic_vector(7 downto 0);
-                           pix_pre  : in std_logic_vector(7 downto 0); --test voley
+                           pix_pre  : in std_logic_vector(7 downto 0); --colision voley
                            mask : in std_logic_vector(7 downto 0);
                            idx  : in natural) return boolean is
       variable pix_res_v, mask_res_v : boolean;
@@ -322,20 +322,14 @@ begin
                       pix_mask(4) = '1' or pix_mask(5) = '1' or pix_mask(6) = '1' or pix_mask(7) = '1');
                 
       -- Solo verificar los pixeles que tengan la máscara activa, excepto el que estamos verificando
-      --pix_check := ((pix(7) and mask(7)) & --OK, excepto voley
-      --             (pix(6 downto 0) and mask(6 downto 0))) and idx_mask_n; 
-      --avlixa test voley
-      pix_check := ((mask(7) and pix(7) ) & --test, voley
+      -- Para los objeto minor obtenemos tenemos en cuenta los pixeles con un poco de retardo, esto
+      -- es utilizado en el voley.  El saque del jugador derecho, a pesar que no esta en colision
+      -- con la bola (esta rozando) en una videopac real, lo detecta como colision
+      pix_check := ((mask(7) and pix(7) ) &  --colision, voley
                     (pix(6 downto 4) and mask(6 downto 4)) &
-                    (pix_pre(3 downto 0) and mask(3 downto 0))
+                    (pix_pre(3 downto 0) and mask(3 downto 0)) --colision, voley
                     ) and idx_mask_n; 
       
-      --      pixel_pre:   00000001
-      --      pixel:       10000000
-      --      mascara:     10001111
-      --      resultado:   1000      -pre
-      --                       0000  -act
-      --avlixa fin test voley
                       
       -- La colisión se verifica desde el punto de vista de cada pixel que equivale a 
       -- un tipo de objeto (major, vertical grid, horizontal grid, minor 0-1-2-3, y externo)
@@ -347,6 +341,15 @@ begin
       -- Al verificar el idx 7 encuentra 1 objetos (idx=0) con máscara y pixel activos y por tanto 
       -- marca el idx como colision
       -- Tras aplicar a los 8 bits el resultado sería: 10000010
+      --
+      -- Ejemplo voley:
+      --      pixel_prev:  00000001
+      --      pixel_curr:  10000000
+      --      mascara:     10001111
+      --      pix_check:   00000001
+      --      resultado:   1000      -prev
+      --                       0000  -curr
+
       mask_res_v := ( pix_check(0) = '1' or pix_check(1) = '1' or pix_check(2) = '1' 
                       or pix_check(3) = '1' or pix_check(4) = '1' or pix_check(5) = '1' 
                       or pix_check(6) = '1' or pix_check(7) = '1');
@@ -538,10 +541,12 @@ begin
 		spr1_col_s <= minor_pix_i(1);
 		spr2_col_s <= minor_pix_i(2);
 		spr3_col_s <= minor_pix_i(3);
-      --avlixa test voley: parece que hay un ligero retraso en los pixel minor
-      --                   y la detección de los mismos (voley) se produce de 
-      --                   forma ligeramente desplazada a la derecha
-      if clk_rise_en_i then
+      
+      -- avlixa colision voley:
+      --      parece que hay un ligero retraso en los pixel minor
+      --      y la detección de los mismos (voley) se produce de 
+      --      forma ligeramente desplazada a la derecha
+      if ( clk_fall_en_i or clk_rise_en_i ) then 
          spr0_col_pre_s <= spr0_col_s;
          spr1_col_pre_s <= spr1_col_s;
          spr2_col_pre_s <= spr2_col_s;
@@ -556,13 +561,11 @@ begin
 						 & spr2_col_pre_s
 						 & spr1_col_pre_s
 						 & spr0_col_pre_s;            
-      --avlixa fin test voley
+      -- avlixa colision voley - end
       
       
 		hgrid_s <= grid_hpix_i or grid_dpix_i;
-		--vgrid_s <=  grid_vpix_i and not major_pix_i; --avlixa original
-		vgrid_s <=  grid_vpix_i; --solucionar problema con canasta
-                               -- genera otros errores en: frogger, globos..
+		vgrid_s <=  grid_vpix_i; 
       
 		pix_vec_v := major_pix_i 
 						 & cx_i 
@@ -588,7 +591,7 @@ begin
       if clk_rise_en_i or clk_fall_en_i then
         for idx in byte_t'range loop
           if tag_overlap_f(pix  => pix_vec_v,
-                           pix_pre  => pix_vec_pre_v, --avlixa test voley
+                           pix_pre  => pix_vec_pre_v, --avlixa voley colision
                            mask => (reg_enoverlap_q),
                            idx  => idx) then
             reg_overlap_q(idx) <= '1' ;
@@ -613,6 +616,7 @@ begin
 			 
         end loop;
       end if;
+
       -- clear OVERLAP register upon read
       if rd_pulse_s and addr_q = addr_overlap_c then
         reg_overlap_q <= (others => '0');
@@ -620,6 +624,8 @@ begin
 
       -- interrupts -----------------------------------------------------------
       if clk_rise_en_i or clk_fall_en_i then
+
+
         -- rising edge detection on vbl_i
         vbl_q <= vbl_i;
 
@@ -632,13 +638,13 @@ begin
         if snd_int_i then
           sound_int_q <= true;
         end if;
-
         if (ext_int_q and reg_ctrl_q(bit_ctrl_en_ext_overlap_c) = '1') or
            (sound_int_q and reg_ctrl_q(bit_ctrl_en_sound_int_c) = '1') or
-           (hor_int_i and reg_ctrl_q(bit_ctrl_en_hor_int_c)) = '1'     or
+           (hor_int_i and reg_ctrl_q(bit_ctrl_en_hor_int_c)) = '1'     or 
            (vbl_i = '1' and vbl_q = '0') then
           intr_q <= true;
         end if;
+
       end if;
       -- clear interrupts upon CONTROL STATUS read
       if rd_pulse_s and addr_q = addr_ctrl_stat_c then

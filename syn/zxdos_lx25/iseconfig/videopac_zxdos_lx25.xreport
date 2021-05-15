@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2021-01-30T19:42:48</DateModified>
+  <DateModified>2021-05-15T09:13:29</DateModified>
   <ModuleName>videopac_zxdos_lx25</ModuleName>
-  <SummaryTimeStamp>2021-01-30T18:41:39</SummaryTimeStamp>
+  <SummaryTimeStamp>2021-05-15T08:53:00</SummaryTimeStamp>
   <SavedFilePath>/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxdos_lx25/iseconfig/videopac_zxdos_lx25.xreport</SavedFilePath>
   <ImplementationReportsDirectory>/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxdos_lx25/work/</ImplementationReportsDirectory>
   <DateInitialized>2020-11-22T18:44:19</DateInitialized>

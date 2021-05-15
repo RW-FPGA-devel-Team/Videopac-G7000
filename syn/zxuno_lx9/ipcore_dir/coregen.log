@@ -2,7 +2,7 @@ Welcome to Xilinx CORE Generator.
 Help system initialized.
 The IP Catalog has been reloaded.
 Opening project file
-/home/avlixa/FPGA/ZXDOS/VideoPac-ZXDOS/syn/zxdos_lx16/ipcore_dir/coregen.cgp.
+/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxuno_lx9/ipcore_dir/coregen.cgp.
 Recustomize and Generate (Under Current Project Settings)INFO:sim:172 - Generating IP...
 Applying current project options...
 Finished applying current project options.
@@ -17,34 +17,34 @@ WARNING:sim - Component clk_wiz_v3_6 does not have a valid model name for
    Verilog synthesis
 Delivering EJava files for 'relojes_pll'...
 Delivered 3 files into directory
-/home/avlixa/FPGA/ZXDOS/VideoPac-ZXDOS/syn/zxdos_lx16/ipcore_dir/tmp/_cg/relojes
-_pll
+/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxuno_lx9/ipcore_dir/tmp/_cg/relojes_
+pll
 Delivered 1 file into directory
-/home/avlixa/FPGA/ZXDOS/VideoPac-ZXDOS/syn/zxdos_lx16/ipcore_dir/tmp/_cg/relojes
-_pll
+/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxuno_lx9/ipcore_dir/tmp/_cg/relojes_
+pll
 Generating ASY schematic symbol...
-Loading device for application Rf_Device from file '6slx16.nph' in environment
+Loading device for application Rf_Device from file '6slx9.nph' in environment
 /opt/Xilinx/14.7/ISE_DS/ISE/.
 INFO:sim:949 - Finished generation of ASY schematic symbol.
 Generating ISE project...
 XCO file found: relojes_pll.xco
 XMDF file found: relojes_pll_xmdf.tcl
 Adding
-/home/avlixa/FPGA/ZXDOS/VideoPac-ZXDOS/syn/zxdos_lx16/ipcore_dir/tmp/_cg/relojes
-_pll.asy -view all -origin_type imported
+/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxuno_lx9/ipcore_dir/tmp/_cg/relojes_
+pll.asy -view all -origin_type imported
 Adding
-/home/avlixa/FPGA/ZXDOS/VideoPac-ZXDOS/syn/zxdos_lx16/ipcore_dir/tmp/_cg/relojes
-_pll.ucf -view all -origin_type created
+/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxuno_lx9/ipcore_dir/tmp/_cg/relojes_
+pll.ucf -view all -origin_type created
 Adding
-/home/avlixa/FPGA/ZXDOS/VideoPac-ZXDOS/syn/zxdos_lx16/ipcore_dir/tmp/_cg/relojes
-_pll.v -view all -origin_type created
+/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxuno_lx9/ipcore_dir/tmp/_cg/relojes_
+pll.v -view all -origin_type created
 INFO:HDLCompiler:1845 - Analyzing Verilog file
-   "/home/avlixa/FPGA/ZXDOS/VideoPac-ZXDOS/syn/zxdos_lx16/ipcore_dir/tmp/_cg/rel
-   ojes_pll.v" into library work
+   "/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxuno_lx9/ipcore_dir/tmp/_cg/relo
+   jes_pll.v" into library work
 INFO:ProjectMgmt - Parsing design hierarchy completed successfully.
 Adding
-/home/avlixa/FPGA/ZXDOS/VideoPac-ZXDOS/syn/zxdos_lx16/ipcore_dir/tmp/_cg/relojes
-_pll.veo -view all -origin_type imported
+/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxuno_lx9/ipcore_dir/tmp/_cg/relojes_
+pll.veo -view all -origin_type imported
 INFO:TclTasksC:2116 - The automatic calculation of top has been turned-off.
    Please set the new top explicitly by running the "project set top" command.
    To re-calculate the new top automatically, set the "Auto Implementation Top"

@@ -40,9 +40,27 @@
          <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/multiboot_lx16 - multiboot</ClosedNode>
          <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/ps2_keyboard_b - ps2_keyboard_interface - my_ps2_keyboard</ClosedNode>
          <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/romload - rom_loader</ClosedNode>
-         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct</ClosedNode>
          <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct</ClosedNode>
-         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/cpuio_b - i8244_cpuio - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/rom_1k_b - t48_rom - struct</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/alu_b - t48_alu - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/bus_mux_b - t48_bus_mux - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/cond_branch_b - t48_cond_branch - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/db_bus_b - t48_db_bus - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/decoder_b - t48_decoder - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/dmem_ctrl_b - t48_dmem_ctrl - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/p1_b - t48_p1 - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/p2_b - t48_p2 - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/pmem_ctrl_b - t48_pmem_ctrl - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/psw_b - t48_psw - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/t48_alu_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/t48_comp_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/t48_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/t8048_b - t8048_notri - struct/t48_core_b - t48_core - struct/timer_b - t48_timer - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/cpuio_b - i8244_cpuio - rtl/i8244_grid_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/cpuio_b - i8244_cpuio - rtl/i8244_major_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/cpuio_b - i8244_cpuio - rtl/i8244_pack</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/cpuio_b - i8244_cpuio - rtl/i8244_sound_pack</ClosedNode>
          <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/grid_b - i8244_grid - rtl</ClosedNode>
          <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_comp_pack</ClosedNode>
          <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_grid_pack</ClosedNode>
@@ -52,6 +70,7 @@
          <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/i8244_sound_pack</ClosedNode>
          <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/major_b - i8244_major - rtl</ClosedNode>
          <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/minor_b - i8244_minor - rtl</ClosedNode>
+         <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/sync_gen_b - i8244_sync_gen - rtl</ClosedNode>
          <ClosedNode>/videopac_zxdos_lx25 - struct |home|avlixa|FPGA|ZXDOS|VideoPac-rampa|syn|zxdos_lx25|rtl|videopac_zxdos_lx25.vhd/vp_console_b - vp_console - struct/vdc_b - i8244_top_sync - struct/core_b - i8244_core - struct/sync_gen_b - i8244_sync_gen - rtl/i8244_pack</ClosedNode>
          <ClosedNode>/zxuno_xs6_vp - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|ZX_Uno_xs6|ZX_Uno_xs6_vp.vhd/dblscan_b - DBLSCAN - RTL</ClosedNode>
          <ClosedNode>/zxuno_xs6_vp - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|ZX_Uno_xs6|ZX_Uno_xs6_vp.vhd/osd1 - osd</ClosedNode>
@@ -60,19 +79,19 @@
          <ClosedNode>/zxuno_xs6_vp - struct |home|avlixa|FPGA|ZXDOS|VideoPac-ZXDOS|src|board|ZX_Uno_xs6|ZX_Uno_xs6_vp.vhd/vp_console_b - vp_console - struct</ClosedNode>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem>videopac_zxdos_lx25 - struct (/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxdos_lx25/rtl/videopac_zxdos_lx25.vhd)</SelectedItem>
+         <SelectedItem>dblscan_b - DBLSCAN - RTL (/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/xilinx_comun/misc/dblscan.vhd)</SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000020200000001000000010000006400000336000000020000000000000000000000000200000064ffffffff000000810000000300000002000003360000000100000003000000000000000100000003</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >true</UserChangedColumnWidths>
-      <CurrentItem>videopac_zxdos_lx25 - struct (/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxdos_lx25/rtl/videopac_zxdos_lx25.vhd)</CurrentItem>
+      <CurrentItem>dblscan_b - DBLSCAN - RTL (/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/xilinx_comun/misc/dblscan.vhd)</CurrentItem>
    </ItemView>
    <ItemView engineview="SynthesisOnly" sourcetype="DESUT_VHDL_ARCHITECTURE" guiview="Process" >
       <ClosedNodes>
          <ClosedNodesVersion>1</ClosedNodesVersion>
          <ClosedNode>CORE Generator</ClosedNode>
-         <ClosedNode>Design Utilities</ClosedNode>
+         <ClosedNode>Configure Target Device</ClosedNode>
          <ClosedNode>Implement Design/Map</ClosedNode>
          <ClosedNode>Implement Design/Place &amp; Route</ClosedNode>
          <ClosedNode>Implement Design/Translate</ClosedNode>
@@ -80,13 +99,13 @@
          <ClosedNode>User Constraints</ClosedNode>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem>Generate Programming File</SelectedItem>
+         <SelectedItem>Design Utilities</SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
-      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000203000000010000000100000000000000000000000064ffffffff000000810000000000000001000002030000000100000000</ViewHeaderState>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000212000000010000000100000000000000000000000064ffffffff000000810000000000000001000002120000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem>Generate Programming File</CurrentItem>
+      <CurrentItem>Design Utilities</CurrentItem>
    </ItemView>
    <ItemView guiview="File" >
       <ClosedNodes>
@@ -97,7 +116,7 @@
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000000000000010000000000000000000000000000000000000390000000040101000100000000000000000000000064ffffffff0000008100000000000000040000019c0000000100000000000000d600000001000000000000008400000001000000000000009a0000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem></CurrentItem>
+      <CurrentItem>../../74ls74.vhd</CurrentItem>
    </ItemView>
    <ItemView guiview="Library" >
       <ClosedNodes>
@@ -131,13 +150,13 @@
          <ClosedNode>Design Utilities</ClosedNode>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem></SelectedItem>
+         <SelectedItem/>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000212000000010000000100000000000000000000000064ffffffff000000810000000000000001000002120000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem></CurrentItem>
+      <CurrentItem/>
    </ItemView>
    <ItemView engineview="SynthesisOnly" sourcetype="DESUT_VHDL_PACKAGE_DECL" guiview="Process" >
       <ClosedNodes>

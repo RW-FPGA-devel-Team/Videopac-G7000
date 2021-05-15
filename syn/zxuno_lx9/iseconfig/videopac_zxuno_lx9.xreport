@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2021-05-03T21:55:10</DateModified>
+  <DateModified>2021-05-15T15:51:17</DateModified>
   <ModuleName>videopac_zxuno_lx9</ModuleName>
-  <SummaryTimeStamp>2021-05-03T21:51:12</SummaryTimeStamp>
+  <SummaryTimeStamp>2021-05-15T10:58:23</SummaryTimeStamp>
   <SavedFilePath>/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxuno_lx9/iseconfig/videopac_zxuno_lx9.xreport</SavedFilePath>
   <ImplementationReportsDirectory>/home/avlixa/FPGA/ZXDOS/VideoPac-rampa/syn/zxuno_lx9/work/</ImplementationReportsDirectory>
   <DateInitialized>2021-04-27T19:57:59</DateInitialized>

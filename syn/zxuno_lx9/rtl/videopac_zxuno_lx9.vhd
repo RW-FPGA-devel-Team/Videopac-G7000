@@ -964,7 +964,7 @@ begin
   --
   dblscan_b : dblscan
     generic map (
-       dbl_adjustn_c  => 20, --20 ZXDOS+ // 22 ZXDOS
+       dbl_adjustn_c  => 22, --20 ZXDOS+ // 22 ZXDOS
        dbl_adjustp_c  => 2
     )
     port map (
