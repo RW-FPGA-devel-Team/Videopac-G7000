@@ -120,8 +120,8 @@ data_io #( .sysclk_frequency(16'd709) )data_io // 16'd709: 16'd420
 	
 	.reset_n(clock_locked), //clockOn
 
-	.vga_hsync(~HSync),
-	.vga_vsync(~VSync),
+	.vga_hsync(HSync),
+	.vga_vsync(VSync),
 	
 	.red_i({colors[23:16]}),  
 	.green_i({colors[15:8]}), 
