@@ -95,11 +95,11 @@ wire [24:0] ps2_mouse;
 wire ypbpr;
 
 
-wire        PAL   = 1'b1; //status[14];
-wire        VOICE = 1'b1; //status[1];
+wire        PAL   = status[14];
+wire        VOICE = status[1];
 wire        MODE  = status[5];
  
-wire        joy_swap = 1'b0; //status[7];
+wire        joy_swap = status[7];
 
 
 
@@ -184,7 +184,7 @@ always @(posedge clk_sys) begin
 	old_pal <= PAL;
 end
 
-wire reset = ~USER_BTN; // | status[0] | ioctl_download | (old_pal != PAL);
+wire reset = ~USER_BTN  | status[0] | ioctl_download | (old_pal != PAL);
 
 // Original Clocks:
 // Standard    NTSC           PAL
@@ -480,7 +480,7 @@ vp_keymap vp_keymap
 // Passed as a vector bit 1 = left bit 0 = right
 // There is no definition as to which is player 1
 
-wire [1:0] joy_up     = JOY_UP;
+wire [1:0] joy_up     = JOY_UP ;
 wire [1:0] joy_down   = JOY_DOWN;
 wire [1:0] joy_left   = JOY_LEFT;
 wire [1:0] joy_right  = JOY_RIGHT;
