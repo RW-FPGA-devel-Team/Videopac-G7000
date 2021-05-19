@@ -34,7 +34,7 @@ entity data_io is
 		-- PS/2 keyboard
 		ps2k_clk_in : in std_logic := '1';
 		ps2k_dat_in : in std_logic := '1';
-	    ps2_key     : out std_logic_vector(10 downto 0) := "00000000000";
+	   ps2_key     : out std_logic_vector(10 downto 0) := "00000000000";
 		
 		host_scandoubler_disable : buffer std_logic;
 		host_divert_sdcard : out std_logic;

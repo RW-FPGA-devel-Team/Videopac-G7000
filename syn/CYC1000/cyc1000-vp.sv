@@ -33,7 +33,7 @@ module cyclone_vp
 		input         JOY_LEFT,
 		input         JOY_UP,
 		input         JOY_DOWN,
-		input         JOY_FIRE,
+		input         JOY_FIRE1,
 		
 		input         CLK_12MHZ,
 	   output        SD_CLK,
@@ -484,7 +484,7 @@ wire [1:0] joy_up     = JOY_UP;
 wire [1:0] joy_down   = JOY_DOWN;
 wire [1:0] joy_left   = JOY_LEFT;
 wire [1:0] joy_right  = JOY_RIGHT;
-wire [1:0] joy_action = JOY_FIRE;
+wire [1:0] joy_action = JOY_FIRE1;
 //wire       joy_reset  = ~joya[5] & ~joyb[5];
 
 
