@@ -65,20 +65,6 @@ assign TX = 'Z;
 
 //////////////////////////////////////////////////////////////////
 
-`include "build_id.v"
-parameter CONF_STR = {
-	"VIDEOPAC;;",
-	"F,BIN,Load catridge;",
-	"F,ROM,Load XROM;",
-	"F,CHR,Change VDC font;",
-	"OE,System,Odyssey2,Videopac;",
-	"O5,Palette,TV RF,RGB;",
-	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%;",
-	"O1,The Voice,Off,on;",
-	"O7,Swap Joysticks,No,Yes;",
-	"T0,Reset;",
-	"V,v",`BUILD_DATE
-};
 
 wire  [1:0] buttons;
 wire [31:0] status;
@@ -480,11 +466,13 @@ vp_keymap vp_keymap
 // Passed as a vector bit 1 = left bit 0 = right
 // There is no definition as to which is player 1
 
-wire [1:0] joy_up     = JOY_UP ;
-wire [1:0] joy_down   = JOY_DOWN;
-wire [1:0] joy_left   = JOY_LEFT;
-wire [1:0] joy_right  = JOY_RIGHT;
-wire [1:0] joy_action = JOY_FIRE1;
+
+
+wire [1:0] joy_up     = joy_swap ? {JOY_UP , 1'b1}   : {1'b1,JOY_UP} ;
+wire [1:0] joy_down   = joy_swap ? {JOY_DOWN , 1'b1} : {1'b1,JOY_DOWN} ;
+wire [1:0] joy_left   = joy_swap ? {JOY_LEFT , 1'b1} : {1'b1,JOY_LEFT} ;
+wire [1:0] joy_right  = joy_swap ? {JOY_RIGHT , 1'b1}: {1'b1,JOY_RIGHT} ;
+wire [1:0] joy_action = joy_swap ? {JOY_FIRE1 , 1'b1}: {1'b1,JOY_FIRE1} ;
 //wire       joy_reset  = ~joya[5] & ~joyb[5];
 
 
