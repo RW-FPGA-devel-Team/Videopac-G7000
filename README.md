@@ -1,15 +1,15 @@
 # Videopac G7000 / Odyssey2 for FPGA.
 
-### This is an FPGA implementation of the Magnavox Oddysey2/Videopac G700 based on FPGA videopac by Arnim Laeuger and ported to MiSTer (With additional work from wsoltys) by [Jamie Dickson](https://github.com/Kitrinx).
+### This is an FPGA implementation of the Magnavox Oddysey2/Videopac G7000 based on FPGA videopac by Arnim Laeuger and ported to MiSTer (With additional work from wsoltys) by [Jamie Dickson](https://github.com/Kitrinx).
 
 ## Features
  * Switch between Odyssey2 and Videopac mode.
- * Switch between two palettes (composite RF emulation and RGB for more vivid colours)
  * Fully working keyboard.
  * Joystick buttons for keys 0-9.
  * loadable **VDC ROM charset** for some custom roms. For information, how-to prepare them and examples read the [manual](https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/doc/Charset%20Edit). Also have some ready to use [custom roms](https://github.com/RW-FPGA-devel-Team/Videopac-G7000/tree/main/custom_roms).
- * Correct Sound, timings and better collision detection.
+ * Correct Sound, timings and collision detection.
  * "The Voice" peripheral.
+ * *G7200* mode (B&W) with 7 contrast levels.
  * available on:
    * **MiSTer**
    * **MiST**

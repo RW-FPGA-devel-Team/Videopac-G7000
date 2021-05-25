@@ -39,4 +39,7 @@ c5_pin_model_dump.txt
 *.rbf
 *.ua2
 *.np1
+*.o
+*.bin
+*.elf
 

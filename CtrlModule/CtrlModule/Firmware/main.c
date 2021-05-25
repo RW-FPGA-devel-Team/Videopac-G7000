@@ -64,10 +64,10 @@ static struct menu_entry topmenu[]; // Forward declaration.
 
 static char *st_scanlines[]=
 {
-	"Scanlines None",
-	"Scanlines CRT 25%",
-	"Scanlines CRT 50%",
-	"Scanlines CRT 75%"
+	"Scanlines: None",
+	"Scanlines: CRT 25%",
+	"Scanlines: CRT 50%",
+	"Scanlines: CRT 75%"
 };
 
 static char *st_system[]=
@@ -76,35 +76,41 @@ static char *st_system[]=
 	"Videopac"
 };
 
-static char *st_pal[]=
+static char *st_G7200[]=
 {
-	"Ntsc",
-	"Pal"
+	"G7200: Off",
+	"G7200: Contrast 1",
+	"G7200: Contrast 2",
+	"G7200: Contrast 3",
+	"G7200: Contrast 4",
+	"G7200: Contrast 5",
+	"G7200: Contrast 6",
+	"G7200: Contrast 7",
 };
 
 static char *st_voice[]=
 {
-	"The Voice Off",
-	"The Voice On"
+	"The Voice: Off",
+	"The Voice: On"
 };
 
 static char *st_swap[]=
 {
-	"Swap Joy Off",
-	"Swap joy On"
+	"Swap Joy: Off",
+	"Swap joy: On"
 };
 
 // Our toplevel menu
 static struct menu_entry topmenu[]=
 {
 //      NUMERO MAXIMO DE LINEAS EN MENU SON 16 (PARA MAS HACER SUBMENUS)
-	{MENU_ENTRY_CALLBACK,"   =Rampa Videopac=    ",0},
+	{MENU_ENTRY_CALLBACK,"  =Videopac/Oddysey2=  ",0},
 	{MENU_ENTRY_CALLBACK,"                       ",0},
 	{MENU_ENTRY_CALLBACK,"Reset",MENU_ACTION(&Reset)},
 	{MENU_ENTRY_CYCLE,(char *)st_scanlines,MENU_ACTION(4)}, 
 	{MENU_ENTRY_CYCLE,(char *)st_swap,MENU_ACTION(2)}, 
 	{MENU_ENTRY_CYCLE,(char *)st_voice,MENU_ACTION(2)},
-	{MENU_ENTRY_CYCLE,(char *)st_pal,MENU_ACTION(2)},
+	{MENU_ENTRY_CYCLE,(char *)st_G7200,MENU_ACTION(8)},
 	{MENU_ENTRY_CYCLE,(char *)st_system,MENU_ACTION(2)},
 	{MENU_ENTRY_CALLBACK,"Cargar Cartucho/Font \x10",MENU_ACTION(&FileSelector_Show)},
 	{MENU_ENTRY_CALLBACK,"Exit",MENU_ACTION(&Menu_Hide)},
@@ -290,8 +296,8 @@ int main(int argc,char **argv)
 		dipsw |= (MENU_CYCLE_VALUE(&topmenu[3])  & 0x3) << 9; //[11:9] 
 		dipsw |= (MENU_CYCLE_VALUE(&topmenu[4])  & 0x1) << 7; //[7]
 		dipsw |= (MENU_CYCLE_VALUE(&topmenu[5])  & 0x1) << 1; //[1]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[6])  & 0x1) << 5; //[5]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[7])  & 0x1) << 14; //[14]
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[6])  & 0x3) << 12; //[14:12]
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[7])  & 0x1) << 15; //[15]
 		HW_HOST(REG_HOST_SW)=dipsw;	// Send the new values to the hardware.
 		// If the menu's visible, prevent keystrokes reaching the host core.
 		HW_HOST(REG_HOST_CONTROL)=(visible ?

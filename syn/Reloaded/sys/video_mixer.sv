@@ -21,7 +21,9 @@
 module video_mixer
 #(
 	parameter LINE_LENGTH  = 768,
-	parameter HALF_DEPTH   = 0
+	parameter HALF_DEPTH   = 0,
+	parameter DWIDTH       = 6
+
 )
 (
 	// master clock
@@ -63,7 +65,7 @@ module video_mixer
 	output reg       VGA_DE
 );
 
-localparam DWIDTH = HALF_DEPTH ? 3 : 7;
+//localparam DWIDTH = HALF_DEPTH ? 3 : 7;
 
 wire [DWIDTH:0] R_sd;
 wire [DWIDTH:0] G_sd;

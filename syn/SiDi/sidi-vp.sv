@@ -90,9 +90,7 @@ module cyclone_vp
         output        SDRAM_CKE
 );
 
-assign   SDRAM_CKE = 1'b0;
-assign   SDRAM_CLK = 1'b0;
-assign   SDRAM_nCS = 1'b1;
+
 
 assign UART_TX = 'Z;
 
@@ -104,8 +102,8 @@ parameter CONF_STR = {
 	"F,BIN,Load catridge;",
 	"F,ROM,Load XROM;",
 	"F,CHR,Change VDC font;",
-	"OE,System,Odyssey2,Videopac;",
-	"O5,Palette,TV RF,RGB;",
+	"OF,System,Odyssey2,Videopac;",
+	"OCE,G7200,Off,Contrast 1,Contrast 2,Contrast 3,Contrast 4,Contrast 5,Contrast 6,Contrast 7;",
 	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%;",
 	"O1,The Voice,Off,on;",
 	"O7,Swap Joysticks,No,Yes;",
@@ -140,11 +138,11 @@ wire [24:0] ps2_mouse;
 wire ypbpr;
 
 
-wire        PAL   = status[14];
-wire        VOICE = status[1];
-wire        MODE  = status[5];
- 
-wire        joy_swap = status[7];
+wire       PAL   = status[15];
+wire       VOICE = status[1];
+wire       G7200    = (CONTRAST != 3'd0);
+wire [2:0] CONTRAST = status[14:12];
+wire       joy_swap = status[7];
 
 wire [15:0] joya = joy_swap ? joystick_1 : joystick_0;
 wire [15:0] joyb = joy_swap ? joystick_0 : joystick_1;
@@ -193,9 +191,9 @@ data_io #( .sysclk_frequency(16'd709) )data_io // 16'd709: 16'd420
 	.vga_hsync(~HSync),
 	.vga_vsync(~VSync),
 	
-	.red_i({colors[23:16]}),  
-	.green_i({colors[15:8]}), 
-	.blue_i({colors[7:0]}),
+	.red_i  (G7200 ? grayscale :Rx),  
+	.green_i(G7200 ? grayscale :Gx), 
+	.blue_i (G7200 ? grayscale :Bx),
 	.red_o(R_OSD),
 	.green_o(G_OSD),
 	.blue_o(B_OSD),
@@ -229,12 +227,13 @@ data_io #( .sysclk_frequency(16'd709) )data_io // 16'd709: 16'd420
 
 
 
+
 ///////////////////////   CLOCKS   ///////////////////////////////
 
 wire clock_locked;
 wire clk_sys_o2;
 wire clk_sys_vp;
-wire clk_2m5;
+wire clk_750k;
 
 wire clk_sys = PAL ? clk_sys_vp : clk_sys_o2;
 
@@ -249,6 +248,7 @@ pll pll
 	.c0(clk_sys_o2),
 	.c1(clk_sys_vp),
 	.c2(clk_2m5),
+	.c3(clk_750k),
 	.locked(clock_locked)
 );
 
@@ -315,7 +315,8 @@ vp_console vp
 	.clk_i          (clk_sys),
 	.clk_cpu_en_i   (clk_cpu_en),
 	.clk_vdc_en_i   (clk_vdc_en),
-	
+	.clk_2m5        (clk_2m5),
+	.clk_750k       (clk_750k),
 	.res_n_i        (~reset & joy_reset), // low to reset
 
 	// Cart Data
@@ -328,7 +329,7 @@ vp_console vp
 	.cart_bs0_o     (cart_bank_0), // Bank switch 0
 	.cart_bs1_o     (cart_bank_1), // Bank Switch 1
 	.cart_psen_n_o  (cart_rd_n),   // Program Store Enable (read)
-	.cart_t0_i      (kb_read_ack || ~ldq), // KB/Voice ack
+	.cart_t0_i      (), // KB/Voice ack
 	.cart_t0_o      (),
 	.cart_t0_dir_o  (),
 	
@@ -359,8 +360,11 @@ vp_console vp
 	
 	// Sound
 	.snd_o          (snd_o),
-	.snd_vec_o      (snd)
-);
+	.snd_vec_o      (snd),
+	//The voice
+	.voice_enable   (VOICE),
+	.snd_voice_o    (voice_out)
+ );
 
 /////////////////////////////////////////////////////////////////
 
@@ -381,8 +385,27 @@ wire HBlank;
 
 wire ce_pix = clk_vdc_en;
 
+wire [7:0] Rx = color_lut_ntsc[{R, G, B, luma}][23:16];
+wire [7:0] Gx = color_lut_ntsc[{R, G, B, luma}][15:8];
+wire [7:0] Bx = color_lut_ntsc[{R, G, B, luma}][7:0];
+wire [7:0] Ry = color_lut_pal[{R, G, B, luma}][23:16];
+wire [7:0] Gy = color_lut_pal[{R, G, B, luma}][15:8];
+wire [7:0] By = color_lut_pal[{R, G, B, luma}][7:0];
 
-wire [23:0] colors = MODE ? color_lut_pal[{R, G, B, luma}] : color_lut_ntsc[{R, G, B, luma}];
+always @(*) begin
+        casex (CONTRAST)
+           3'd1:    colors <= {{Ry[7:1],By[7]}  ,{Gy[7]  ,Ry[7:1]},{Ry[7:1],By[7]}  };
+           3'd2:    colors <= {{Ry[7:2],By[7:6]},{Gy[7:6],Ry[7:2]},{Ry[7:2],By[7:6]}};
+           3'd3:    colors <= {{Ry[7:4],By[7:4]},{Gy[7:4],Ry[7:4]},{Ry[7:4],By[7:4]}};
+           3'd4:    colors <= {Ry,Gy,By};
+           3'd5:    colors <= {{By[7:4],Ry[7:4]},{Gy[7:4],By[7:4]},{By[7:4],Ry[7:4]}};
+           3'd6:    colors <= {{By[7:2],Ry[7:6]},{Gy[7:6],By[7:2]},{By[7:2],Ry[7:6]}};
+           3'd7:    colors <= {{By[7:1],Ry[7]}  ,{Gy[7]  ,By[7:1]},{By[7:1],Ry[7]}  };
+           default: colors <= {Ry,Gy,By};
+        endcase
+end
+
+wire [23:0] colors;
 
 
 wire [2:0] scale = status[11:9];
@@ -395,8 +418,20 @@ always @(posedge ce_pix) begin
 	old_h <= HSync;
 	ce_h_cnt <= (~old_h & HSync) ? 16'd0 : (ce_h_cnt + 16'd1);
 end
+wire [7:0] grayscale;
 
-video_mixer #(.LINE_LENGTH(455)) video_mixer
+vga_to_greyscale vga_to_greyscale
+(
+        .r_in  (colors[23:16]),
+        .g_in  (colors[15:8]),
+        .b_in  (colors[7:0]),
+        .y_out (grayscale)
+);
+`ifndef JOYDC
+video_mixer #(.LINE_LENGTH(455),.DWIDTH(6)) video_mixer
+`else
+video_mixer #(.LINE_LENGTH(455),.DWIDTH(8)) video_mixer
+`endif
 (
 	.*,
 	.HSync(~HSync),
@@ -410,9 +445,9 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
    .ce_pix_actual(ce_pix),
 	.scandoubler_disable(scandoubler_disable),
 	.scanlines(scandoubler_disable ? 2'b00 : {scale==3, scale==2}),
-	.R({colors[23:16]  >>2}),
-	.G({colors[15:8]   >>2}),
-	.B({colors[7:0]    >>2}),
+	.R(G7200 ? grayscale[7:2] : Rx[7:2] ),
+   .G(G7200 ? grayscale[7:2] : Gx[7:2] ),
+   .B(G7200 ? grayscale[7:2] : Bx[7:2] ),
 	.ypbpr_full(1),
 	.line_start(0),
 
@@ -438,9 +473,9 @@ video_mixer #(.LINE_LENGTH(455)) video_mixer
 	.HBlank(HBlank),
 	.VBlank(VBlank),
 	.VGA_DE(VGA_BLANK),
-	.R(R_OSD[7:0]>>2),
-	.G(G_OSD[7:0]>>2),
-	.B(B_OSD[7:0]>>2),
+	.R(R_OSD[7:2]),
+	.G(G_OSD[7:2]),
+	.B(B_OSD[7:2])
 `endif
 `endif 
 );
@@ -611,9 +646,9 @@ wire [13:0] rom_addr;
 rom  rom
 (
 	.clock(clk_sys),
-	.address((ioctl_download && ioctl_index[1:0] < 3)? ioctl_addr[13:0] : rom_addr),
+	.address((ioctl_download && ioctl_index[1:0] > 0 && ioctl_index[1:0] < 3)? ioctl_addr[13:0] : rom_addr),
 	.data(ioctl_dout),
-	.wren(ioctl_wr&& ioctl_index[1:0] < 3),
+	.wren(ioctl_wr&& ioctl_download && ioctl_index[1:0] > 0 && ioctl_index[1:0] < 3),
 	.rden(XROM ? rom_oe_n : ~cart_rd_n),
 	.q(cart_do)
 );
@@ -660,27 +695,26 @@ always @(*)
 
 //////////////////////////////// SOUND /////////////////////////////////////////////
 
-wire snd_o;
-wire the_voice;
+
 wire [3:0] snd;
+wire signed [15:0] voice_out; 
 wire cart_wr_n;
 wire [7:0] cart_di;
 
-dac #(
-   .c_bits         (16))
-  audiodac_l(
-   .clk_i        (clk_sys),
-   .res_n_i      (1      ),
-   .dac_i        (audio_out),
-   .dac_o        (AUDIO_L)
+wire signed [14:0] sound_s = {1'b0,snd,snd,snd,2'b0};
+wire signed [15:0] voice_s = VOICE ? {voice_out[11:0],4'b0} : 15'b0;
+
+sigma_delta sigma_delta
+(
+  .clk      (clk_sys),
+  .ldatasum ({sound_s + voice_s,2'b0}),
+  .rdatasum ({sound_s + voice_s,2'b0}),
+  .aleft    (AUDIO_L),
+  .aright   (AUDIO_R)
 );
 
-wire [15:0] audio_out = (VOICE?{snd,snd,snd,snd} | {voice_out[7:0],voice_out[7:0]}:{snd, snd, snd,snd}) ;
-assign AUDIO_R = AUDIO_L;
-
-
 `ifdef CYCLONE
-wire [15:0] audio_i2s = VOICE?{1'b0,snd,snd,7'b0000000} | {signed_voice_out[9:0],6'b0} : {1'b0,snd,snd,7'b0000000} ;
+wire [15:0] audio_i2s = sound_s+voice_s;
 audio_top audio_top
 (
 	.clk_50MHz(CLOCK_50),
@@ -706,47 +740,7 @@ joydecoder joydecoder
 `endif
 `endif
 
-////////////The Voice /////////////////////////////////////////////////
 
-
-reg signed [9:0] signed_voice_out;
-reg        [8:0] voice_out;
-    
-wire ldq;
-         
-
-sp0256 sp0256 (
-        .clk_2m5    (clk_2m5),
-        .reset      (rst_a_n),
-        .lrq        (ldq),
-        .data_in    (rom_addr[6:0]),
-        .ald        (ald),
-        .audio_out  (signed_voice_out),
-);
-
-compressor compressor
-(
-        .clk  (clk_sys),
-        .din  ( signed_voice_out),
-        .dout ( voice_out)
-);
-
-wire ald     = !rom_addr[7] | cart_wr_n | cart_cs;
-wire rst_a_n;
-
-
-
-ls74 ls74
-(
-  .d     (cart_di[5]),
-  .clr   (VOICE? 1'b1: 1'b0),
-  .q     (rst_a_n),
-  .pre   (1'b1),
-  .clk   (ald)
-);
-
-
-assign LED=ldq;
 
 ///////////////////////////////////////////////////////////////////////
 
