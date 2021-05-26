@@ -385,23 +385,20 @@ wire HBlank;
 
 wire ce_pix = clk_vdc_en;
 
-wire [7:0] Rx = color_lut_ntsc[{R, G, B, luma}][23:16];
-wire [7:0] Gx = color_lut_ntsc[{R, G, B, luma}][15:8];
-wire [7:0] Bx = color_lut_ntsc[{R, G, B, luma}][7:0];
-wire [7:0] Ry = color_lut_pal[{R, G, B, luma}][23:16];
-wire [7:0] Gy = color_lut_pal[{R, G, B, luma}][15:8];
-wire [7:0] By = color_lut_pal[{R, G, B, luma}][7:0];
+wire [7:0] Rx = color_lut_vp[{R, G, B, luma}][23:16];
+wire [7:0] Gx = color_lut_vp[{R, G, B, luma}][15:8];
+wire [7:0] Bx = color_lut_vp[{R, G, B, luma}][7:0];
 
 always @(*) begin
         casex (CONTRAST)
-           3'd1:    colors <= {{Ry[7:1],By[7]}  ,{Gy[7]  ,Ry[7:1]},{Ry[7:1],By[7]}  };
-           3'd2:    colors <= {{Ry[7:2],By[7:6]},{Gy[7:6],Ry[7:2]},{Ry[7:2],By[7:6]}};
-           3'd3:    colors <= {{Ry[7:4],By[7:4]},{Gy[7:4],Ry[7:4]},{Ry[7:4],By[7:4]}};
-           3'd4:    colors <= {Ry,Gy,By};
-           3'd5:    colors <= {{By[7:4],Ry[7:4]},{Gy[7:4],By[7:4]},{By[7:4],Ry[7:4]}};
-           3'd6:    colors <= {{By[7:2],Ry[7:6]},{Gy[7:6],By[7:2]},{By[7:2],Ry[7:6]}};
-           3'd7:    colors <= {{By[7:1],Ry[7]}  ,{Gy[7]  ,By[7:1]},{By[7:1],Ry[7]}  };
-           default: colors <= {Ry,Gy,By};
+           3'd1:    colors <= {{Rx[7:1],Bx[7]}  ,{Gx[7]  ,Rx[7:1]},{Rx[7:1],Bx[7]}  };
+           3'd2:    colors <= {{Rx[7:2],Bx[7:6]},{Gx[7:6],Rx[7:2]},{Rx[7:2],Bx[7:6]}};
+           3'd3:    colors <= {{Rx[7:4],Bx[7:4]},{Gx[7:4],Rx[7:4]},{Rx[7:4],Bx[7:4]}};
+           3'd4:    colors <= {Rx,Gx,Bx};
+           3'd5:    colors <= {{Bx[7:4],Rx[7:4]},{Gx[7:4],Bx[7:4]},{Bx[7:4],Rx[7:4]}};
+           3'd6:    colors <= {{Bx[7:2],Rx[7:6]},{Gx[7:6],Bx[7:2]},{Bx[7:2],Rx[7:6]}};
+           3'd7:    colors <= {{Bx[7:1],Rx[7]}  ,{Gx[7]  ,Bx[7:1]},{Bx[7:1],Rx[7]}  };
+           default: colors <= {Rx,Gx,Bx};
         endcase
 end
 
@@ -427,17 +424,12 @@ vga_to_greyscale vga_to_greyscale
         .b_in  (colors[7:0]),
         .y_out (grayscale)
 );
-`ifndef JOYDC
-video_mixer #(.LINE_LENGTH(455),.DWIDTH(6)) video_mixer
-`else
-video_mixer #(.LINE_LENGTH(455),.DWIDTH(8)) video_mixer
-`endif
+video_mixer #(.LINE_LENGTH(455),.HALF_DEPTH(0)) video_mixer
 (
 	.*,
 	.HSync(~HSync),
 	.VSync(~VSync),
 	.clk_sys(clk_sys),
-	//.scanlines(0),
 	.hq2x(scale==1),
 	.mono(0),
 	
@@ -468,14 +460,14 @@ video_mixer #(.LINE_LENGTH(455),.DWIDTH(8)) video_mixer
 	.ypbpr_full(1)
 `else
    .scandoubler(!scandoubler_disable),
-	.scanlines(scandoubler ? {scale==3, scale==2}:2'b00),
+	.scanlines(!scandoubler_disable ? {scale==3, scale==2}:2'b00),
 	.ce_pix_out(),
 	.HBlank(HBlank),
 	.VBlank(VBlank),
 	.VGA_DE(VGA_BLANK),
-	.R(R_OSD[7:2]),
-	.G(G_OSD[7:2]),
-	.B(B_OSD[7:2])
+	.R(R_OSD),
+	.G(G_OSD),
+	.B(B_OSD)
 `endif
 `endif 
 );
@@ -745,42 +737,24 @@ joydecoder joydecoder
 ///////////////////////////////////////////////////////////////////////
 
 // LUT using calibrated palette
-wire [23:0] color_lut_ntsc[16] = '{
+wire [23:0] color_lut_vp[16] = '{
 	24'h000000,    //BLACK
-	24'h676767,    //BLACK LUMA
-	24'h1a37be,
-	24'h5c80f6,
-	24'h006d07,
-	24'h56c469,
-	24'h2aaabe,
-	24'h77e6eb,
+	24'h676767,    //GREY
+	24'h1a37be,    //BLUE
+	24'h5c80f6,    //BLUE I
+	24'h006d07,    //GREEN
+	24'h56c469,    //GREEN I
+	24'h2aaabe,    //BLUE GREEN
+	24'h77e6eb,    //BLUE-GREEN I
 	24'h790000,    //RED
 	24'hc75151,    //RED LUMA
-	24'h94309f,
-	24'hdc84e8,
-	24'h77670b,
-	24'hc6b86a,
-	24'hcecece,     //WHITE 
-	24'hffffff      //WHITE LUMA
+	24'h94309f,    //VIOLET
+	24'hdc84e8,    //VIOLET I
+	24'h77670b,    //KAHKI
+	24'hc6b86a,    //KAHKI I
+	24'hcecece,    //GREY I 
+	24'hffffff     //WHITE
 };
 
-wire [23:0] color_lut_pal[16] = '{
-	24'h000000,    //BLACK
-	24'h494949,    //BLACK LUMA
-	24'h0000B6,    //Blue
-	24'h4949ff,
-	24'h00B601,    //Green
-	24'h49ff49,
-	24'h00b6c9,    //Cyan
-	24'h49ffff,
-	24'hB60000,    //RED
-	24'hff4949,    //RED LUMA
-	24'hb600b6,    //magenta     
-	24'hff49ff,
-	24'hb6b600,    //Yellow    
-	24'hffff49,
-	24'hb6b6b6,     //WHITE 
-	24'hffffff      //WHITE LUMA
-};
 
 endmodule

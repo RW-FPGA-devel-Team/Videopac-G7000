@@ -50,7 +50,7 @@ module scandoubler #(parameter LENGTH, parameter HALF_DEPTH)
 );
 
 
-localparam DWIDTH = HALF_DEPTH ? 3 : 7;
+localparam DWIDTH = HALF_DEPTH ? 2 : 7;
 
 assign vs_out = vso[3];
 assign ce_pix_out = hq2x ? ce_x4 : ce_x2;
