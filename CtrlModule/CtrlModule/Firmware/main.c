@@ -72,20 +72,20 @@ static char *st_scanlines[]=
 
 static char *st_system[]=
 {
-	"Odyssey2",
-	"Videopac"
+	"System: Odyssey2",
+	"System: Videopac"
 };
 
 static char *st_G7200[]=
 {
-	"G7200: Off",
-	"G7200: Contrast 1",
-	"G7200: Contrast 2",
-	"G7200: Contrast 3",
-	"G7200: Contrast 4",
-	"G7200: Contrast 5",
-	"G7200: Contrast 6",
-	"G7200: Contrast 7",
+	"G7200 Mode: Off",
+	"G7200 Mode: Contrast 1",
+	"G7200 Mode: Contrast 2",
+	"G7200 Mode: Contrast 3",
+	"G7200 Mode: Contrast 4",
+	"G7200 Mode: Contrast 5",
+	"G7200 Mode: Contrast 6",
+	"G7200 Mode: Contrast 7",
 };
 
 static char *st_voice[]=
@@ -293,10 +293,10 @@ int main(int argc,char **argv)
 		visible=Menu_Run();
 		dipsw = 0;
 		//Posicion 3 del menu, 0x3 = 2 bits max, <<9 = dips[1:0]	
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[3])  & 0x3) << 9; //[11:9] 
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[3])  & 0x7) << 9; //[11:9] 
 		dipsw |= (MENU_CYCLE_VALUE(&topmenu[4])  & 0x1) << 7; //[7]
 		dipsw |= (MENU_CYCLE_VALUE(&topmenu[5])  & 0x1) << 1; //[1]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[6])  & 0x3) << 12; //[14:12]
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[6])  & 0x7) << 12; //[14:12]
 		dipsw |= (MENU_CYCLE_VALUE(&topmenu[7])  & 0x1) << 15; //[15]
 		HW_HOST(REG_HOST_SW)=dipsw;	// Send the new values to the hardware.
 		// If the menu's visible, prevent keystrokes reaching the host core.

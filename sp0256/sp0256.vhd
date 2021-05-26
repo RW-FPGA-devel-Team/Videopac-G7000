@@ -226,10 +226,12 @@ process (clock_750k, reset)
 				if stage = 0 and input_rdy_in = '0' then
 				
 						-- filter the bankswitch commands
-				         if allophone = "1100100" then bank <= "00";
-						elsif allophone = "1101000" then bank <= "01";
-						elsif allophone = "1101001" then bank <= "10";
-						elsif allophone = "1101010" then bank <= "11";
+				         if allophone = "1100100" then bank <= "00"; -- Bank $E4
+						elsif allophone = "1101000" then bank <= "01"; -- Bank $E8
+						elsif allophone = "1101001" then bank <= "10" ; -- Bank $E9
+						elsif allophone = "1101010" then bank <= "11";  --Bank $EA
+						-- elsif allophone = "1101001" then bank <= "00";-- uncoment for SiDi without the 2 upper banks
+						-- elsif allophone = "1101010" then bank <= "00";
 						elsif allophone <= "1011111" or allophone >= "1110000" then --filter the playable sounds
 								allo_entry <=          allophone*"11"; -- alophone times 3
 								rom_addr   <= "00000"&(allophone*"11");

@@ -104,7 +104,7 @@ parameter CONF_STR = {
 	"F,CHR,Change VDC font;",
 	"OF,System,Odyssey2,Videopac;",
 	"OCE,G7200,Off,Contrast 1,Contrast 2,Contrast 3,Contrast 4,Contrast 5,Contrast 6,Contrast 7;",
-	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%;",
+	"O9B,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%,CRT 75%;",
 	"O1,The Voice,Off,on;",
 	"O7,Swap Joysticks,No,Yes;",
 	"T0,Reset;",

@@ -42,4 +42,5 @@ c5_pin_model_dump.txt
 *.o
 *.bin
 *.elf
+zpu_obj/
 
