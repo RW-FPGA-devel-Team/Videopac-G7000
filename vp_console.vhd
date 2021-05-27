@@ -96,6 +96,7 @@ entity vp_console is
     -- Keyboard Interface -----------------------------------------------------
     keyb_dec_o     : out std_logic_vector( 6 downto 1);
     keyb_enc_i     : in  std_logic_vector(14 downto 7);
+	 keyb_ack_i     : in std_logic;
     -- Video Interface --------------------------------------------------------
     r_o            : out std_logic;
     g_o            : out std_logic;
@@ -265,7 +266,7 @@ begin
       xtal_i        => clk_i,
       xtal_en_i     => clk_cpu_en_i,
       reset_n_i     => res_n_i,
-      t0_i          => not fifo_empty_s, --cart_t0_i,
+      t0_i          => (not fifo_empty_s or keyb_ack_i) , --cart_t0_i,
       t0_o          => cart_t0_o,
       t0_dir_o      => cart_t0_dir_o,
       int_n_i       => int_n_s,

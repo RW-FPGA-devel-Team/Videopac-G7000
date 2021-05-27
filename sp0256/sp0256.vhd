@@ -134,7 +134,13 @@ architecture syn of sp0256 is
  signal rom_do   		: std_logic_vector( 7 downto 0);
  signal bank 			: std_logic_vector( 1 downto 0);
 
- signal stage : integer range 0 to 249; -- stage counter 0-24;
+ signal voiceE4_do   : std_logic_vector( 7 downto 0);
+ signal voiceE8_do   : std_logic_vector( 7 downto 0);
+ signal voiceE9_do   : std_logic_vector( 7 downto 0);
+ signal voiceEA_do   : std_logic_vector( 7 downto 0);
+ 
+ 
+ signal stage  : integer range 0 to 249; -- stage counter 0-24;
  
  signal allo_entry                   : std_logic_vector(8 downto 0);
  signal allo_addr_lsb, allo_addr_msb : std_logic_vector(7 downto 0);
@@ -437,13 +443,46 @@ sum_out <= to_signed( 32767,16) when sum_out_ul >  32767 else
 			  to_signed(-32768,16) when sum_out_ul < -32768 else
 			  sum_out_ul;
 
+rom_do <= 	voiceE4_do when bank = "00" else
+			voiceE8_do when bank = "01" else
+			voiceE9_do when bank = "10" else
+			voiceEA_do;
+
 			  
-sp256_003 : ENTITY work.sp256_003
+			  
+bank_e4 : ENTITY work.bank_e4
 port map(
  clock  => clock_2m5,
  clken  => clock_750k_n,
- address => bank & rom_addr,
- q => rom_do  
+ address => rom_addr(12 downto 0),
+ rden    => '1',
+ q =>   voiceE4_do
+);
+
+bank_e8 : ENTITY work.bank_e8
+port map(
+ clock  => clock_2m5,
+ clken  => clock_750k_n,
+ address => rom_addr(12 downto 0),
+ rden    => '1',
+ q => voiceE8_do
+);
+
+bank_e9 : ENTITY work.bank_e9
+port map(
+ clock  => clock_2m5,
+ clken  => clock_750k_n,
+ address => rom_addr(12 downto 0),
+ rden    => '1',
+ q => voiceE9_do  
+);
+bank_ea : ENTITY work.bank_ea
+port map(
+ clock  => clock_2m5,
+ clken  => clock_750k_n,
+ address => rom_addr(12 downto 0),
+ rden    => '1',
+ q => voiceEA_do  
 );
 
 

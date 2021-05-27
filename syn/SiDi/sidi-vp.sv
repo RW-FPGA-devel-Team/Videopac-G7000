@@ -347,7 +347,7 @@ vp_console vp
 
 	.keyb_dec_o     (kb_dec),
 	.keyb_enc_i     (kb_enc),
-
+   .keyb_ack_i     (kb_read_ack),
 	// Video
 	.r_o            (R),
 	.g_o            (G),

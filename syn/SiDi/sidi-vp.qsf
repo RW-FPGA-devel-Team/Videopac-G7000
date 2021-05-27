@@ -231,9 +231,12 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW 4MA -to SPI_DO
 set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to SPI_SCK
 set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
 set_global_assignment -name SMART_RECOMPILE ON
+set_global_assignment -name QIP_FILE ../../sp0256/bank_ea.qip
+set_global_assignment -name QIP_FILE ../../sp0256/bank_e9.qip
+set_global_assignment -name QIP_FILE ../../sp0256/bank_e8.qip
+set_global_assignment -name QIP_FILE ../../sp0256/bank_e4.qip
 set_global_assignment -name VERILOG_FILE ../../vga_to_greyscale.v
 set_global_assignment -name VHDL_FILE ssdram.vhd
-set_global_assignment -name QIP_FILE ../../sp0256/sp256_003.qip
 set_global_assignment -name VHDL_FILE ../../sp0256/sp0256.vhd
 set_global_assignment -name VHDL_FILE ../../sp0256/fifo.vhd
 set_global_assignment -name VERILOG_FILE sys/sigma_delta_dac.v
