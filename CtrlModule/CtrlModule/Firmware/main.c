@@ -108,7 +108,7 @@ static struct menu_entry topmenu[]=
 	{MENU_ENTRY_CALLBACK,"  =Videopac/Oddysey2=  ",0},
 	{MENU_ENTRY_CALLBACK,"                       ",0},
 	{MENU_ENTRY_CALLBACK,"Reset",MENU_ACTION(&Reset)},
-	{MENU_ENTRY_CYCLE,(char *)st_scanlines,MENU_ACTION(4)}, 
+	{MENU_ENTRY_CYCLE,(char *)st_scanlines,MENU_ACTION(5)}, 
 	{MENU_ENTRY_CYCLE,(char *)st_swap,MENU_ACTION(2)}, 
 	{MENU_ENTRY_CYCLE,(char *)st_voice,MENU_ACTION(2)},
 	{MENU_ENTRY_CYCLE,(char *)st_G7200,MENU_ACTION(8)},
