@@ -89,8 +89,8 @@ entity audio_top is
 				dac_LRCK : out STD_LOGIC;
 				dac_SCLK : out STD_LOGIC;
 				dac_SDIN : out STD_LOGIC;
-				L_data : 	in std_logic_vector(15 downto 0);  	-- LEFT data (15-bit signed)
-				R_data : 	in std_logic_vector(15 downto 0)  	-- RIGHT data (15-bit signed) 
+				L_data : 	in signed(15 downto 0);  	-- LEFT data (15-bit signed)
+				R_data : 	in signed(15 downto 0)  	-- RIGHT data (15-bit signed) 
 	);
 end audio_top;
 

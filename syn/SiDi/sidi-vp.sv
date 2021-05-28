@@ -706,7 +706,7 @@ sigma_delta sigma_delta
 );
 
 `ifdef CYCLONE
-wire [15:0] audio_i2s = sound_s+voice_s;
+wire signed [15:0] audio_i2s = sound_s+voice_s;
 audio_top audio_top
 (
 	.clk_50MHz(CLOCK_50),

@@ -239,12 +239,14 @@ set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 
 # end ENTITY(sidi_vp)
 # -------------------
-set_global_assignment -name SYSTEMVERILOG_FILE ../../sp0256/compressor.sv
-set_global_assignment -name VHDL_FILE ../../sp0256/sp0256_al2_decoded.vhd
-set_global_assignment -name VHDL_FILE ../../sp0256/sp0256_256b_019_decoded.vhd
+set_global_assignment -name VERILOG_FILE ../../vga_to_greyscale.v
+set_global_assignment -name VERILOG_FILE ../SiDi/sys/sigma_delta_dac.v
 set_global_assignment -name VHDL_FILE ../../sp0256/sp0256.vhd
-set_global_assignment -name VHDL_FILE ../SiDi/sys/dac.vhd
-set_global_assignment -name VHDL_FILE ../../74ls74.vhd
+set_global_assignment -name VHDL_FILE ../../sp0256/fifo.vhd
+set_global_assignment -name QIP_FILE ../../sp0256/bank_ea.qip
+set_global_assignment -name QIP_FILE ../../sp0256/bank_e9.qip
+set_global_assignment -name QIP_FILE ../../sp0256/bank_e8.qip
+set_global_assignment -name QIP_FILE ../../sp0256/bank_e4.qip
 set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/video_space.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/video_mixer.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../SiDi/sys/video_cleaner.sv

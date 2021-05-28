@@ -65,6 +65,7 @@ static struct menu_entry topmenu[]; // Forward declaration.
 static char *st_scanlines[]=
 {
 	"Scanlines: None",
+	"ScanLines: HQ2x",
 	"Scanlines: CRT 25%",
 	"Scanlines: CRT 50%",
 	"Scanlines: CRT 75%"
